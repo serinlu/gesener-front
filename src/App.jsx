@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import LandingLayout from "./layouts/LandingLayout"
-import Landing from "./pages/landing/Landing"
+import Home from "./pages/landing/home/home"
+import Contact from "./pages/landing/contact/contact"
 
 function App() {
 
@@ -8,7 +9,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingLayout />}>
-          <Route index element={<Landing />}/>
+          <Route index element={<Home />}/>
+          <Route path="contact" element={<Contact />}/>
         </Route>
       </Routes>
     </BrowserRouter>

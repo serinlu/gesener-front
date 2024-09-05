@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faUser, faSearch } from '@fortawesome/free-solid-svg-icons';
 import logo from '../uploads/logo.png'; // Ajusta la ruta según tu proyecto
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Header = () => {
   const [showSearch, setShowSearch] = useState(false);
@@ -65,9 +65,9 @@ const Header = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative z-10">
       <header className="bg-gray-100 py-4 shadow-md">
-        <div className="container mx-auto flex justify-between items-center">
+        <div className="w-[90%] mx-auto flex justify-between items-center">
 
           {/* Logo */}
           <div className="flex justify-start items-center flex-shrink-0 -ml-6">
@@ -81,48 +81,48 @@ const Header = () => {
             onMouseLeave={() => setHovering(null)}
             className="flex-grow flex justify-center items-center space-x-4"
           >
-            <a
+            <NavLink
+            to="/solutions"
               onMouseEnter={(event) => onMouseEnter(0, event.currentTarget)}
-              href="#"
               className="text-black transition-colors duration-300 text-center text-base font-medium leading-6 tracking-wide px-4 py-2 hover:text-indigo-600"
             >
               SOLUCIONES
-            </a>
-            <a
+            </NavLink>
+            <NavLink
               onMouseEnter={(event) => onMouseEnter(1, event.currentTarget)}
-              href="#"
+              to="/products"
               className="text-black transition-colors duration-300 text-center text-base font-medium leading-6 tracking-wide px-4 py-2 hover:text-indigo-600"
             >
               PRODUCTOS
-            </a>
-            <a
+            </NavLink>
+            <NavLink
               onMouseEnter={() => setHovering(null)} // No tiene popover
-              href="#"
+              to="/"
               className="text-black transition-colors duration-300 text-center text-base font-medium leading-6 tracking-wide px-4 py-2 hover:text-indigo-600"
             >
               CASOS DE ÉXITO
-            </a>
-            <a
+            </NavLink>
+            <NavLink
               onMouseEnter={() => setHovering(null)}
-              href="#"
+              to="/success-cases"
               className="text-black transition-colors duration-300 text-center text-base font-medium leading-6 tracking-wide px-4 py-2 hover:text-indigo-600"
             >
               NOTICIAS
-            </a>
-            <a
+            </NavLink>
+            <NavLink
               onMouseEnter={() => setHovering(null)}
-              href="#"
+              to="/us"
               className="text-black transition-colors duration-300 text-center text-base font-medium leading-6 tracking-wide px-4 py-2 hover:text-indigo-600"
             >
               NOSOTROS
-            </a>
-            <a
+            </NavLink>
+            <NavLink
               onMouseEnter={() => setHovering(null)}
-              href="#"
+              to="/contact"
               className="text-black transition-colors duration-300 text-center text-base font-medium leading-6 tracking-wide px-4 py-2 hover:text-indigo-600"
             >
               CONTÁCTANOS
-            </a>
+            </NavLink>
           </nav>
 
           {/* Acceder y Carrito */}
