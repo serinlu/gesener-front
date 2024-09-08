@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { FaCartShopping } from 'react-icons/fa6';
 import { IoSearch } from 'react-icons/io5';
@@ -12,29 +12,40 @@ const Navbar = () => {
     const [showSearch, setShowSearch] = useState(false);
     const [showUserOptions, setShowUserOptions] = useState(false);
 
+    const userMenuRef = useRef(null);
+    const searchMenuRef = useRef(null);
+
     const handleMouseEnterSolutions = () => setShowSolutionsMenu(true);
     const handleMouseLeaveSolutions = () => setShowSolutionsMenu(false);
 
     const handleMouseEnterProducts = () => setShowProductsMenu(true);
     const handleMouseLeaveProducts = () => setShowProductsMenu(false);
 
-    const onClickSearch = () => setShowSearch(!showSearch);
-    const onClickUser = () => setShowUserOptions(!showUserOptions)
+    const onClickSearch = () => {
+        setShowSearch(!showSearch);
+        setShowUserOptions(false);
+    };
+
+    const onClickUser = () => {
+        setShowUserOptions(!showUserOptions);
+        setShowSearch(false);
+    };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            const searchMenu = document.getElementById('search-menu');
-            const userMenu = document.getElementById('user-menu');
-            if (searchMenu && !searchMenu.contains(event.target) || userMenu && !userMenu.contains(event.target)) {
+            if (
+                searchMenuRef.current && !searchMenuRef.current.contains(event.target) &&
+                userMenuRef.current && !userMenuRef.current.contains(event.target)
+            ) {
                 setShowSearch(false);
                 setShowUserOptions(false);
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('click', handleClickOutside);
 
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('click', handleClickOutside);
         };
     }, []);
 
@@ -45,7 +56,6 @@ const Navbar = () => {
                     <img src={logo} alt="logo" className='w-48' />
                 </NavLink>
                 <div className='flex gap-x-6'>
-
                     {/* Soluciones Link with Dropdown */}
                     <div
                         className='relative'
@@ -109,6 +119,7 @@ const Navbar = () => {
                             </div>
                         )}
                     </div>
+
                     <NavLink to="success-stories" className='p-4 hover:text-indigo-500 duration-300'>CASOS DE ÉXITO</NavLink>
                     <NavLink to="news" className='p-4 hover:text-indigo-500 duration-300'>NOTICIAS</NavLink>
                     <NavLink to="us" className='p-4 hover:text-indigo-500 duration-300'>NOSOTROS</NavLink>
@@ -123,7 +134,7 @@ const Navbar = () => {
                             <FaUser />
                         </button>
                         {showUserOptions && (
-                            <div id='user-menu' className='absolute top-full left-0 w-[10rem] rounded-lg bg-white shadow-lg z-50'>
+                            <div ref={userMenuRef} id='user-menu' className='absolute top-full left-0 w-[10rem] rounded-lg bg-white shadow-lg z-50'>
                                 <ul className='py-2'>
                                     <li className='px-4 py-2 hover:bg-gray-100'>
                                         <NavLink to="/login">Iniciar sesión</NavLink>
@@ -138,9 +149,7 @@ const Navbar = () => {
                     <button className='p-2 text-lg hover:text-indigo-500 duration-300'>
                         <FaCartShopping />
                     </button>
-                    <div
-                        className='relative'
-                    >
+                    <div className='relative'>
                         <button
                             className='p-2 text-lg hover:text-indigo-500 duration-300'
                             onClick={onClickSearch}
@@ -148,13 +157,12 @@ const Navbar = () => {
                             <IoSearch />
                         </button>
                         {showSearch && (
-                            <div id='search-menu' className='absolute top-full right-0 mt-1 w-96 rounded-lg bg-white shadow-lg z-50'>
+                            <div ref={searchMenuRef} id='search-menu' className='absolute top-full right-0 mt-1 w-96 rounded-lg bg-white shadow-lg z-50'>
                                 <form className='p-4'>
                                     <input type='text' placeholder='Buscar' className='w-full p-2 border border-gray-200 rounded-lg' />
                                 </form>
                             </div>
                         )}
-
                     </div>
                 </div>
             </nav>
@@ -162,4 +170,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+export default Navbar;
