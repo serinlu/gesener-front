@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Sidebar = () => {
+const SidebarDashboard = () => {
   const [activeTab, setActiveTab] = useState(''); // Controla la pestaña activa
 
   const menuItems = [
@@ -53,4 +53,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SidebarDashboard;
