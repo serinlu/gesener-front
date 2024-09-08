@@ -1,9 +1,11 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import loginImage from "../uploads/1.jpg"
+
 
 const AuthLayout = () => {
     return (
         <div className="min-h-screen flex">
+            
             
             <Outlet />
             {/* Sección de la imagen con fade */}
