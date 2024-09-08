@@ -36,7 +36,7 @@ const Navbar = () => {
                             </span>
                         </NavLink>
                         {showSolutionsMenu && (
-                            <div className='absolute top-full left-0 mt-2 w-96 rounded-lg bg-white shadow-lg z-50'>
+                            <div className='absolute top-full left-0 mt-1 w-96 rounded-lg bg-white shadow-lg z-50'>
                                 <ul className='py-2'>
                                     <li className='px-4 py-2 hover:bg-gray-100'>
                                         <NavLink to="/solutions/efficiency">Eficiencia Energética</NavLink>
@@ -71,7 +71,7 @@ const Navbar = () => {
                             </span>
                         </NavLink>
                         {showProductsMenu && (
-                            <div className='absolute top-full left-0 mt-2 w-96 rounded-lg bg-white shadow-lg z-50'>
+                            <div className='absolute top-full left-0 mt-1 w-96 rounded-lg bg-white shadow-lg z-50'>
                                 <ul className='py-2'>
                                     <li className='px-4 py-2 hover:bg-gray-100'>
                                         <NavLink to="/products/solar-panels">Paneles Solares</NavLink>
