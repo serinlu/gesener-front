@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { FaCartShopping } from 'react-icons/fa6';
 import { IoSearch } from 'react-icons/io5';
@@ -7,9 +7,9 @@ import logo from '../uploads/logo.png';
 import { IoIosArrowDown } from 'react-icons/io';
 
 const Navbar = () => {
-    const [showSearch, setShowSearch] = useState(false);
     const [showSolutionsMenu, setShowSolutionsMenu] = useState(false);
     const [showProductsMenu, setShowProductsMenu] = useState(false);
+    const [showSearch, setShowSearch] = useState(false);
 
     const handleMouseEnterSolutions = () => setShowSolutionsMenu(true);
     const handleMouseLeaveSolutions = () => setShowSolutionsMenu(false);
@@ -17,10 +17,29 @@ const Navbar = () => {
     const handleMouseEnterProducts = () => setShowProductsMenu(true);
     const handleMouseLeaveProducts = () => setShowProductsMenu(false);
 
+    const onClickSearch = () => setShowSearch(!showSearch);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            const searchMenu = document.getElementById('search-menu');
+            if (searchMenu && !searchMenu.contains(event.target)) {
+                setShowSearch(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
         <div className='w-full py-4 bg-white shadow-md'>
             <nav className='w-[90%] mx-auto flex justify-between items-center'>
-                <img src={logo} alt="logo" className='w-48' />
+                <NavLink to="/">
+                    <img src={logo} alt="logo" className='w-48' />
+                </NavLink>
                 <div className='flex gap-x-6'>
 
                     {/* Soluciones Link with Dropdown */}
@@ -36,16 +55,16 @@ const Navbar = () => {
                             </span>
                         </NavLink>
                         {showSolutionsMenu && (
-                            <div className='absolute top-full left-0 mt-1 w-96 rounded-lg bg-white shadow-lg z-50'>
+                            <div className='absolute top-full left-0 w-96 rounded-lg bg-white shadow-lg z-50'>
                                 <ul className='py-2'>
                                     <li className='px-4 py-2 hover:bg-gray-100'>
-                                        <NavLink to="/solutions/efficiency">Eficiencia Energética</NavLink>
+                                        <NavLink to="/solutions/energy-efficiency">Eficiencia Energética</NavLink>
                                     </li>
                                     <li className='px-4 py-2 hover:bg-gray-100'>
                                         <NavLink to="/solutions/equipment-rental">Alquiler de Equipos</NavLink>
                                     </li>
                                     <li className='px-4 py-2 hover:bg-gray-100'>
-                                        <NavLink to="/solutions/thermography">Termografía Infrarroja</NavLink>
+                                        <NavLink to="/solutions/infrared-thermography">Termografía Infrarroja</NavLink>
                                     </li>
                                     <li className='px-4 py-2 hover:bg-gray-100'>
                                         <NavLink to="/solutions/renewable-energy">Energía Renovable</NavLink>
@@ -71,7 +90,7 @@ const Navbar = () => {
                             </span>
                         </NavLink>
                         {showProductsMenu && (
-                            <div className='absolute top-full left-0 mt-1 w-96 rounded-lg bg-white shadow-lg z-50'>
+                            <div className='absolute top-full left-0 w-96 rounded-lg bg-white shadow-lg z-50'>
                                 <ul className='py-2'>
                                     <li className='px-4 py-2 hover:bg-gray-100'>
                                         <NavLink to="/products/solar-panels">Paneles Solares</NavLink>
@@ -98,9 +117,23 @@ const Navbar = () => {
                     <button className='p-2 text-lg hover:text-indigo-500 duration-300'>
                         <FaCartShopping />
                     </button>
-                    <button className='p-2 text-lg hover:text-indigo-500 duration-300'>
-                        <IoSearch />
-                    </button>
+                    <div
+                        className='relative'
+                    >
+                        <button
+                            className='p-2 text-lg hover:text-indigo-500 duration-300'
+                            onClick={onClickSearch}
+                        >
+                            <IoSearch />
+                        </button>
+                        {showSearch && (
+                            <div id='search-menu' className='absolute top-full right-0 mt-1 w-96 rounded-lg bg-white shadow-lg z-50'>
+                                <form className='p-4'>
+                                    <input type='text' placeholder='Buscar' className='w-full p-2 border border-gray-200 rounded-lg' />
+                                </form>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </nav>
         </div>

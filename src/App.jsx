@@ -7,6 +7,11 @@ import AuthLayout from "./layouts/AuthLayout";
 import Register from "./pages/auth/Register";
 import RecoverPassword from "./pages/auth/RecoverPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
+import EnergyEfficiency from "./pages/landing/solutions/energy-efficiency";
+import EquipmentRental from "./pages/landing/solutions/equipment-rental";
+import InfraredThermography from "./pages/landing/solutions/infrared-thermography";
+import RenewableEnergy from "./pages/landing/solutions/renewable-energy";
+import Training from "./pages/landing/solutions/training";
 
 function App() {
   return (
@@ -14,6 +19,14 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingLayout />}>
           <Route index element={<Home />} />
+          {/* Solutions Page */}
+          <Route path="solutions/energy-efficiency" element={<EnergyEfficiency />} />
+          <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
+          <Route path="solutions/infrared-thermography" element={<InfraredThermography />} />
+          <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
+          <Route path="solutions/renewable-energy" element={<RenewableEnergy />} />
+          <Route path="solutions/training" element={<Training />} />
+          {/* Solutions Page */}
           <Route path="contact" element={<Contact />} />
         </Route>
         <Route element={<AuthLayout />}>
@@ -22,7 +35,7 @@ function App() {
           <Route path="recover-password" element={<RecoverPassword />} />
         </Route>
         <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route path=""/>
+          <Route path="" />
         </Route>
       </Routes>
     </BrowserRouter>
