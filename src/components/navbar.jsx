@@ -10,6 +10,7 @@ const Navbar = () => {
     const [showSolutionsMenu, setShowSolutionsMenu] = useState(false);
     const [showProductsMenu, setShowProductsMenu] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
+    const [showUserOptions, setShowUserOptions] = useState(false);
 
     const handleMouseEnterSolutions = () => setShowSolutionsMenu(true);
     const handleMouseLeaveSolutions = () => setShowSolutionsMenu(false);
@@ -18,12 +19,15 @@ const Navbar = () => {
     const handleMouseLeaveProducts = () => setShowProductsMenu(false);
 
     const onClickSearch = () => setShowSearch(!showSearch);
+    const onClickUser = () => setShowUserOptions(!showUserOptions)
 
     useEffect(() => {
         const handleClickOutside = (event) => {
             const searchMenu = document.getElementById('search-menu');
-            if (searchMenu && !searchMenu.contains(event.target)) {
+            const userMenu = document.getElementById('user-menu');
+            if (searchMenu && !searchMenu.contains(event.target) || userMenu && !userMenu.contains(event.target)) {
                 setShowSearch(false);
+                setShowUserOptions(false);
             }
         };
 
@@ -111,9 +115,26 @@ const Navbar = () => {
                     <NavLink to="contact" className='p-4 hover:text-indigo-500 duration-300'>CONTÁCTANOS</NavLink>
                 </div>
                 <div className='flex gap-x-2'>
-                    <button className='p-2 text-lg hover:text-indigo-500 duration-300'>
-                        <FaUser />
-                    </button>
+                    <div
+                        className='relative'
+                        onClick={onClickUser}
+                    >
+                        <button className='p-2 text-lg hover:text-indigo-500 duration-300'>
+                            <FaUser />
+                        </button>
+                        {showUserOptions && (
+                            <div id='user-menu' className='absolute top-full left-0 w-[10rem] rounded-lg bg-white shadow-lg z-50'>
+                                <ul className='py-2'>
+                                    <li className='px-4 py-2 hover:bg-gray-100'>
+                                        <NavLink to="/login">Iniciar sesión</NavLink>
+                                    </li>
+                                    <li className='px-4 py-2 hover:bg-gray-100'>
+                                        <NavLink to="/register">Registrarse</NavLink>
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
+                    </div>
                     <button className='p-2 text-lg hover:text-indigo-500 duration-300'>
                         <FaCartShopping />
                     </button>
@@ -133,6 +154,7 @@ const Navbar = () => {
                                 </form>
                             </div>
                         )}
+
                     </div>
                 </div>
             </nav>
