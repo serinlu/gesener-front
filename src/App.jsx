@@ -12,6 +12,7 @@ import EquipmentRental from "./pages/landing/solutions/equipment-rental";
 import InfraredThermography from "./pages/landing/solutions/infrared-thermography";
 import RenewableEnergy from "./pages/landing/solutions/renewable-energy";
 import Training from "./pages/landing/solutions/training";
+import Us from "./pages/us/us";
 
 function App() {
   return (
@@ -26,8 +27,9 @@ function App() {
           <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
           <Route path="solutions/renewable-energy" element={<RenewableEnergy />} />
           <Route path="solutions/training" element={<Training />} />
-          {/* Solutions Page */}
+          {/* other pages */}
           <Route path="contact" element={<Contact />} />
+          <Route path="us" element={<Us />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="login" element={<Login />} />
