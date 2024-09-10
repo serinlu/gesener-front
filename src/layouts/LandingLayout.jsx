@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
+import WhatsAppButton from "../components/Whatsapp";
 
 const LandingLayout = () => {
     return (
@@ -14,9 +15,9 @@ const LandingLayout = () => {
             <Navbar />
             <div className="text-gray-500 bg-gray-100">
                 <Outlet />
+                <WhatsAppButton />
             </div>
             <Footer />
-            {/* <Header /> */}
         </>
     )
 }
