@@ -1,5 +1,5 @@
-import { TextField } from "@mui/material";
 import React from "react";
+import ContactForm from "../../../components/ContactForm";
 
 const Contact = () => {
 	return (
@@ -26,41 +26,7 @@ const Contact = () => {
 					</div>
 
 					{/* Form */}
-					<form className="bg-white w-[80%] p-4 rounded-lg flex flex-col gap-y-4">
-						<TextField
-							id="outlined-basic"
-							label="Nombre"
-							variant="outlined"
-							className="w-full"
-							size="small"
-						/>
-						<TextField
-							id="outlined-basic"
-							label="Correo"
-							variant="outlined"
-							className="w-full"
-							size="small"
-						/>
-						<TextField
-							id="outlined-basic"
-							label="Teléfono"
-							variant="outlined"
-							className="w-full"
-							size="small"
-						/>
-						<TextField
-							id="outlined-multiline-static"
-							label="Mensaje"
-							className="w-full"
-							multiline
-							rows={4}
-							defaultValue="Default Value"
-						/>
-
-						<div className="flex justify-center">
-							<button className="bg-blue-500 text-white hover:bg-blue-600 rounded py-2 px-12">Enviar</button>
-						</div>
-					</form>
+					<ContactForm />
 				</div>
 			</div>
 

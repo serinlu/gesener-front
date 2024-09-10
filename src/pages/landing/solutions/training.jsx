@@ -1,15 +1,26 @@
 import React, { useState } from "react";
 import { useInView } from 'react-intersection-observer';
 import TitleSection from "../../../components/TitleSection";
-import logo from "../../../uploads/renewable-energy.jpg";
-import sistemasFotovoltaicos from "../../../uploads/sistemas-fotovoltaicos.jpg";
-import sistemasEolicos from "../../../uploads/sistemas-eolicos.jpg";
-import calidadEnergia from "../../../uploads/calidad-energia.jpg";
+
 import arcoElectrico from "../../../uploads/arco-electrico.jpg";
-import seguridadElectrica from "../../../uploads/seguridad-electrica.jpg";
-import sistemasPuestaTierra from "../../../uploads/sistemas-puesta-tierra.jpg";
+import calidadEnergia from "../../../uploads/calidad-energia.jpg";
 import eficienciaEnergetica from "../../../uploads/eficiencia-energetica.jpg";
+import seguridadElectrica from "../../../uploads/seguridad-electrica.jpg";
+import sistemasEolicos from "../../../uploads/sistemas-eolicos.jpg";
+import sistemasFotovoltaicos from "../../../uploads/sistemas-fotovoltaicos.jpg";
+import sistemasPuestaTierra from "../../../uploads/sistemas-puesta-tierra.jpg";
 import termografiaInfrarroja from "../../../uploads/termografia-infrarroja.jpg";
+
+import fuerteHoyos from "../../../uploads/fuerte-hoyos.jpg";
+import siderPeru from "../../../uploads/sider-peru.jpg";
+import sistemasElectricosTecsup from "../../../uploads/sistemas-electricos-tecsup.png";
+import sunatFotovoltaico from "../../../uploads/sunat-eficiencia.png";
+import tecsupFotovoltaico from "../../../uploads/tecsup-fotovoltaico.jpeg";
+
+import ContactForm from "../../../components/ContactForm";
+import energiaFuturo from "../../../uploads/energia-futuro.png";
+import infrarrojaIA from "../../../uploads/infrarroja-ia.png";
+import sostenibilidad from "../../../uploads/sostenibilidad.png";
 
 const Contact = () => {
   const [startCount, setStartCount] = useState(false);
@@ -112,6 +123,95 @@ const Contact = () => {
                   <h1 className="pb-2 text-justify">Este curso ofrece fundamentos de termografía infrarroja, explicando sus aplicaciones en el campo industrial. Asimismo, aprenderás acerca de las nuevas tecnologías involucradad y los factores influyentes en la medición.</h1>
                 </div>
               </div>
+            </div>
+            <div className="pt-12">
+              <h1 className="text-2xl pb-6 font-bold">Cursos brindados</h1>
+              <div className="flex space-x-6 text-justify">
+                <div className="w-1/3 rounded flex-1 bg-white">
+                  <div>
+                    <img src={sunatFotovoltaico} alt="Logo" className="w-full h-48 object-cover rounded" />
+                  </div>
+                  <div className="p-3">
+                    <h1 className="font-bold pb-2 text-base">SISTEMAS FOTOVOLTAICOS Y EFICIENCIA ENERGÉTICA SUNAT</h1>
+                    <h1 className="pb-2">Año: 2024.</h1>
+                  </div>
+                </div>
+                <div className="w-1/3 rounded flex-1 bg-white">
+                  <div>
+                    <img src={tecsupFotovoltaico} alt="Logo" className="w-full h-48 object-cover rounded" />
+                  </div>
+                  <div className="p-3">
+                    <h1 className="font-bold pb-2 text-base">ENERGÍA SOLAR FOTOVOLTÁICA PRESENCIAL TECSUP</h1>
+                    <h1 className="pb-2">Año: 2022</h1>
+                  </div>
+                </div>
+                <div className="w-1/3 rounded flex-1 bg-white">
+                  <div>
+                    <img src={siderPeru} alt="Logo" className="w-full h-48 object-cover rounded" />
+                  </div>
+                  <div className="p-3">
+                    <h1 className="font-bold pb-2 text-base">NÁLISIS DE ARMÓNICOS DE POTENCIA EN SIDER PERÚ</h1>
+                    <h1 className="pb-2">Año: 2021</h1>
+                  </div>
+                </div>
+              </div>
+              <div className="flex space-x-6 w-[66%] mx-auto pt-6 text-justify">
+                <div className="w-1/3 rounded flex-1 bg-white">
+                  <div>
+                    <img src={fuerteHoyos} alt="Logo" className="w-full h-48 object-cover rounded" />
+                  </div>
+                  <div className="p-3">
+                    <h1 className="font-bold pb-2 text-base">LUMINARIAS Y REFLECTORES SOLARES CUARTEL FUERTE DE HOYOS</h1>
+                    <h1 className="pb-2">Año: 2021.</h1>
+                  </div>
+                </div>
+                <div className="w-1/3 rounded flex-1 bg-white">
+                  <div>
+                    <img src={sistemasElectricosTecsup} alt="Logo" className="w-full h-48 object-cover rounded" />
+                  </div>
+                  <div className="p-3">
+                    <h1 className="font-bold pb-2 text-base">TERMOGRAFÍA APLICADA A SISTEMAS ELÉCTRICOS EN TECSUP</h1>
+                    <h1 className="pb-2">Año: 2021</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="pt-12 text-justify">
+              <h1 className="text-2xl pb-6 font-bold">Próximos cursos</h1>
+              <div className="flex space-x-6">
+                <div className="w-1/3 rounded flex-1 bg-white">
+                  <div>
+                    <img src={infrarrojaIA} alt="Logo" className="w-full h-48 object-cover rounded" />
+                  </div>
+                  <div className="p-3">
+                    <h1 className="font-bold pb-2 text-base">Potenciando la Termografía Infrarroja con Inteligencia Artificial</h1>
+                    <h1 className="pb-2">Explora la exelencia sobre las aplicaciones prácticas de la IA en termografía.</h1>
+                  </div>
+                </div>
+                <div className="w-1/3 rounded flex-1 bg-white">
+                  <div>
+                    <img src={sostenibilidad} alt="Logo" className="w-full h-48 object-cover rounded" />
+                  </div>
+                  <div className="p-3">
+                    <h1 className="font-bold pb-2 text-base">Impulsa tu Ahorro y Sostenibilidad Optimizando tu Consumo Energético</h1>
+                    <h1 className="pb-2">¡Domina sistemas fotovoltaicos! Diseño, instalación y mantenimiento eficiente para tu éxito energético.</h1>
+                  </div>
+                </div>
+                <div className="w-1/3 rounded flex-1 bg-white">
+                  <div>
+                    <img src={energiaFuturo} alt="Logo" className="w-full h-48 object-cover rounded" />
+                  </div>
+                  <div className="p-3">
+                    <h1 className="font-bold pb-2 text-base">Domina la Energía del Futuro con Sistemas Fotovoltaicos</h1>
+                    <h1 className="pb-2">Revoluciona tu gestión energética: aprende a optimizar el consumo con tecnologías avanzadas en nuestro curso online.</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h1 className="text-2xl mt-14 font-bold">Más información</h1>
+            <h1 className="text-lg mt-4">Si desea consultar información sobre nuestros cursos, puede enviarnos un mensaje.</h1>
+            <div className="flex justify-between gap-x-4 mt-6">
+              <ContactForm />
             </div>
           </div>
         </div>

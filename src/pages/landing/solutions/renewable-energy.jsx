@@ -28,7 +28,7 @@ const Contact = () => {
             </p>
             <div className="flex justify-between w-[100%] mx-auto space-x-8">
               <div className="flex-1">
-                <h1 className="text-black font-bold text-2xl pb-8">Brindamos:</h1>
+                <h1 className="font-bold text-2xl pb-8">Brindamos:</h1>
                 <div className=''>
                   <ul className="list-disc list-inside space-y-2 text-base">
                     <li>Kits: Solares fotovoltaicos</li>
