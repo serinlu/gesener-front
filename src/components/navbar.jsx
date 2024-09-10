@@ -50,7 +50,7 @@ const Navbar = () => {
     }, []);
 
     return (
-        <div className='w-full py-4 bg-white shadow-md'>
+        <div className='w-full py-4 bg-white shadow-md text-black'>
             <nav className='w-[90%] mx-auto flex justify-between items-center'>
                 <NavLink to="/">
                     <img src={logo} alt="logo" className='w-48' />

@@ -11,10 +11,12 @@ const LandingLayout = () => {
         //     <Footer />
         // </div>
         <>
-            {/* <Header /> */}
             <Navbar />
-            <Outlet />
+            <div className="text-gray-500 bg-gray-100">
+                <Outlet />
+            </div>
             <Footer />
+            {/* <Header /> */}
         </>
     )
 }
