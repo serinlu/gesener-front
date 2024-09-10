@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useInView } from 'react-intersection-observer';
 import RelatedTopics from '../../../components/RelatedTopics';
+import logo from "../../../uploads/renewable-energy.jpg";
+import TitleSection from "../../../components/TitleSection";
 
 const Contact = () => {
   const [startCount, setStartCount] = useState(false);
@@ -16,11 +18,9 @@ const Contact = () => {
     },
   });
   return (
-    <div className="py-10 font-sans">
-      <div className="w-[70%] mx-auto pb-8">
-        <h1 className="text-4xl text-center text-blue-600 font-bold pb-12">
-          ENERGÍAS RENOVABLES
-        </h1>
+    <div className="font-sans pb-10">
+      <TitleSection />
+      <div className="w-[70%] mx-auto py-10">
         <div className='flex space-x-14'>
           <div className='w-2/3'>
             <p className="text-lg pb-8 text-justify">
