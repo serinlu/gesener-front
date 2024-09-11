@@ -22,7 +22,7 @@ import energiaFuturo from "../../../uploads/energia-futuro.png";
 import infrarrojaIA from "../../../uploads/infrarroja-ia.png";
 import sostenibilidad from "../../../uploads/sostenibilidad.png";
 
-const Contact = () => {
+const Training = () => {
   const [startCount, setStartCount] = useState(false);
 
   // Configurar el observer para detectar cuando el componente está visible
@@ -220,4 +220,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default Training;

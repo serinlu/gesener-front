@@ -1,15 +1,24 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
+import energyEfficiency from '../uploads/energy-efficiency.jpg';
+import equipmentRental from '../uploads/equipment-rental.jpeg';
+import infraredThermography from '../uploads/infrared-thermography.jpg';
 import renewableEnergy from '../uploads/renewable-energy.jpg';
 import training from '../uploads/training.jpg';
 
 const images = {
+    '/solutions/energy-efficiency': energyEfficiency,
+    '/solutions/equipment-rental': equipmentRental,
+    '/solutions/infrared-thermography': infraredThermography,
     '/solutions/renewable-energy': renewableEnergy,
     '/solutions/training': training,
 };
 
 const titles = {
+    '/solutions/energy-efficiency': 'Eficiencia energética',
+    '/solutions/equipment-rental': 'Alquiler de equipos',
+    '/solutions/infrared-thermography': 'Termografía infrarroja',
     '/solutions/renewable-energy': 'Energía renovable',
     '/solutions/training': 'Capacitaciones',
 };

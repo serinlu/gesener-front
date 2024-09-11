@@ -4,7 +4,7 @@ import RelatedTopics from '../../../components/RelatedTopics';
 import logo from "../../../uploads/renewable-energy.jpg";
 import TitleSection from "../../../components/TitleSection";
 
-const Contact = () => {
+const RenewableEnergy = () => {
   const [startCount, setStartCount] = useState(false);
 
   // Configurar el observer para detectar cuando el componente está visible
@@ -54,4 +54,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default RenewableEnergy;
