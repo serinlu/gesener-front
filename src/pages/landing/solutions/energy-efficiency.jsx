@@ -23,24 +23,21 @@ const EnergyEfficiency = () => {
         <div className='flex space-x-14'>
           <div className='w-2/3'>
             <p className="text-lg pb-8 text-justify">
-              Los principales beneficios de implementar un sistema fotovoltaico en su negocio son el de producir su propia energía eléctrica con fuentes renovables, Ahorra considerablemente en la factura de energía eléctrica y reducir su huella de carbono. Para ello ofrecemos desde el diseño, instalación, operación y mantenimiento de sistemas fotovoltaicos a pequeña y gran escala, garantizando el óptimo funcionamiento y potenciando el crecimiento sustentable de su negocio.
+              Los servicios de Gestión Energética permiten que puedas reducir y mejorar tu consumo energético y ahorrar de forma significativa manteniendo el nivel óptimo de tus instalaciones y mejorando los estándares de producción industrial. Además, nuestras soluciones reducen las emisiones de gases de efecto invernadero al producir un bajo impacto ambiental para ayudar a que su empresa sea más sostenible.
             </p>
             <div className="flex justify-between w-[100%] mx-auto space-x-8">
               <div className="flex-1">
                 <h1 className="font-bold text-2xl pb-8">Brindamos:</h1>
                 <div className=''>
                   <ul className="list-disc list-inside space-y-2 text-base">
-                    <li>Kits: Solares fotovoltaicos</li>
-                    <li>Kits: Bombeo de agua solar</li>
-                    <li>Paneles solares</li>
-                    <li>Soportes de paneles solares</li>
-                    <li>Baterías solares</li>
-                    <li>Inversores solares</li>
-                    <li>Controladores de baterías</li>
-                    <li>Cargador de baterías</li>
-                    <li>Cargador auto – eléctrico</li>
-                    <li>Iluminación</li>
-                    <li>Accesorios</li>
+                    <li>Auditoría Integral de Gestión de Energía</li>
+                    <li>Estudios de calidad de la energía</li>
+                    <li>Monitoreo energético en tiempo real</li>
+                    <li>Proporcionar seguridad de suministro en la operación</li>
+                    <li>Ejecución de proyectos para clientes del sector público y privado</li>
+                    <li>Evaluación y mejoramiento de su tarifa eléctrica</li>
+                    <li>Reducción y optimización de su consumo energético</li>
+                    <li>Implementación y mantenimiento especializado</li>
                   </ul>
                 </div>
               </div>
