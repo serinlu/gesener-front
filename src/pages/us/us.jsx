@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import CountUp from "react-countup";
 import { useInView } from 'react-intersection-observer';
+import TitleSection from '../../components/TitleSection';
 
 const Contact = () => {
     const [startCount, setStartCount] = useState(false);
@@ -18,11 +19,9 @@ const Contact = () => {
         },
     });
     return (
-        <div className="py-10 font-sans">
-            <div className="w-[70%] mx-auto pb-8">
-                <h1 className="text-4xl text-center text-blue-600 font-bold pb-12">
-                    NOSOTROS
-                </h1>
+        <div className="pb-10 font-sans">
+            <TitleSection />
+            <div className="w-[70%] mx-auto py-16">
                 <p className="text-lg pb-8 text-justify">
                     Somos una empresa comprometida con la transformación digital en el sector energético para una mejor eficiencia en nuestros clientes, por ello brindamos servicios cumplan con las más altas expectativas. Nuestro equipo de trabajo se encuentra altamente capacitado para brindar servicios de excelente calidad.
                 </p>

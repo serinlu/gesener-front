@@ -25,11 +25,11 @@ const Item = ({ imagen, modelo, marca }) => {
 
 const Equipo = () => {
     return (
-        <Accordion >
-            <AccordionItem key="1" aria-label="Accordion 1" title="Accordion 1">
+        <Accordion>
+            <AccordionItem key="1" aria-label="Accordion 1" title="Cámara Termográfica HD​">
                 <Item imagen={"https://www.gesener.pe/wp-content/uploads/2022/04/unnamed-300x240-1.jpeg"} modelo={"Camara"} marca={"Canon"} />
             </AccordionItem>
-            <AccordionItem key="2" aria-label="Accordion 2" title="Accordion 2">
+            <AccordionItem key="2" aria-label="Accordion 2" title="Drone Termográfico Flir Matrice 210">
                 <Item imagen={"https://www.gesener.pe/wp-content/uploads/2024/04/dronedji.png"} modelo={"M210V2XT2"} marca={"Drone"} />
             </AccordionItem>
         </Accordion>
