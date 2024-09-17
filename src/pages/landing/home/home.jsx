@@ -100,7 +100,7 @@ const Home = () => {
                             <CardFooter className="justify-between bg-white/10 backdrop-blur-lg border-white/20 border-1 overflow-hidden py-3 absolute rounded-xl bottom-1 w-[calc(100%_-_8px)] shadow-small mx-1 z-10">
                                 <p className="text-base text-white pl-3">Casos de éxito</p>
                                 <Button
-                                    className="text-sm text-white bg-black/20 p-2 group relative overflow-hidden transition-all duration-300 ease-in-out"
+                                    className="text-sm text-white bg-black/20 p-2 group relative overflow-hidden transition-all duration-300 ease-in-out rounded-lg"
                                     variant="flat"
                                     color="default"
                                     radius="lg"
@@ -125,7 +125,7 @@ const Home = () => {
                             <CardFooter className="justify-between bg-white/10 backdrop-blur-lg border-white/20 border-1 overflow-hidden py-3 absolute rounded-xl bottom-1 w-[calc(100%_-_8px)] shadow-small mx-1 z-10">
                                 <p className="text-base text-white pl-3">Eficiencia energética</p>
                                 <Button
-                                    className="text-sm text-white bg-black/20 p-2 group relative overflow-hidden transition-all duration-300 ease-in-out"
+                                    className="text-sm text-white bg-black/20 p-2 group relative overflow-hidden transition-all duration-300 ease-in-out rounded-lg"
                                     variant="flat"
                                     color="default"
                                     radius="lg"
@@ -150,7 +150,7 @@ const Home = () => {
                             <CardFooter className="justify-between bg-white/10 backdrop-blur-lg border-white/20 border-1 overflow-hidden py-3 absolute rounded-xl bottom-1 w-[calc(100%_-_8px)] shadow-small mx-1 z-10">
                                 <p className="text-base text-white pl-3">Termografía infrarroja</p>
                                 <Button
-                                    className="text-sm text-white bg-black/20 p-2 group relative overflow-hidden transition-all duration-300 ease-in-out"
+                                    className="text-sm text-white bg-black/20 p-2 group relative overflow-hidden transition-all duration-300 ease-in-out rounded-lg"
                                     variant="flat"
                                     color="default"
                                     radius="lg"
@@ -175,7 +175,7 @@ const Home = () => {
                             <CardFooter className="justify-between bg-white/10 backdrop-blur-lg border-white/20 border-1 overflow-hidden py-3 absolute rounded-xl bottom-1 w-[calc(100%_-_8px)] shadow-small mx-1 z-10">
                                 <p className="text-base text-white pl-3">Energías renovables</p>
                                 <Button
-                                    className="text-sm text-white bg-black/20 p-2 group relative overflow-hidden transition-all duration-300 ease-in-out"
+                                    className="text-sm text-white bg-black/20 p-2 group relative overflow-hidden transition-all duration-300 ease-in-out rounded-lg"
                                     variant="flat"
                                     color="default"
                                     radius="lg"
@@ -200,7 +200,7 @@ const Home = () => {
                             <CardFooter className="justify-between bg-white/10 backdrop-blur-lg border-white/20 border-1 overflow-hidden py-3 absolute rounded-xl bottom-1 w-[calc(100%_-_8px)] shadow-small mx-1 z-10">
                                 <p className="text-base text-white pl-3">Capacitación</p>
                                 <Button
-                                    className="text-sm text-white bg-black/20 p-2 group relative overflow-hidden transition-all duration-300 ease-in-out"
+                                    className="text-sm text-white bg-black/20 p-2 group relative overflow-hidden transition-all duration-300 ease-in-out rounded-lg"
                                     variant="flat"
                                     color="default"
                                     radius="lg"
@@ -225,7 +225,7 @@ const Home = () => {
                             <CardFooter className="justify-between bg-white/10 backdrop-blur-lg border-white/20 border-1 overflow-hidden py-3 absolute rounded-xl bottom-1 w-[calc(100%_-_8px)] shadow-small mx-1 z-10">
                                 <p className="text-base text-white pl-3">Alquiler de equipos</p>
                                 <Button
-                                    className="text-sm text-white bg-black/20 p-2 group relative overflow-hidden transition-all duration-300 ease-in-out"
+                                    className="text-sm text-white bg-black/20 p-2 group relative overflow-hidden transition-all duration-300 ease-in-out rounded-lg"
                                     variant="flat"
                                     color="default"
                                     radius="lg"
