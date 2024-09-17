@@ -34,7 +34,7 @@ const RelatedTopics = () => {
             <h1 className='font-bold'>Empecemos a trabajar</h1>
             <h1 className='pb-2'>Da el siguiente paso</h1>
             <button
-                className='bg-indigo-700 px-5 py-2 text-base text-white font-semibold'
+                className='bg-indigo-700 px-5 py-2 text-base text-white font-semibold rounded-lg'
                 onClick={mailHandler}
             >
                 <FontAwesomeIcon icon={faComment} size="lg" /> Hablar con un especialista

@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input } from "@nextui-org/react";
 import { FaCross, FaSearch } from "react-icons/fa";
 
-export default function ModalComponent() {
+const ModalComponent = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [size, setSize] = React.useState('md');
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -79,3 +79,5 @@ export default function ModalComponent() {
         </div>
     );
 }
+
+export default ModalComponent;
