@@ -45,7 +45,7 @@ const Register = () => {
                             className="ml-4 mr-2"
                         />
                         <label htmlFor="juridica" className="text-sm font-medium text-gray-700">
-                            Persona Jurídica
+                            Persona Jurídic
                         </label>
                     </div>
 
