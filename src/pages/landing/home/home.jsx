@@ -90,7 +90,7 @@ const Home = () => {
                     <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4'>
                         <Card
                             radius="lg"
-                            className="border-none h-60"
+                            className="border-none h-60 rounded-lg"
                         >
                             <img
                                 alt="Casos de éxito"
@@ -115,7 +115,7 @@ const Home = () => {
                         </Card>
                         <Card
                             radius="lg"
-                            className="border-none h-60"
+                            className="border-none h-60 rounded-lg"
                         >
                             <img
                                 alt="Eficiencia energética"
@@ -140,7 +140,7 @@ const Home = () => {
                         </Card>
                         <Card
                             radius="lg"
-                            className="border-none h-60"
+                            className="border-none h-60 rounded-lg"
                         >
                             <img
                                 alt="Termografía infrarroja"
@@ -165,7 +165,7 @@ const Home = () => {
                         </Card>
                         <Card
                             radius="lg"
-                            className="border-none h-60"
+                            className="border-none h-60 rounded-lg"
                         >
                             <img
                                 alt="Energías renovables"
@@ -190,7 +190,7 @@ const Home = () => {
                         </Card>
                         <Card
                             radius="lg"
-                            className="border-none h-60"
+                            className="border-none h-60 rounded-lg"
                         >
                             <img
                                 alt="Capacitación"
@@ -215,7 +215,7 @@ const Home = () => {
                         </Card>
                         <Card
                             radius="lg"
-                            className="border-none h-60"
+                            className="border-none h-60 rounded-lg"
                         >
                             <img
                                 alt="Alquiler de equipos"
