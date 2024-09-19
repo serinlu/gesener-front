@@ -1,18 +1,22 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import LandingLayout from "./layouts/LandingLayout";
+import AuthLayout from "./layouts/AuthLayout";
+import ProductsLayout from "./layouts/ProductsLayout";
+import DashboardLayout from "./layouts/DashboardLayout";
+
 import Home from "./pages/landing/home/home";
 import Contact from "./pages/landing/contact/contact";
 import Login from "./pages/auth/Login";
-import AuthLayout from "./layouts/AuthLayout";
 import Register from "./pages/auth/Register";
 import RecoverPassword from "./pages/auth/RecoverPassword";
-import DashboardLayout from "./layouts/DashboardLayout";
 import EnergyEfficiency from "./pages/landing/solutions/energy-efficiency";
 import EquipmentRental from "./pages/landing/solutions/equipment-rental";
 import InfraredThermography from "./pages/landing/solutions/infrared-thermography";
 import RenewableEnergy from "./pages/landing/solutions/renewable-energy";
 import Training from "./pages/landing/solutions/training";
 import Us from "./pages/us/us";
+
 
 function App() {
   return (
@@ -30,6 +34,8 @@ function App() {
           {/* other pages */}
           <Route path="contact" element={<Contact />} />
           <Route path="us" element={<Us />} />
+        </Route>
+        <Route path="/products" element={<ProductsLayout />}>
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="login" element={<Login />} />
