@@ -9,7 +9,7 @@ import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, useDiscl
 import ModalComponent from './Modal';
 import alquiler from '../uploads/training.jpg'; // Example image import, you can change it with dynamic ones
 import clsx from 'clsx';
-import ProductNavbar from './ProductNavbar';
+import ProductNavbar from './ProductSidebar';
 
 const Navbar = () => {
     const [showSearch, setShowSearch] = useState(false);
