@@ -34,7 +34,7 @@ function App() {
           <Route path="contact" element={<Contact />} />
           <Route path="us" element={<Us />} />
           {/* product pages */}
-          <Route path="product/:category" element={<Product />} />
+          <Route path="products/category/:categoryName" element={<Product />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="login" element={<Login />} />

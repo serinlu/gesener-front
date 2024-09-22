@@ -32,6 +32,18 @@ const getProducts = async () => {
     }
 }
 
+const getProductsByCategory = async (categoryId) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/products/category/${categoryId}`);
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error al obtener productos por categoría:', error);
+    }
+};
+
 const getProductById = async (id) => {
     try {
         const response = await fetch(`http://localhost:3000/api/products/${id}`);
@@ -81,3 +93,12 @@ const deleteProduct = async (id) => {
         console.error('Error al eliminar el producto:', error);
     }
 }
+
+export {
+    createProduct,
+    getProducts,
+    getProductsByCategory,
+    getProductById,
+    updateProduct,
+    deleteProduct
+};

@@ -12,14 +12,9 @@ const getCategories = async () => {
     }
 }
 
-const getCategoryById = async (id) => {
+const getCategoryById = async (categoryId) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/categories/${id}`);
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
-
+        const response = await fetch(`http://localhost/3000/api/categories/${categoryId}`);
         return await response.json();
     } catch (error) {
         console.error('Error al obtener la categoría:', error);

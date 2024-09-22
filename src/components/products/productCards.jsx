@@ -1,19 +1,26 @@
 import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
 
-const ProductCards = () => {
+const ProductCards = ({ name, categories, price }) => {
     return (
         <Card className="py-4">
             <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                <p className="text-tiny uppercase font-bold">Daily Mix</p>
-                <small className="text-default-500">12 Tracks</small>
-                <h4 className="font-bold text-large">Frontend Radio</h4>
+                <h4 className="font-bold text-large">{name}</h4>
+                <p className="text-tiny uppercase font-bold">
+                    {categories.map((category) => category.name).join(', ')} {/* Muestra los nombres de las categorías */}
+                </p>
+                <small className="text-default-500">${price}</small>
             </CardHeader>
             <CardBody className="overflow-visible py-2">
-                <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" alt="Frontend Radio" className="w-96 h-96 object-cover rounded-lg"
+                <Image
+                    alt={name}
+                    className="object-cover rounded-xl"
+                    src="https://via.placeholder.com/270" // Puedes reemplazar con una URL dinámica si tienes la imagen en tu base de datos
+                    width={270}
+                    height={270}
                 />
             </CardBody>
         </Card>
     );
-}
+};
 
 export default ProductCards;
