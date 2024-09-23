@@ -1,3 +1,5 @@
+import clientAxios from "../config/axios";
+
 const createProduct = async (product) => {
     try {
         const response = await fetch(`${process.env.BACKEND_URL}/api/products`, {
@@ -26,11 +28,13 @@ const getProducts = async () => {
             throw new Error(`Error: ${response.status}`);
         }
 
-        return await response.json();
+        const data = await response.json(); // Convertir la respuesta a JSON
+        return data;
     } catch (error) {
         console.error('Error al obtener los productos:', error);
+        return []; // Retorna un array vacío en caso de error para evitar errores en el frontend
     }
-}
+};
 
 const getProductsByCategory = async (categoryId) => {
     try {

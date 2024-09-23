@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import logo from "../../uploads/logo.png"
+import { AuthContext } from '../../context/AuthContext';
+import { loginUser } from '../../services/UserService';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+  const [form, setForm] = useState({
+    email: '',
+    password: ''
+  });
 
-  const handleSubmit = (e) => {
+  const { auth } = useContext(AuthContext);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Manejar el envío del formulario
-    console.log('Email:', email);
-    console.log('Password:', password);
-  };
+    try {
+      const response = await loginUser(form);
+      console.log(response);
+      return response.data;
+    }
+    catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
 
   return (
     <>
@@ -26,8 +39,8 @@ const Login = () => {
               type="email"
               id="email"
               name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={form.email}
+              onChange={(e) => setForm({...form, email: e.target.value})}
               required
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -40,8 +53,8 @@ const Login = () => {
               type="password"
               id="password"
               name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={form.password}
+              onChange={(e) => setForm({...form, password: e.target.value})}
               required
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />

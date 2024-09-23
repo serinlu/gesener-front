@@ -16,35 +16,38 @@ import RenewableEnergy from "./pages/landing/solutions/renewable-energy";
 import Training from "./pages/landing/solutions/training";
 import Us from "./pages/us/us";
 import Product from "./pages/landing/product/Product";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingLayout />}>
-          <Route index element={<Home />} />
-          {/* Solutions Page */}
-          <Route path="solutions/energy-efficiency" element={<EnergyEfficiency />} />
-          <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
-          <Route path="solutions/infrared-thermography" element={<InfraredThermography />} />
-          <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
-          <Route path="solutions/renewable-energy" element={<RenewableEnergy />} />
-          <Route path="solutions/training" element={<Training />} />
-          {/* other pages */}
-          <Route path="contact" element={<Contact />} />
-          <Route path="us" element={<Us />} />
-          {/* product pages */}
-          <Route path="products/category/:categoryName" element={<Product />} />
-        </Route>
-        <Route element={<AuthLayout />}>
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="recover-password" element={<RecoverPassword />} />
-        </Route>
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route path="" />
-        </Route>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<LandingLayout />}>
+            <Route index element={<Home />} />
+            {/* Solutions Page */}
+            <Route path="solutions/energy-efficiency" element={<EnergyEfficiency />} />
+            <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
+            <Route path="solutions/infrared-thermography" element={<InfraredThermography />} />
+            <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
+            <Route path="solutions/renewable-energy" element={<RenewableEnergy />} />
+            <Route path="solutions/training" element={<Training />} />
+            {/* other pages */}
+            <Route path="contact" element={<Contact />} />
+            <Route path="us" element={<Us />} />
+            {/* product pages */}
+            <Route path="products/category/:categoryName" element={<Product />} />
+          </Route>
+          <Route element={<AuthLayout />}>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="recover-password" element={<RecoverPassword />} />
+          </Route>
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route path="" />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
