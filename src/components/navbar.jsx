@@ -40,16 +40,6 @@ const Navbar = () => {
         { key: "training", label: "Capacitación", path: "/solutions/training" }
     ];
 
-    // Actualización del array ItemsProducts con image y description
-    const ItemsProducts = [
-        { key: "solar-panels", label: "Paneles solares", path: "/products/solar-panels", image: 'https://www.gesener.pe/wp-content/uploads/2022/04/Foto-4.png', description: 'Paneles solares de alta eficiencia.' },
-        { key: "inverters", label: "Inversores", path: "/products/inverters", image: '/path/to/inverter.jpg', description: 'Inversores para sistemas solares.' },
-        { key: "batteries", label: "Baterías", path: "/products/batteries", image: '/path/to/battery.jpg', description: 'Baterías de larga duración para energía solar.' },
-        { key: "inverters", label: "Inversores", path: "/products/inverters", image: '/path/to/inverter.jpg', description: 'Inversores para sistemas solares.' },
-        { key: "inverters", label: "Inversores", path: "/products/inverters", image: '/path/to/inverter.jpg', description: 'Inversores para sistemas solares.' },
-        { key: "inverters", label: "Inversores", path: "/products/inverters", image: '/path/to/inverter.jpg', description: 'Inversores para sistemas solares.' }
-    ];
-
     const toggleNavbar = () => {
         setIsOpen(!isOpen);
     };

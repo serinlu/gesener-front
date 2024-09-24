@@ -23,7 +23,7 @@ const ProductNavbar = () => {
             {categories.map((category) => (
                 <NavLink
                     key={category._id}
-                    to={`/products/category/${category._id}`} // Usar el ID en la URL
+                    to={`/products/category/${category.name}`} // Usar el ID en la URL
                     className="text-sm font-semibold text-gray-700 hover:text-indigo-500 transition-colors pl-4"
                 >
                     {category.name} {/* Mostrar el nombre en el frontend */}

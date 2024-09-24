@@ -70,7 +70,7 @@ const Product = () => {
                 {categories.map((category) => (
                     <NavLink
                         key={category._id}
-                        to={`/products/category/${category._id}`}
+                        to={`/products/category/${category.name}`}
                         className="text-sm font-semibold text-gray-700 hover:text-indigo-500 transition-colors pl-4"
                         onClick={() => filterByCategory(category._id)} // Filtrar productos por categoría
                     >
@@ -92,10 +92,6 @@ const Product = () => {
                     {filteredProducts.length > 0 ? (
                         filteredProducts.map((product) => (
                             <Card key={product._id} className="py-4">
-                                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                                    <h4 className="font-bold text-large">{product.name}</h4>
-                                    <small className="text-default-500">${product.price}</small>
-                                </CardHeader>
                                 <CardBody className="overflow-visible py-2">
                                     <Image
                                         alt={product.name}
@@ -105,6 +101,17 @@ const Product = () => {
                                         height={270}
                                     />
                                 </CardBody>
+                                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                                    <div className="mt-2">
+                                        {product.categories.map((category) => (
+                                            <span key={category._id} className="text-sm text-gray-500 mr-2">
+                                                {category.name}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <h4 className="font-bold text-large">{product.name}</h4>
+                                    <small className="text-default-500">${product.price}</small>
+                                </CardHeader>
                             </Card>
                         ))
                     ) : (

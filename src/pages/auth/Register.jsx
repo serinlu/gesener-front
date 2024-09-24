@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { registerUser } from '../../services/UserService';
+import { Input, Radio, RadioGroup } from '@nextui-org/react';
 
 const Register = () => {
     const [form, setForm] = useState({
@@ -66,66 +67,83 @@ const Register = () => {
                     {/* Formulario para Persona Natural */}
                     {form.userType === 'natural' && (
                         <>
-                            <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    Nombre
-                                </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={form.name}
-                                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                                    required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                />
+                            <div className='flex justify-between space-x-2'>
+                                <div className="relative w-1/2">
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        value={form.name}
+                                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                                        required
+                                        className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                        placeholder=" "
+                                    />
+                                    <label
+                                        htmlFor="name"
+                                        className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                    >
+                                        Nombre
+                                    </label>
+                                </div>
+                                <div className="relative w-1/2">
+                                    <input
+                                        type="text"
+                                        id="lastname"
+                                        name="lastname"
+                                        value={form.lastname}
+                                        onChange={(e) => setForm({ ...form, lastname: e.target.value })}
+                                        required
+                                        className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                        placeholder=" "
+                                    />
+                                    <label
+                                        htmlFor="lastname"
+                                        className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                    >
+                                        Apellidos
+                                    </label>
+                                </div>
                             </div>
-                            <div>
-                                <label htmlFor="lastname" className="block text-sm font-medium text-gray-700">
-                                    Apellido
-                                </label>
-                                <input
-                                    type="text"
-                                    id="lastname"
-                                    name="lastname"
-                                    value={form.lastname}
-                                    onChange={(e) => setForm({ ...form, lastname: e.target.value })}
-                                    required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                />
+                            <div className='flex justify-between space-x-2'>
+                                <div className="relative w-1/2">
+                                    <input
+                                        type="text"
+                                        id="tipoDocumento"
+                                        name="tipoDocumento"
+                                        value={form.tipoDocumento}
+                                        onChange={(e) => setForm({ ...form, tipoDocumento: e.target.value })}
+                                        required
+                                        className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                        placeholder=" "
+                                    />
+                                    <label
+                                        htmlFor="tipoDocumento"
+                                        className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                    >
+                                        Tipo de documento
+                                    </label>
+                                </div>
+                                <div className="relative w-1/2">
+                                    <input
+                                        type="number"
+                                        id="numDoc"
+                                        name="numDoc"
+                                        value={form.numDoc}
+                                        onChange={(e) => setForm({ ...form, numDoc: e.target.value })}
+                                        required
+                                        className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                        placeholder=" "
+                                    />
+                                    <label
+                                        htmlFor="numDoc"
+                                        className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                    >
+                                        Nùmero de documento
+                                    </label>
+                                </div>
                             </div>
-                            <div>
-                                <label htmlFor="tipoDocumento" className="block text-sm font-medium text-gray-700">
-                                    Tipo de Documento
-                                </label>
-                                <input
-                                    type="text"
-                                    id="tipoDocumento"
-                                    name="tipoDocumento"
-                                    value={form.tipoDocumento}
-                                    onChange={(e) => setForm({ ...form, tipoDocumento: e.target.value })}
-                                    required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="numDoc" className="block text-sm font-medium text-gray-700">
-                                    Número de Documento
-                                </label>
-                                <input
-                                    type="text"
-                                    id="numDoc"
-                                    name="numDoc"
-                                    value={form.numDoc}
-                                    onChange={(e) => setForm({ ...form, numDoc: e.target.value })}
-                                    required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                                    Correo Electrónico
-                                </label>
+                            <div className="relative">
                                 <input
                                     type="email"
                                     id="email"
@@ -133,13 +151,17 @@ const Register = () => {
                                     value={form.email}
                                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                                     required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                    placeholder=" "
                                 />
-                            </div>
-                            <div>
-                                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                                    Contraseña
+                                <label
+                                    htmlFor="email"
+                                    className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                >
+                                    Correo electrónico
                                 </label>
+                            </div>
+                            <div className="relative">
                                 <input
                                     type="password"
                                     id="password"
@@ -147,13 +169,17 @@ const Register = () => {
                                     value={form.password}
                                     onChange={(e) => setForm({ ...form, password: e.target.value })}
                                     required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                    placeholder=" "
                                 />
-                            </div>
-                            <div>
-                                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                                    Confirmar Contraseña
+                                <label
+                                    htmlFor="password"
+                                    className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                >
+                                    Contraseña
                                 </label>
+                            </div>
+                            <div className="relative">
                                 <input
                                     type="password"
                                     id="confirmPassword"
@@ -161,8 +187,15 @@ const Register = () => {
                                     value={form.confirmPassword}
                                     onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
                                     required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                    placeholder=" "
                                 />
+                                <label
+                                    htmlFor="confirmPassword"
+                                    className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                >
+                                    Confirmar contraseña
+                                </label>
                             </div>
                         </>
                     )}
@@ -170,10 +203,7 @@ const Register = () => {
                     {/* Formulario para Persona Jurídica */}
                     {form.userType === 'juridica' && (
                         <>
-                            <div>
-                                <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">
-                                    Nombre de la Empresa
-                                </label>
+                            <div className="relative">
                                 <input
                                     type="text"
                                     id="companyName"
@@ -181,13 +211,17 @@ const Register = () => {
                                     value={form.companyName}
                                     onChange={(e) => setForm({ ...form, companyName: e.target.value })}
                                     required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                    placeholder=" "
                                 />
-                            </div>
-                            <div>
-                                <label htmlFor="socialReason" className="block text-sm font-medium text-gray-700">
-                                    Razón Social
+                                <label
+                                    htmlFor="companyName"
+                                    className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                >
+                                    Nombre de la empresa
                                 </label>
+                            </div>
+                            <div className="relative">
                                 <input
                                     type="text"
                                     id="socialReason"
@@ -195,41 +229,55 @@ const Register = () => {
                                     value={form.socialReason}
                                     onChange={(e) => setForm({ ...form, socialReason: e.target.value })}
                                     required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                    placeholder=" "
                                 />
-                            </div>
-                            <div>
-                                <label htmlFor="tipoDocumento" className="block text-sm font-medium text-gray-700">
-                                    Tipo de Documento
+                                <label
+                                    htmlFor="socialReason"
+                                    className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                >
+                                    Razòn social
                                 </label>
-                                <input
-                                    type="text"
-                                    id="tipoDocumento"
-                                    name="tipoDocumento"
-                                    value={form.tipoDocumento}
-                                    onChange={(e) => setForm({ ...form, tipoDocumento: e.target.value })}
-                                    required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                />
                             </div>
-                            <div>
-                                <label htmlFor="numDoc" className="block text-sm font-medium text-gray-700">
-                                    Número de Documento
-                                </label>
-                                <input
-                                    type="text"
-                                    id="numDoc"
-                                    name="numDoc"
-                                    value={form.numDoc}
-                                    onChange={(e) => setForm({ ...form, numDoc: e.target.value })}
-                                    required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                />
+                            <div className='flex space-x-2 justify-between'>
+                                <div className="relative w-1/2">
+                                    <input
+                                        type="text"
+                                        id="tipoDocumento"
+                                        name="tipoDocumento"
+                                        value={form.tipoDocumento}
+                                        onChange={(e) => setForm({ ...form, tipoDocumento: e.target.value })}
+                                        required
+                                        className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                        placeholder=" "
+                                    />
+                                    <label
+                                        htmlFor="tipoDocumento"
+                                        className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                    >
+                                        Tipo de documento
+                                    </label>
+                                </div>
+                                <div className="relative w-1/2">
+                                    <input
+                                        type="number"
+                                        id="numDoc"
+                                        name="numDoc"
+                                        value={form.numDoc}
+                                        onChange={(e) => setForm({ ...form, numDoc: e.target.value })}
+                                        required
+                                        className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                        placeholder=" "
+                                    />
+                                    <label
+                                        htmlFor="numDoc"
+                                        className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                    >
+                                        Nùmero de documento
+                                    </label>
+                                </div>
                             </div>
-                            <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                                    Correo Electrónico Corporativo
-                                </label>
+                            <div className="relative">
                                 <input
                                     type="email"
                                     id="email"
@@ -237,13 +285,17 @@ const Register = () => {
                                     value={form.email}
                                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                                     required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                    placeholder=" "
                                 />
-                            </div>
-                            <div>
-                                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                                    Contraseña
+                                <label
+                                    htmlFor="email"
+                                    className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                >
+                                    Correo electrònico corporativo
                                 </label>
+                            </div>
+                            <div className="relative">
                                 <input
                                     type="password"
                                     id="password"
@@ -251,13 +303,17 @@ const Register = () => {
                                     value={form.password}
                                     onChange={(e) => setForm({ ...form, password: e.target.value })}
                                     required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                    placeholder=" "
                                 />
-                            </div>
-                            <div>
-                                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                                    Confirmar Contraseña
+                                <label
+                                    htmlFor="password"
+                                    className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                >
+                                    Contraseña
                                 </label>
+                            </div>
+                            <div className="relative">
                                 <input
                                     type="password"
                                     id="confirmPassword"
@@ -265,8 +321,15 @@ const Register = () => {
                                     value={form.confirmPassword}
                                     onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
                                     required
-                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                                    placeholder=" "
                                 />
+                                <label
+                                    htmlFor="confirmPassword"
+                                    className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+                                >
+                                    Confirmar contraseña
+                                </label>
                             </div>
                         </>
                     )}
