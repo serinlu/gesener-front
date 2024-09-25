@@ -7,9 +7,6 @@ import logo from '../uploads/logo.png';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, useDisclosure, Card, CardFooter, DropdownSection } from "@nextui-org/react";
 import ModalComponent from './Modal';
-import alquiler from '../uploads/training.jpg'; // Example image import, you can change it with dynamic ones
-import clsx from 'clsx';
-import ProductNavbar from './ProductSidebar';
 
 const Navbar = () => {
     const [showSearch, setShowSearch] = useState(false);
@@ -18,7 +15,6 @@ const Navbar = () => {
         products: false
     });
     const searchMenuRef = useRef(null);
-    const [isOpen, setIsOpen] = useState(false);
 
     const toggleDropdown = (menu) => {
         setIsDropdownOpen((prevState) => ({
@@ -40,54 +36,16 @@ const Navbar = () => {
         { key: "training", label: "Capacitación", path: "/solutions/training" }
     ];
 
-    const toggleNavbar = () => {
-        setIsOpen(!isOpen);
-    };
-
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (searchMenuRef.current && !searchMenuRef.current.contains(event.target)) {
                 setShowSearch(false);
             }
         };
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
     }, []);
 
     return (
         <div className='w-full py-3 bg-white shadow-md text-black z-20 outline-none'>
-            <div className="relative">
-
-                {/* Fondo oscuro que oscurece la pantalla fuera del navbar */}
-                <div
-                    className={clsx(
-                        "fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-500",
-                        { 'opacity-0 pointer-events-none': !isOpen, 'opacity-100': isOpen }
-                    )}
-                    onClick={toggleNavbar}
-                ></div>
-
-                {/* Navbar lateral */}
-                <div
-                    className={clsx(
-                        "fixed top-0 left-0 h-full w-[75%] md:w-[40%] lg:w-[30%] bg-white shadow-lg z-50 transform transition-transform duration-500",
-                        { '-translate-x-full': !isOpen, 'translate-x-0': isOpen }
-                    )}
-                >
-                    {/* Botón para cerrar el navbar */}
-                    <button
-                        onClick={toggleNavbar}
-                        className="text-2xl p-2 absolute top-4 right-4 text-gray-700 focus:outline-none"
-                    >
-                        <FaTimes />
-                    </button>
-
-                    {/* Contenido del navbar */}
-                    <ProductNavbar />
-                </div>
-            </div>
             <nav className='w-[90%] mx-auto flex justify-between items-center'>
                 <NavLink to="/">
                     <img src={logo} alt="logo" className='w-[10rem] h-[2.5rem]' />
@@ -124,18 +82,16 @@ const Navbar = () => {
                     </Dropdown>
 
                     {/* Productos Link with Dropdown */}
-                    <Dropdown>
-                        <DropdownTrigger>
-                            <Button
-                                variant="bordered"
-                                className='p-2 text-sm flex hover:text-indigo-500 duration-300 rounded-lg font-bold'
-                                style={{ outline: 'none', boxShadow: 'none' }}
-                                onClick={toggleNavbar}
-                            >
-                                PRODUCTOS
-                            </Button>
-                        </DropdownTrigger>
-                    </Dropdown>
+                    <NavLink to="products/category/all">
+                        <Button
+                            variant="bordered"
+                            className='p-2 text-sm flex hover:text-indigo-500 duration-300 rounded-lg font-bold'
+                            style={{ outline: 'none', boxShadow: 'none' }}
+                        >
+                            PRODUCTOS
+                        </Button>
+
+                    </NavLink>
 
 
 
