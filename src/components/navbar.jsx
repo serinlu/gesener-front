@@ -61,7 +61,7 @@ const Navbar = () => {
                                 onClick={() => toggleDropdown('solutions')}
                             >
                                 SOLUCIONES
-                                <span className={`ml-1 transition-transform duration-300 ${isDropdownOpen.solutions ? 'rotate-180' : 'rotate-0'}`}>
+                                <span className={`transition-transform duration-300 ${isDropdownOpen.solutions ? 'rotate-180' : 'rotate-0'}`}>
                                     <IoIosArrowDown />
                                 </span>
                             </Button>

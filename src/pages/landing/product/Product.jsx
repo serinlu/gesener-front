@@ -6,7 +6,6 @@ import { getBrands } from '../../../services/BrandService';
 import { motion } from 'framer-motion';
 import { FaAngleRight } from 'react-icons/fa6';
 import { Button } from '@nextui-org/react';
-import clsx from 'clsx';
 
 const accordionVariants = {
     open: {
@@ -40,7 +39,6 @@ const Product = () => {
     const [brandAccordionOpen, setBrandAccordionOpen] = useState(false);
     const [priceAccordionOpen, setPriceAccordionOpen] = useState(false);
 
-    // Fetch productos y categorías
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -48,80 +46,70 @@ const Product = () => {
             setProducts(productsRes);
             setCategories(categoriesRes);
             setBrands(brandsRes);
+            setFilteredProducts(productsRes);
             setLoading(false);
         };
         fetchData();
     }, []);
 
-    // Filtra productos basados en las categorías seleccionadas manualmente
+    // Unificar el filtro por categorías y marcas en un solo efecto
     useEffect(() => {
+        let filtered = products;
+
         if (selectedCategories.length > 0) {
-            const filtered = products.filter(product =>
+            filtered = filtered.filter(product =>
                 product.categories.some(category => selectedCategories.includes(category._id))
             );
-            setFilteredProducts(filtered);
-        } else {
-            setFilteredProducts(products);
         }
-    }, [selectedCategories, products]);
 
-    useEffect(() => {
-        console.log(products); // Verifica la estructura de product
         if (selectedBrands.length > 0) {
-            const filtered = products.filter(product =>
+            filtered = filtered.filter(product =>
                 selectedBrands.includes(product.brand._id)
             );
-            setFilteredProducts(filtered);
-        } else {
-            setFilteredProducts(products);
         }
-    }, [selectedBrands, products]);
-    
 
+        setFilteredProducts(filtered);
+    }, [selectedCategories, selectedBrands, products]);
 
-    // Función para manejar el cambio de categoría
     const handleCategoryChange = (categoryId) => {
-        setLoading(true); // Muestra el spinner cuando se selecciona una categoría
+        setLoading(true);
         setSelectedCategories(prevSelected =>
             prevSelected.includes(categoryId)
                 ? prevSelected.filter(id => id !== categoryId)
                 : [...prevSelected, categoryId]
         );
-        setTimeout(() => setLoading(false), 500); // Simulando tiempo de carga
+        setLoading(false);
     };
 
     const handleBrandChange = (brandId) => {
-        setLoading(true); // Muestra el spinner cuando se selecciona una marca
+        setLoading(true);
         setSelectedBrands(prevSelected =>
             prevSelected.includes(brandId)
                 ? prevSelected.filter(id => id !== brandId)
                 : [...prevSelected, brandId]
         );
-        setTimeout(() => setLoading(false), 500); // Simulando tiempo de carga
+        setLoading(false);
     };
 
-    // Función para limpiar todos los filtros activos
     const clearFilters = () => {
-        if (selectedCategories.length === 0) {
-            if (selectedBrands.length === 0) return; // Si no hay marcas seleccionadas, no hace
-        } // Si no hay categorías seleccionadas, no hace
-        setLoading(true); // Muestra el spinner mientras se limpia
-        setSelectedCategories([]); // Resetea las categorías seleccionadas
-        setSelectedBrands([]); // Resetea las marcas seleccionadas
-        setFilteredProducts(products); // Restablece todas las marcas
-        setTimeout(() => setLoading(false), 500); // Simulando tiempo de carga
+        if (selectedCategories.length === 0 && selectedBrands.length === 0) return;
+        setLoading(true);
+        setSelectedCategories([]);
+        setSelectedBrands([]);
+        setFilteredProducts(products);
+        setLoading(false);
     };
 
     const toggleCategoryAccordion = () => {
-        setCategoryAccordionOpen(prevState => !prevState); // Cambia el estado del acordeón
+        setCategoryAccordionOpen(prevState => !prevState);
     };
 
     const toggleBrandAccordion = () => {
-        setBrandAccordionOpen(prevState => !prevState); // Cambia el estado del acordeón
+        setBrandAccordionOpen(prevState => !prevState);
     };
 
     const togglePriceAccordion = () => {
-        setPriceAccordionOpen(prevState => !prevState); // Cambia el estado del acordeón
+        setPriceAccordionOpen(prevState => !prevState);
     };
 
     return (
@@ -134,6 +122,7 @@ const Product = () => {
                         Limpiar
                     </Button>
                 </div>
+
                 {/* Acordeón de Categorías */}
                 <div className="cursor-pointer w-[75%] mx-auto" onClick={toggleCategoryAccordion}>
                     <motion.div
@@ -217,38 +206,6 @@ const Product = () => {
                         ))}
                     </div>
                 </motion.div>
-
-                {/* Acordeón de Precio */}
-                <div className="cursor-pointer w-[75%] mx-auto" onClick={togglePriceAccordion}>
-                    <motion.div
-                        initial={false}
-                        animate={priceAccordionOpen ? 'open' : 'closed'}
-                        className={clsx(
-                            'flex items-center justify-between p-2 bg-gray-200 h-12',
-                            priceAccordionOpen ? 'rounded-none' : 'rounded-b-lg'
-                        )}
-                    >
-                        <h3 className="font-bold text-md pl-2">Precio</h3>
-                        <motion.span
-                            variants={arrowVariants}
-                            animate={priceAccordionOpen ? 'open' : 'closed'}
-                            transition={{ duration: 0.3 }}
-                            className="text-xl"
-                        >
-                            <FaAngleRight />
-                        </motion.span>
-                    </motion.div>
-                </div>
-                <motion.div
-                    variants={accordionVariants}
-                    initial={false}
-                    animate={priceAccordionOpen ? 'open' : 'closed'}
-                    className="overflow-hidden w-[75%] mx-auto"
-                >
-                    <div className="p-4 border rounded-b-lg bg-gray-50">
-                        price
-                    </div>
-                </motion.div>
             </div>
 
             {/* Contenido principal con los productos */}
@@ -265,11 +222,22 @@ const Product = () => {
                                     <h2 className="text-lg font-bold mb-2">{product.name}</h2>
                                     <p className="text-gray-600 mb-2">{product.description}</p>
                                     <p className="font-bold">{product.price} €</p>
+
+                                    {/* Mostrar las categorías */}
+                                    <div className="text-sm text-gray-500 mb-2">
+                                        <strong>Categorías: </strong>
+                                        {product.categories.map(category => category.name).join(', ')}
+                                    </div>
+
+                                    {/* Mostrar la marca */}
+                                    <div className="text-sm text-gray-500 mb-2">
+                                        <strong>Marca: </strong>{product.brand.name}
+                                    </div>
                                 </div>
                             ))
                         ) : (
-                            <div className="flex justify-center items-center h-full">
-                                <h1>No se encontraron productos.</h1>
+                            <div className="col-span-3 text-center">
+                                <h2>No hay productos disponibles.</h2>
                             </div>
                         )}
                     </div>
