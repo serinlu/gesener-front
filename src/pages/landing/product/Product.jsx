@@ -26,8 +26,6 @@ const arrowVariants = {
 };
 
 const Product = () => {
-    const { categoryId } = useParams();
-    const { brandId } = useParams();
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [brands, setBrands] = useState([]);
@@ -219,6 +217,9 @@ const Product = () => {
                         {filteredProducts.length > 0 ? (
                             filteredProducts.map((product) => (
                                 <div key={product._id} className="border rounded-lg p-4">
+                                    <div className="text-sm text-gray-500 mb-2">
+                                        {product.brand.name}
+                                    </div>
                                     <h2 className="text-lg font-bold mb-2">{product.name}</h2>
                                     <p className="text-gray-600 mb-2">{product.description}</p>
                                     <p className="font-bold">{product.price} €</p>
@@ -228,11 +229,13 @@ const Product = () => {
                                         <strong>Categorías: </strong>
                                         {product.categories.map(category => category.name).join(', ')}
                                     </div>
+                                    <div className="flex justify-center p-2 w-full">
+                                        <Button className="bg-indigo-600 text-white font-bold rounded-xl">
+                                            <h1 className="p-2">Agregar al carrito</h1>
+                                        </Button>
+                                    </div>
 
                                     {/* Mostrar la marca */}
-                                    <div className="text-sm text-gray-500 mb-2">
-                                        <strong>Marca: </strong>{product.brand.name}
-                                    </div>
                                 </div>
                             ))
                         ) : (
