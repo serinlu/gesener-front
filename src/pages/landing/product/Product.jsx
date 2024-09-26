@@ -6,6 +6,7 @@ import { getBrands } from '../../../services/BrandService';
 import { motion } from 'framer-motion';
 import { FaAngleRight } from 'react-icons/fa6';
 import { Button } from '@nextui-org/react';
+import clsx from 'clsx';
 
 const accordionVariants = {
     open: {
@@ -36,6 +37,10 @@ const Product = () => {
     const [categoryAccordionOpen, setCategoryAccordionOpen] = useState(false);
     const [brandAccordionOpen, setBrandAccordionOpen] = useState(false);
     const [priceAccordionOpen, setPriceAccordionOpen] = useState(false);
+    const [minPrice, setMinPrice] = useState(0); // Valor mínimo del slider
+    const [maxPrice, setMaxPrice] = useState(50000); // Valor máximo del slider
+    const [priceRange, setPriceRange] = useState([0, 50000]); // Rango actual (min y max)
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -66,8 +71,14 @@ const Product = () => {
             );
         }
 
+        // Filtrar por precio
+        filtered = filtered.filter(product =>
+            product.price >= priceRange[0] && product.price <= priceRange[1]
+        );
+
         setFilteredProducts(filtered);
-    }, [selectedCategories, selectedBrands, products]);
+    }, [selectedCategories, selectedBrands, priceRange, products]);
+
 
     const handleCategoryChange = (categoryId) => {
         setLoading(true);
@@ -204,6 +215,75 @@ const Product = () => {
                         ))}
                     </div>
                 </motion.div>
+
+                {/* Acordeón de Precio */}
+                <div className="cursor-pointer w-[75%] mx-auto" onClick={togglePriceAccordion}>
+                    <motion.div
+                        initial={false}
+                        animate={priceAccordionOpen ? 'open' : 'closed'}
+                        className={clsx("flex items-center justify-between p-2 bg-gray-200 h-12", priceAccordionOpen ? "rounded-none" : "rounded-b-lg")}
+                    >
+                        <h3 className="font-bold text-md pl-2">Precio</h3>
+                        <motion.span
+                            variants={arrowVariants}
+                            animate={priceAccordionOpen ? 'open' : 'closed'}
+                            transition={{ duration: 0.3 }}
+                            className="text-xl"
+                        >
+                            <FaAngleRight />
+                        </motion.span>
+                    </motion.div>
+                </div>
+                <motion.div
+                    variants={accordionVariants}
+                    initial={false}
+                    animate={priceAccordionOpen ? 'open' : 'closed'}
+                    className={clsx("overflow-hidden w-[75%] mx-auto", priceAccordionOpen ? "rounded-b-lg" : "rounded-none")}
+                >
+                    <div className="p-4 border bg-gray-50">
+                        <div className='py-2'>
+                            <div className='flex justify-between pb-2'>
+                                <label htmlFor="minPrice" className="text-sm text-gray-700">Mín:</label>
+                                <input
+                                    id="minPrice"
+                                    type="number"
+                                    className="w-16 border-gray-300 rounded-md"
+                                    value={priceRange[0]}
+                                    onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                                />
+                            </div>
+                            <input
+                                type="range"
+                                min={minPrice}
+                                max={maxPrice}
+                                value={priceRange[0]}
+                                onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                                className="flex w-[90%] mx-auto"
+                            />
+                        </div>
+                        <div className='py-2'>
+                            <div className='flex justify-between pb-2'>
+                                <label htmlFor="maxPrice" className="text-sm text-gray-700">Máx:</label>
+                                <input
+                                    id="maxPrice"
+                                    type="number"
+                                    className="w-16 border-gray-300 rounded-md"
+                                    value={priceRange[1]}
+                                    onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                                />
+                            </div>
+                            <input
+                                type="range"
+                                min={minPrice}
+                                max={maxPrice}
+                                value={priceRange[1]}
+                                onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                                className="flex w-[90%] mx-auto"
+                            />
+                        </div>
+                    </div>
+                </motion.div>
+
             </div>
 
             {/* Contenido principal con los productos */}
@@ -222,7 +302,7 @@ const Product = () => {
                                     </div>
                                     <h2 className="text-lg font-bold mb-2">{product.name}</h2>
                                     <p className="text-gray-600 mb-2">{product.description}</p>
-                                    <p className="font-bold">{product.price} €</p>
+                                    <p className="font-bold">$ {product.price}</p>
 
                                     {/* Mostrar las categorías */}
                                     <div className="text-sm text-gray-500 mb-2">

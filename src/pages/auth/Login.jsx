@@ -4,8 +4,6 @@ import { AuthContext } from '../../context/AuthContext';
 import { loginUser } from '../../services/UserService';
 
 const Login = () => {
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
   const [form, setForm] = useState({
     email: '',
     password: ''
