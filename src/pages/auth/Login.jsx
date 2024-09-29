@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
-import { loginUser } from '../../services/AuthService';
-import { Button } from '@nextui-org/react';
+import { getProfile, loginUser } from '../../services/UserService';
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -10,24 +9,17 @@ const Login = () => {
     password: ''
   });
 
-  const { login } = useContext(AuthContext); // Cambiado a login
-
+  // const { setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await loginUser(form);
-      if (response) {
-        login(response.data); // Llama a login en lugar de setAuth
-        console.log(response);
-        navigate('/');
-      }
-      return response.data;
+      await loginUser(form);
+      navigate('/');
     }
     catch (error) {
       console.error(error);
-      return null;
     }
   }
 

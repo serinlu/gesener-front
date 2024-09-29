@@ -23,7 +23,7 @@ const Register = () => {
         e.preventDefault();
         try {
             const response = await registerUser(form);
-            console.log(response);
+            console.log(response.data);
             return response.data;
         }
         catch (error) {
