@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaAward, FaBox, FaDollarSign, FaHandshake, FaHome, FaList, FaNewspaper, FaTag, FaUser } from 'react-icons/fa';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'; // Importar useLocation
 import logo from "../uploads/logo.png";
+import { AuthContext } from '../context/AuthContext';
 
 const DashboardLayout = () => {
   const location = useLocation(); // Obtener la ubicación actual
   const [selectedOption, setSelectedOption] = useState('');
+  const {auth} = useContext(AuthContext);
   const navigate = useNavigate(); // Para la navegación
 
   const menuItems = [
@@ -26,7 +28,11 @@ const DashboardLayout = () => {
     if (currentItem) {
       setSelectedOption(currentItem.name);
     }
-  }, [location.pathname]); // Ejecutar cuando la ruta cambie
+
+    if (!auth) {
+      navigate('/login');
+    }
+  }, [auth, location.pathname]); // Ejecutar cuando la ruta cambie
 
   const handleMenuClick = (name, path) => {
     setSelectedOption(name); // Actualizar la opción seleccionada
