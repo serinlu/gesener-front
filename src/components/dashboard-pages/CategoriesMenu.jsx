@@ -29,13 +29,15 @@ const CategoriesMenu = () => {
 
     const handleUpdate = async () => {
         if (!selectedCategory) return; // Verificar que hay una categoría seleccionada
-    
+        console.log(selectedCategory);
+
         const updatedCategory = {
             // Asegúrate de incluir el ID
             name,
             description,
         };
-        const response = await updateCategory(selectedCategory.id, updatedCategory)
+
+        const response = await updateCategory(selectedCategory._id, updatedCategory)
         console.log(response);
     };
 
@@ -45,7 +47,7 @@ const CategoriesMenu = () => {
     };
 
     const handleDelete = () => {
-        deleteCategory(selectedCategory.id)
+        deleteCategory(selectedCategory._id)
             .then(() => {
                 fetchCategories();
                 setShowDeleteModal(false);
