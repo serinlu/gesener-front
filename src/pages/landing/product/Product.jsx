@@ -105,6 +105,8 @@ const Product = () => {
         setLoading(true);
         setSelectedCategories([]);
         setSelectedBrands([]);
+        setMinPrice(0);
+        setMaxPrice(50000);
         setFilteredProducts(products);
         setLoading(false);
     };

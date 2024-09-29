@@ -18,6 +18,16 @@ import Us from "./pages/us/us";
 import Product from "./pages/landing/product/Product";
 import { AuthProvider } from "./context/AuthContext";
 
+import MainMenu from "./components/dashboard-pages/MainMenu";
+import UsersMenu from "./components/dashboard-pages/UsersMenu";
+import ProductsMenu from "./components/dashboard-pages/ProductsMenu";
+import BrandsMenu from "./components/dashboard-pages/BrandsMenu";
+import CategoriesMenu from "./components/dashboard-pages/CategoriesMenu";
+import OrdersMenu from "./components/dashboard-pages/OrdersMenu";
+import SalesMenu from "./components/dashboard-pages/SalesMenu";
+import SuccessCasesMenu from "./components/dashboard-pages/SuccessCasesMenu";
+import NewsMenu from "./components/dashboard-pages/NewsMenu";
+
 function App() {
   return (
     <BrowserRouter>
@@ -44,7 +54,15 @@ function App() {
             <Route path="recover-password" element={<RecoverPassword />} />
           </Route>
           <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route path="" />
+            <Route index element={<MainMenu />} />
+            <Route path='users' element={<UsersMenu />} />
+            <Route path="products" element={<ProductsMenu />} />
+            <Route path="brands" element={<BrandsMenu />} />
+            <Route path="categories" element={<CategoriesMenu />} />
+            <Route path="orders" element={<OrdersMenu />} />
+            <Route path="sales" element={<SalesMenu />} />
+            <Route path="success-cases" element={<SuccessCasesMenu />} />
+            <Route path="news" element={<NewsMenu />} />
           </Route>
         </Routes>
       </AuthProvider>

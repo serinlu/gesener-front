@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
-import { loginUser } from '../../services/UserService';
+import { loginUser } from '../../services/AuthService';
+import { Button } from '@nextui-org/react';
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -9,13 +10,19 @@ const Login = () => {
     password: ''
   });
 
-  const { auth } = useContext(AuthContext);
+  const { login } = useContext(AuthContext); // Cambiado a login
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await loginUser(form);
-      console.log(response);
+      if (response) {
+        login(response.data); // Llama a login en lugar de setAuth
+        console.log(response);
+        navigate('/');
+      }
       return response.data;
     }
     catch (error) {
@@ -29,40 +36,50 @@ const Login = () => {
       <div>
         <h2 className="text-3xl font-bold mb-6 text-center">Iniciar sesión</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Correo electrónico
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={form.email}
-              onChange={(e) => setForm({...form, email: e.target.value})}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
+          <div className='space-y-4'>
+            <div className="relative">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                required
+                className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                placeholder=" "
+              />
+              <label
+                htmlFor="email"
+                className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+              >
+                Correo electrónico
+              </label>
+            </div>
+            <div className="relative">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                required
+                className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
+                placeholder=" "
+              />
+              <label
+                htmlFor="password"
+                className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
+              >
+                Contraseña
+              </label>
+            </div>
           </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Contraseña
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={form.password}
-              onChange={(e) => setForm({...form, password: e.target.value})}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-          </div>
-          <button
+          <Button
             type="submit"
             className="w-full bg-indigo-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-base font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Iniciar sesión
-          </button>
+          </Button>
           <div className="flex justify-between mx-2">
             <Link to="/register" className="text-indigo-600 hover:underline">
               Crear cuenta

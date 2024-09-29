@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { registerUser } from '../../services/UserService';
+import { registerUser } from '../../services/AuthService';
 import { Input, Radio, RadioGroup } from '@nextui-org/react';
 
 const Register = () => {
