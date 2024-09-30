@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { getProfile, loginUser } from '../../services/UserService';
+import { Button } from '@nextui-org/react';
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -9,13 +10,20 @@ const Login = () => {
     password: ''
   });
 
-  // const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await loginUser(form);
+      const response = await loginUser(form);
+      if (!response) {
+        console.log("error al iniciar sesión");
+        return;
+      }
+      const user = await getProfile();
+      console.log(user.data)
+      setAuth(user.data);
       navigate('/');
     }
     catch (error) {

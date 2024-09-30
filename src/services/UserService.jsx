@@ -35,7 +35,7 @@ const registerUser = async (form) => {
 
 const logoutUser = async () => {
     try {
-        await clientAxios.get('/auth/logout');
+        await clientAxios.post('/auth/logout');
     } catch (error) {
         console.error(error);
     }

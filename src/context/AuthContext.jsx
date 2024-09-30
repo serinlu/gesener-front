@@ -1,11 +1,11 @@
 import { createContext, useEffect, useState } from 'react';
-import { getProfile } from '../services/UserService';
+import { getProfile, logoutUser } from '../services/UserService';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-	const [auth, setAuth] = useState({});
+	const [auth, setAuth] = useState(null);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -17,14 +17,15 @@ const AuthProvider = ({ children }) => {
 				console.log(auth)
 			} catch (error) {
 				console.error(error);
+				setAuth(null);
 			}
 		}
 		autenticarUsuario();
-	}, []);
+	}, [setAuth]);
 
 	const logout = () => {
 		logoutUser();
-		setAuth({});
+		setAuth(null);
 		navigate('/');
 	};
 
