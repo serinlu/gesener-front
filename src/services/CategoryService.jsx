@@ -30,21 +30,15 @@ const getCategoryById = async (categoryId) => {
     }
 };
 
-const createCategory = async (category) => {
+const createCategory = async (form) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }
     try {
-        const response = await fetch('http://localhost:3000/api/categories', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(category),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
-
-        return await response.json();
+        const response = await clientAxios.post('/categories/create', form, config)
+        return response.data;
     } catch (error) {
         console.error('Error al crear la categoría:', error);
     }
@@ -66,16 +60,15 @@ const updateCategory = async (id, form) => {
 
 
 const deleteCategory = async (id) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    
     try {
-        const response = await fetch(`http://localhost:3000/api/categories/${id}`, {
-            method: 'DELETE',
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
-
-        return await response.json();
+        const response = await clientAxios.delete(`/categories/${id}`, config);
+        return response.data;
     } catch (error) {
         console.error('Error al eliminar la categoría:', error);
     }

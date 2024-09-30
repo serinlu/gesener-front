@@ -300,8 +300,10 @@ const Product = () => {
                             filteredProducts.map((product) => (
                                 <div key={product._id} className="border rounded-lg p-4">
                                     <div className="text-sm text-gray-500 mb-2">
-                                        {product.brand.name}
+                                        <strong>Marca: </strong>
+                                        {product.brand ? product.brand.name : 'Sin marca'}
                                     </div>
+
                                     <h2 className="text-lg font-bold mb-2">{product.name}</h2>
                                     <p className="text-gray-600 mb-2">{product.description}</p>
                                     <p className="font-bold">$ {product.price}</p>
@@ -309,7 +311,7 @@ const Product = () => {
                                     {/* Mostrar las categorías */}
                                     <div className="text-sm text-gray-500 mb-2">
                                         <strong>Categorías: </strong>
-                                        {product.categories.map(category => category.name).join(', ')}
+                                        {product.categories.length === 0 ? 'Sin categorizar' : product.categories.map(category => category.name).join(', ')}
                                     </div>
                                     <div className="flex justify-center p-2 w-full">
                                         <Button className="bg-indigo-600 text-white font-bold rounded-xl">
