@@ -1,20 +1,14 @@
 import clientAxios from "../config/axios";
 
-const createProduct = async (product) => {
+const createProduct = async (form) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }
     try {
-        const response = await fetch(`${process.env.BACKEND_URL}/api/products`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(product),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
-
-        return await response.json();
+        const response = await clientAxios.post('/products/create', form, config)
+        return response.data
     } catch (error) {
         console.error('Error al crear el producto:', error);
     }
@@ -43,7 +37,7 @@ const getProductById = async (id) => {
     }
     try {
         const response = await clientAxios.get(`/products/${id}`, config);
-        return response.data
+        return response.json
     } catch (error) {
         console.error('Error al obtener el producto:', error);
     }

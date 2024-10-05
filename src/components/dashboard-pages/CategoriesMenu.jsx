@@ -103,13 +103,19 @@ const CategoriesMenu = () => {
                             <div key={category.id} className="grid grid-cols-3 items-start gap-4 p-2">
                                 <h1 className="col-span-1 text-left">{category.name}</h1>
                                 <h1 className="col-span-1 text-left">{category.description}</h1>
-                                <div className="col-span-1 flex space-x-2 text-base">
-                                    <button onClick={() => handleEditClick(category)}>
-                                        <FaEdit className="text-green-400" />
-                                    </button>
-                                    <button onClick={() => handleDeleteClick(category)}>
-                                        <FaTrash className="text-red-500" />
-                                    </button>
+                                <div className="col-span-1 flex space-x-2 text-base items-left">
+                                    <Button
+                                        className="bg-green-500 rounded-md w-1/8 flex items-center justify-start py-2"
+                                        onClick={() => handleEditClick(category)}
+                                    >
+                                        <FaEdit className="text-white text-sm" />
+                                    </Button>
+                                    <Button
+                                        className="bg-red-500 rounded-md w-1/8 flex items-center justify-center py-2"
+                                        onClick={() => handleDeleteClick(category)}
+                                    >
+                                        <FaTrash className="text-white text-sm" />
+                                    </Button>
                                 </div>
                             </div>
                         ))

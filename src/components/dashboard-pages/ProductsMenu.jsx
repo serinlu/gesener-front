@@ -1,7 +1,10 @@
 import { Button } from '@nextui-org/react';
-import React, { useState, useEffect } from 'react';
-import { createProduct, getProducts, updateProduct, deleteProduct } from '../../services/ProductService';
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
+import { getBrands } from '../../services/BrandService';
+import { getCategories } from '../../services/CategoryService';
+import { createProduct, deleteProduct, getProducts, updateProduct } from '../../services/ProductService';
+import { validateProduct } from './validations/productValidations.js';
 
 const ProductsMenu = () => {
     const [products, setProducts] = useState([]);
@@ -9,82 +12,202 @@ const ProductsMenu = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [categories, setCategories] = useState([]);
+    const [brands, setBrands] = useState([]);
     const [form, setForm] = useState({
         sku: '',
         name: '',
-        categoryId: '',
-        brandId: '',
+        category: [],
+        brand: {}, // Se inicializa como objeto vacío
+        description: '',
         price: '',
         countInStock: '',
+        imageUrl: '',
     });
+    const [showCategoryList, setShowCategoryList] = useState(false);
+    const [errors, setErrors] = useState({
+        sku: false,
+        name: false,
+        category: false,
+        brand: false,
+        description: false,
+        price: false,
+    });
+
+    //validacion de sku
+    const [existingSkus, setExistingSkus] = useState([]);
 
     useEffect(() => {
         fetchProducts();
+        fetchCategories();
+        fetchBrands();
     }, []);
 
     const fetchProducts = () => {
         getProducts()
             .then((data) => setProducts(data))
             .catch((error) => console.error(error));
-        console.log(products);
-    }
+    };
+
+    const fetchCategories = () => {
+        getCategories()
+            .then((data) => setCategories(data))
+            .catch((error) => console.error(error));
+    };
+
+    const fetchBrands = () => {
+        getBrands()
+            .then((data) => setBrands(data))
+            .catch((error) => console.error(error));
+    };
 
     const handleCreateClick = () => {
+        setErrors(null)
         setForm({
             sku: '',
             name: '',
-            categoryId: '',
-            brandId: '',
+            category: [],
+            brand: {}, // Inicializa como objeto vacío
+            description: '',
             price: '',
-            countInStock: '',
+            countInStock: 0,
+            imageUrl: '',
         });
         setShowCreateModal(true);
-    }
+        const skuArray = products.map(product => product.sku);
+        setExistingSkus(skuArray);
+
+        const existingSkus = products.map(product => product.sku);
+        console.log(existingSkus);
+    };
+
 
     const handleEditClick = (product) => {
+        setShowEditModal(true);
         setForm({
             sku: product.sku,
             name: product.name,
-            categoryId: product.categoryId,
-            brandId: product.brandId,
+            category: product.categories || [], // Manejar caso en que no haya categorías
+            brand: product.brand || {}, // Manejar caso en que no haya marca
+            description: product.description || '',
             price: product.price,
             countInStock: product.countInStock,
+            imageUrl: product.imageUrl || '',
         });
         setSelectedProduct(product);
-        setShowEditModal(true);
-    }
+    };
 
     const handleDeleteClick = (product) => {
         setSelectedProduct(product);
         setShowDeleteModal(true);
-    }
+    };
 
-    const handleCreate = () => {
-        createProduct(form)
-            .then(() => {
+    const handleCreate = async () => {
+        setErrors({}); // Limpiar errores previos
+
+        // Validar producto
+        const validationErrors = validateProduct(form);
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        const existingSkus = products.map(product => product.sku);
+        console.log(existingSkus);
+
+        if (existingSkus.includes(form.sku)) {
+            errors.sku = "el sku ya existe"
+        }
+
+        const newProduct = {
+            sku: form.sku,
+            name: form.name,
+            brand: form.brand || null, // Permitir que no tenga marca
+            categories: form.category || [], // Permitir que sea un array vacío
+            description: form.description || '',
+            price: form.price,
+            countInStock: form.countInStock,
+            imageUrl: form.imageUrl || '',
+        }
+
+        try {
+            const response = await createProduct(newProduct);
+            console.log(response);
+
+            if (response) {
                 fetchProducts();
                 setShowCreateModal(false);
-            })
-            .catch((error) => console.error(error));
-    }
+            }
+        } catch (error) {
+            console.error('Error al crear el producto:', error);
+        }
+    };
 
     const handleUpdate = () => {
-        updateProduct(selectedProduct.id, form)
-            .then(() => {
+        if (!selectedProduct) return; // Verificar que hay un producto seleccionado
+
+        const updatedProduct = {
+            _id: selectedProduct._id,
+            sku: form.sku,
+            name: form.name,
+            brand: form.brand || null, // Permitir que no tenga marca
+            categories: form.category || [], // Permitir que sea un array vacío
+            description: form.description || '',
+            price: form.price,
+            countInStock: form.countInStock,
+            imageUrl: form.imageUrl || '',
+        };
+
+        const newErrors = validateProduct(form);
+
+        // Si hay errores, actualizar estado y detener la ejecución
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
+        setErrors(null);
+
+        updateProduct(selectedProduct._id, updatedProduct)
+            .then((response) => {
+                console.log('Producto actualizado:', response);
                 fetchProducts();
                 setShowEditModal(false);
             })
-            .catch((error) => console.error(error));
-    }
+            .catch((error) => {
+                console.error('Error al actualizar el producto:', error);
+            });
+    };
 
     const handleDelete = () => {
-        deleteProduct(selectedProduct.id)
+        deleteProduct(selectedProduct._id)
             .then(() => {
                 fetchProducts();
                 setShowDeleteModal(false);
             })
             .catch((error) => console.error(error));
-    }
+    };
+
+    const handleCheckboxChange = (categoryId) => {
+        setForm((prevForm) => {
+            const category = categories.find(cat => cat._id === categoryId);
+            const newCategories = prevForm.category.includes(category)
+                ? prevForm.category.filter((cat) => cat._id !== categoryId)
+                : [...prevForm.category, category];
+            return { ...prevForm, category: newCategories };
+        });
+    };
+
+    const getSelectedCategoryNames = () => {
+        return form.category
+            .map((cat) => cat.name) // Muestra el nombre de cada objeto de categoría
+            .join(', ');
+    };
+
+    const toggleCategoryList = () => {
+        setShowCategoryList((prev) => !prev);
+    };
 
     return (
         <>
@@ -122,14 +245,21 @@ const ProductsMenu = () => {
                                 </h1>
                                 <h1 className="col-span-1 text-left">{product.price}</h1>
                                 <h1 className="col-span-1 text-left">{product.countInStock ?? '0'}</h1>
-                                <div className="col-span-1 flex space-x-2 text-base">
-                                    <button onClick={() => handleEditClick(product)}>
-                                        <FaEdit className="text-green-400" />
-                                    </button>
-                                    <button onClick={() => handleDeleteClick(product)}>
-                                        <FaTrash className="text-red-500" />
-                                    </button>
+                                <div className="col-span-1 flex space-x-2 text-base items-center">
+                                    <Button
+                                        className="bg-green-500 rounded-md w-1/3 flex items-center justify-center px-4 py-2"
+                                        onClick={() => handleEditClick(product)}
+                                    >
+                                        <FaEdit className="text-white text-sm" />
+                                    </Button>
+                                    <Button
+                                        className="bg-red-500 rounded-md w-1/3 flex items-center justify-center px-4 py-2"
+                                        onClick={() => handleDeleteClick(product)}
+                                    >
+                                        <FaTrash className="text-white text-sm" />
+                                    </Button>
                                 </div>
+
                             </div>
                         ))
                     ) : (
@@ -137,68 +267,176 @@ const ProductsMenu = () => {
                     )}
                 </div>
 
-
                 {/* Modal para Crear Producto */}
                 {showCreateModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-1/3 transform transition-transform duration-300">
-                            <h2 className="text-xl font-bold">Crear Producto</h2>
-                            <div>
-                                <label className="block mb-2">SKU</label>
-                                <input
-                                    type="text"
-                                    value={form.sku}
-                                    onChange={(e) => setForm({ ...form, sku: e.target.value })}
-                                    className="w-full p-2 border rounded"
-                                />
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style={{ marginTop: 0 }}>
+                        <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 max-h-[90%] flex flex-col z-10">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-bold">Crear Producto</h2>
+                                <h1 className="text-xs"><span className="text-red-400 text-md pr-1">*</span>Campos obligatorios</h1>
                             </div>
-                            <div>
-                                <label className="block mb-2">Nombre</label>
-                                <input
-                                    type="text"
-                                    value={form.name}
-                                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                                    className="w-full p-2 border rounded"
-                                />
+                            {/* Contenido del formulario */}
+                            <div className="overflow-y-auto space-y-4 flex-grow">
+                                <div>
+                                    <label className="block mb-1">SKU<span className="pl-1 text-red-400 font-bold">*</span></label>
+                                    <input
+                                        type="number"
+                                        value={form.sku}
+                                        onChange={(e) => {
+                                            setForm({ ...form, sku: e.target.value });
+                                            setErrors({ ...errors, sku: '' }); // Limpiar el error mientras el usuario escribe
+                                        }}
+                                        onBlur={() => {
+                                            const newErrors = validateProduct(form); // Validar el campo cuando pierde el foco
+                                            setErrors((prevErrors) => ({ ...prevErrors, sku: newErrors.sku })); // Mostrar el error solo para el campo SKU
+                                        }}
+                                        className={`w-full p-2 border rounded ${errors?.sku ? 'border-red-500' : ''}`}
+                                    />
+                                    {errors?.sku && <p className="text-xs text-red-400">{errors.sku}</p>}
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Nombre<span className="pl-1 text-red-400 font-bold">*</span></label>
+                                    <input
+                                        type="text"
+                                        value={form.name}
+                                        onChange={(e) => {
+                                            setForm({ ...form, name: e.target.value });
+                                            setErrors({ ...errors, name: '' }); // Limpiar el error mientras el usuario escribe
+                                        }}
+                                        onBlur={() => {
+                                            const newErrors = validateProduct(form); // Validar el campo cuando pierde el foco
+                                            setErrors((prevErrors) => ({ ...prevErrors, name: newErrors.name })); // Mostrar el error solo para el campo SKU
+                                        }}
+                                        className={`w-full p-2 border rounded ${errors?.name ? 'border-red-500' : ''}`}
+                                    />
+                                    {errors?.name && <p className="text-xs text-red-400">{errors.name}</p>}
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Categorías<span className="pl-1 text-red-400 font-bold">*</span></label>
+                                    <input
+                                        type="text"
+                                        value={getSelectedCategoryNames()}
+                                        readOnly
+                                        className={`w-full p-2 border rounded cursor-pointer ${errors?.category ? 'border-red-500' : ''}`}
+                                        onClick={toggleCategoryList}
+                                        onBlur={() => {
+                                            const newErrors = validateProduct(form);
+                                            setErrors((prevErrors) => ({ ...prevErrors, category: newErrors.category }));
+                                        }}
+                                    />
+                                    {errors?.category && <p className="text-xs text-red-400">{errors.category}</p>}
+
+                                    {showCategoryList && (
+                                        <div className="border rounded p-2 max-h-60 overflow-y-auto absolute bg-white z-10">
+                                            {categories.map((category) => (
+                                                <div key={category._id} className="flex items-center pt-2">
+                                                    <input
+                                                        type="checkbox"
+                                                        id={category._id}
+                                                        checked={form.category.some(cat => cat._id === category._id)}
+                                                        onChange={() => handleCheckboxChange(category._id)}
+                                                        className="mr-2"
+                                                    />
+                                                    <label htmlFor={category._id} className="cursor-pointer">
+                                                        {category.name}
+                                                    </label>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                                <div>
+                                    <label className="block mb-1">
+                                        Marca<span className="pl-1 text-red-400 font-bold">*</span>
+                                    </label>
+                                    <select
+                                        value={form.brand?._id || ''}
+                                        onChange={(e) => {
+                                            const selectedBrand = brands.find((brand) => brand._id === e.target.value);
+                                            setForm((prevForm) => ({
+                                                ...prevForm,
+                                                brand: selectedBrand || {},
+                                            }));
+                                            setErrors((prevErrors) => ({
+                                                ...prevErrors,
+                                                brand: '', // Limpiar error al seleccionar
+                                            }));
+                                        }}
+                                        onBlur={() => {
+                                            if (!form.brand || !form.brand._id) {
+                                                setErrors((prevErrors) => ({
+                                                    ...prevErrors,
+                                                    brand: 'La marca es obligatoria', // Mostrar error si no hay marca seleccionada
+                                                }));
+                                            }
+                                        }}
+                                        className={`w-full p-2 border rounded ${errors?.brand ? 'border-red-500' : ''}`}
+                                    >
+                                        <option value="">Seleccionar marca</option>
+                                        {brands.map((brand) => (
+                                            <option key={brand._id} value={brand._id}>
+                                                {brand.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors?.brand && <p className="text-xs text-red-400">{errors.brand}</p>}
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Descripción<span className="pl-1 text-red-400 font-bold">*</span></label>
+                                    <input
+                                        type="text"
+                                        value={form.description}
+                                        onChange={(e) => {
+                                            setForm({ ...form, description: e.target.value });
+                                            setErrors({ ...errors, description: '' }); // Limpiar el error mientras el usuario escribe
+                                        }}
+                                        onBlur={() => {
+                                            const newErrors = validateProduct(form); // Validar el campo cuando pierde el foco
+                                            setErrors((prevErrors) => ({ ...prevErrors, description: newErrors.description })); // Mostrar el error solo para el campo SKU
+                                        }}
+                                        className={`w-full p-2 border rounded ${errors?.description ? 'border-red-500' : ''}`}
+                                    />
+                                    {errors?.description && <p className="text-xs text-red-400">{errors.description}</p>}
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Precio<span className="pl-1 text-red-400 font-bold">*</span></label>
+                                    <input
+                                        type="number"
+                                        value={form.price}
+                                        onChange={(e) => {
+                                            setForm({ ...form, price: e.target.value });
+                                            setErrors({ ...errors, price: '' }); // Limpiar el error mientras el usuario escribe
+                                        }}
+                                        onBlur={() => {
+                                            const newErrors = validateProduct(form); // Validar el campo cuando pierde el foco
+                                            setErrors((prevErrors) => ({ ...prevErrors, price: newErrors.price })); // Mostrar el error solo para el campo SKU
+                                        }}
+                                        className={`w-full p-2 border rounded ${errors?.price ? 'border-red-500' : ''}`}
+                                    />
+                                    {errors?.price && <p className="text-xs text-red-400">{errors.price}</p>}
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Stock</label>
+                                    <input
+                                        type="number"
+                                        value={form.countInStock}
+                                        onChange={(e) => setForm({ ...form, countInStock: e.target.value })}
+                                        className="w-full p-2 border rounded"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block mb-2">URL de la Imagen</label>
+                                    <input
+                                        type="text"
+                                        value={form.imageUrl}
+                                        onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
+                                        className="w-full p-2 border rounded"
+                                    />
+                                </div>
                             </div>
-                            <div>
-                                <label className="block mb-2">Categoría ID</label>
-                                <input
-                                    type="text"
-                                    value={form.categoryId}
-                                    onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-                                    className="w-full p-2 border rounded"
-                                />
-                            </div>
-                            <div>
-                                <label className="block mb-2">Marca ID</label>
-                                <input
-                                    type="text"
-                                    value={form.brandId}
-                                    onChange={(e) => setForm({ ...form, brandId: e.target.value })}
-                                    className="w-full p-2 border rounded"
-                                />
-                            </div>
-                            <div>
-                                <label className="block mb-2">Precio</label>
-                                <input
-                                    type="number"
-                                    value={form.price}
-                                    onChange={(e) => setForm({ ...form, price: e.target.value })}
-                                    className="w-full p-2 border rounded"
-                                />
-                            </div>
-                            <div>
-                                <label className="block mb-2">Stock</label>
-                                <input
-                                    type="number"
-                                    value={form.countInStock} // Cambiado de `stock` a `countInStock`
-                                    onChange={(e) => setForm({ ...form, countInStock: e.target.value })}
-                                    className="w-full p-2 border rounded"
-                                />
-                            </div>
-                            <div className="flex justify-end space-x-2">
-                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowCreateModal(false)}>Cancelar</button>
+                            {/* Botones */}
+                            <div className="flex justify-end space-x-2 mt-4">
+                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => [setShowCreateModal(false), setErrors(false)]}>Cancelar</button>
                                 <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleCreate}>Crear</button>
                             </div>
                         </div>
@@ -207,23 +445,185 @@ const ProductsMenu = () => {
 
                 {/* Modal para Editar Producto */}
                 {showEditModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-1/3 transform transition-transform duration-300">
-                            <h2 className="text-xl font-bold">Editar Producto</h2>
-                            {/* Campos similares a los de crear */}
-                            {/* ... */}
-                            <div className="flex justify-end space-x-2">
-                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowEditModal(false)}>Cancelar</button>
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style={{ marginTop: 0 }}>
+                        <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 max-h-[90%] flex flex-col z-10">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-bold">Editar Producto</h2>
+                                <h1 className="text-xs"><span className="text-red-400 text-md pr-1">*</span>Campos obligatorios</h1>
+                            </div>
+                            {/* Contenido del formulario */}
+                            <div className="overflow-y-auto space-y-4 flex-grow">
+                                <div>
+                                    <label className="block mb-1">SKU<span className="pl-1 text-red-400 font-bold">*</span></label>
+                                    <input
+                                        type="text"
+                                        value={form.sku}
+                                        onChange={(e) => {
+                                            setForm({ ...form, sku: e.target.value });
+                                            setErrors({ ...errors, sku: '' }); // Limpiar el error mientras el usuario escribe
+                                        }}
+                                        onBlur={() => {
+                                            const newErrors = validateProduct(form); // Validar el campo cuando pierde el foco
+                                            setErrors((prevErrors) => ({ ...prevErrors, sku: newErrors.sku })); // Mostrar el error solo para el campo SKU
+                                        }}
+                                        className={`w-full p-2 border rounded ${errors?.sku ? 'border-red-500' : ''}`}
+                                    />
+                                    {errors?.sku && <p className="text-xs text-red-400">{errors.sku}</p>}
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Nombre<span className="pl-1 text-red-400 font-bold">*</span></label>
+                                    <input
+                                        type="text"
+                                        value={form.name}
+                                        onChange={(e) => {
+                                            setForm({ ...form, name: e.target.value });
+                                            setErrors({ ...errors, name: '' }); // Limpiar el error mientras el usuario escribe
+                                        }}
+                                        onBlur={() => {
+                                            const newErrors = validateProduct(form); // Validar el campo cuando pierde el foco
+                                            setErrors((prevErrors) => ({ ...prevErrors, name: newErrors.name })); // Mostrar el error solo para el campo SKU
+                                        }}
+                                        className={`w-full p-2 border rounded ${errors?.name ? 'border-red-500' : ''}`}
+                                    />
+                                    {errors?.name && <p className="text-xs text-red-400">{errors.name}</p>}
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Categorías<span className="pl-1 text-red-400 font-bold">*</span></label>
+                                    <input
+                                        type="text"
+                                        value={getSelectedCategoryNames()}
+                                        readOnly
+                                        className={`w-full p-2 border rounded cursor-pointer ${errors?.category ? 'border-red-500' : ''}`}
+                                        onClick={toggleCategoryList}
+                                        onBlur={() => {
+                                            const newErrors = validateProduct(form);
+                                            setErrors((prevErrors) => ({ ...prevErrors, category: newErrors.category }));
+                                        }}
+                                    />
+                                    {errors?.category && <p className="text-xs text-red-400">{errors.category}</p>}
+
+                                    {showCategoryList && (
+                                        <div className="border rounded p-2 max-h-60 overflow-y-auto absolute bg-white z-10">
+                                            {categories.map((category) => (
+                                                <div key={category._id} className="flex items-center pt-2">
+                                                    <input
+                                                        type="checkbox"
+                                                        id={category._id}
+                                                        checked={form.category.some(cat => cat._id === category._id)}
+                                                        onChange={() => handleCheckboxChange(category._id)}
+                                                        className="mr-2"
+                                                    />
+                                                    <label htmlFor={category._id} className="cursor-pointer">
+                                                        {category.name}
+                                                    </label>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                                <div>
+                                    <label className="block mb-1">
+                                        Marca<span className="pl-1 text-red-400 font-bold">*</span>
+                                    </label>
+                                    <select
+                                        value={form.brand?._id || ''}
+                                        onChange={(e) => {
+                                            const selectedBrand = brands.find((brand) => brand._id === e.target.value);
+                                            setForm((prevForm) => ({
+                                                ...prevForm,
+                                                brand: selectedBrand || {},
+                                            }));
+                                            setErrors((prevErrors) => ({
+                                                ...prevErrors,
+                                                brand: '', // Limpiar error al seleccionar
+                                            }));
+                                        }}
+                                        onBlur={() => {
+                                            if (!form.brand || !form.brand._id) {
+                                                setErrors((prevErrors) => ({
+                                                    ...prevErrors,
+                                                    brand: 'La marca es obligatoria', // Mostrar error si no hay marca seleccionada
+                                                }));
+                                            }
+                                        }}
+                                        className={`w-full p-2 border rounded ${errors?.brand ? 'border-red-500' : ''}`}
+                                    >
+                                        <option value="">Seleccionar marca</option>
+                                        {brands.map((brand) => (
+                                            <option key={brand._id} value={brand._id}>
+                                                {brand.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors?.brand && <p className="text-xs text-red-400">{errors.brand}</p>}
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Descripción<span className="pl-1 text-red-400 font-bold">*</span></label>
+                                    <input
+                                        type="text"
+                                        value={form.description}
+                                        onChange={(e) => {
+                                            setForm({ ...form, description: e.target.value });
+                                            setErrors({ ...errors, description: '' }); // Limpiar el error mientras el usuario escribe
+                                        }}
+                                        onBlur={() => {
+                                            const newErrors = validateProduct(form); // Validar el campo cuando pierde el foco
+                                            setErrors((prevErrors) => ({ ...prevErrors, description: newErrors.description })); // Mostrar el error solo para el campo SKU
+                                        }}
+                                        className={`w-full p-2 border rounded ${errors?.description ? 'border-red-500' : ''}`}
+                                    />
+                                    {errors?.description && <p className="text-xs text-red-400">{errors.description}</p>}
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Precio<span className="pl-1 text-red-400 font-bold">*</span></label>
+                                    <input
+                                        type="number"
+                                        value={form.price}
+                                        onChange={(e) => {
+                                            setForm({ ...form, price: e.target.value });
+                                            setErrors({ ...errors, price: '' }); // Limpiar el error mientras el usuario escribe
+                                        }}
+                                        onBlur={() => {
+                                            const newErrors = validateProduct(form); // Validar el campo cuando pierde el foco
+                                            setErrors((prevErrors) => ({ ...prevErrors, price: newErrors.price })); // Mostrar el error solo para el campo SKU
+                                        }}
+                                        className={`w-full p-2 border rounded ${errors?.price ? 'border-red-500' : ''}`}
+                                    />
+                                    {errors?.price && <p className="text-xs text-red-400">{errors.price}</p>}
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Stock</label>
+                                    <input
+                                        type="number"
+                                        value={form.countInStock}
+                                        onChange={(e) => setForm({ ...form, countInStock: e.target.value })}
+                                        className="w-full p-2 border rounded"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block mb-2">URL de la Imagen</label>
+                                    <input
+                                        type="text"
+                                        value={form.imageUrl}
+                                        onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
+                                        className="w-full p-2 border rounded"
+                                    />
+                                </div>
+                            </div>
+                            {/* Botones */}
+                            <div className="flex justify-end space-x-2 mt-4">
+                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => [setShowEditModal(false), setErrors(false)]}>Cancelar</button>
                                 <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleUpdate}>Actualizar</button>
                             </div>
                         </div>
                     </div>
                 )}
 
+
                 {/* Modal para Eliminar Producto */}
                 {showDeleteModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-1/3 transform transition-transform duration-300">
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style={{ marginTop: 0 }}>
+                        <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-1/3">
                             <h2 className="text-xl font-bold">Eliminar Producto</h2>
                             <p>¿Estás seguro de que deseas eliminar el producto <strong>{selectedProduct?.name}</strong>?</p>
                             <div className="flex justify-end space-x-2">

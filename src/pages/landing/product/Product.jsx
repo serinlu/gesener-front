@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getProducts } from '../../../services/ProductService';
 import { getCategories } from '../../../services/CategoryService';
 import { getBrands } from '../../../services/BrandService';
@@ -164,9 +164,10 @@ const Product = () => {
                                 <input
                                     type="checkbox"
                                     id={category._id}
+                                    value={category._id}
                                     checked={selectedCategories.includes(category._id)}
                                     onChange={() => handleCategoryChange(category._id)}
-                                    className="form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out"
+                                    className="form-checkbox checked h-5 w-5 text-indigo-600 transition duration-150 ease-in-out"
                                 />
                                 <label htmlFor={category._id} className="text-gray-700">
                                     {category.name}
@@ -300,11 +301,10 @@ const Product = () => {
                             filteredProducts.map((product) => (
                                 <div key={product._id} className="border rounded-lg p-4">
                                     <div className="text-sm text-gray-500 mb-2">
-                                        <strong>Marca: </strong>
                                         {product.brand ? product.brand.name : 'Sin marca'}
                                     </div>
 
-                                    <h2 className="text-lg font-bold mb-2">{product.name}</h2>
+                                    <Link to={`/products/${product._id}`} className="text-lg font-bold mb-2">{product.name}</Link>
                                     <p className="text-gray-600 mb-2">{product.description}</p>
                                     <p className="font-bold">$ {product.price}</p>
 
@@ -318,8 +318,6 @@ const Product = () => {
                                             <h1 className="p-2">Agregar al carrito</h1>
                                         </Button>
                                     </div>
-
-                                    {/* Mostrar la marca */}
                                 </div>
                             ))
                         ) : (

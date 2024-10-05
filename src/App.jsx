@@ -27,6 +27,7 @@ import OrdersMenu from "./components/dashboard-pages/OrdersMenu";
 import SalesMenu from "./components/dashboard-pages/SalesMenu";
 import SuccessCasesMenu from "./components/dashboard-pages/SuccessCasesMenu";
 import NewsMenu from "./components/dashboard-pages/NewsMenu";
+import ProductView from "./pages/landing/product/ProductView";
 
 function App() {
   return (
@@ -46,7 +47,8 @@ function App() {
             <Route path="contact" element={<Contact />} />
             <Route path="us" element={<Us />} />
             {/* product pages */}
-            <Route path="products/category/:categoryName" element={<Product />} />
+            <Route path="products" element={<Product />} />
+            <Route path="products/:id" element={<ProductView />} />
           </Route>
           <Route element={<AuthLayout />}>
             <Route path="login" element={<Login />} />

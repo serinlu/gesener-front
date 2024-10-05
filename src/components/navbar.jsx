@@ -91,7 +91,7 @@ const Navbar = () => {
                     </Dropdown>
 
                     {/* Productos Link */}
-                    <NavLink to="products/category/all">
+                    <NavLink to="products">
                         <Button
                             variant="bordered"
                             className='p-2 text-sm flex hover:text-indigo-500 duration-300 rounded-lg font-bold'
