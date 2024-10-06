@@ -1,64 +1,128 @@
-import { Button } from '@nextui-org/react'
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Button } from '@nextui-org/react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const ProductView = () => {
-  const { id } = useParams()
-  const [product, setProduct] = useState([])
+  const { id } = useParams();
+  const [product, setProduct] = useState({});
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const getProduct = async () => {
-      const response = await fetch(`http://localhost:3000/api/products/${id}`)
-      const data = await response.json()
-      setProduct(data)
-    }
-    getProduct()
-  }, [id])
+      const response = await fetch(`http://localhost:3000/api/products/${id}`);
+      const data = await response.json();
+      setProduct(data);
+    };
+    getProduct();
+  }, [id]);
 
-  console.log(id)
-  console.log(product)
+  console.log(id);
+  console.log(product);
+
+  const handleIncrease = () => {
+    if (quantity < product.countInStock) {
+      setQuantity(prev => prev + 1);
+    } else return
+  };
+
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      setQuantity(prev => prev - 1);
+    } else return;
+  };
+
+  const handleInputChange = () => {
+    const value = Math.max(1, Math.min(product.countInStock, Number(e.target.value)))
+    setQuantity(value);
+  }
 
   return (
     <>
-      <div className="max-w-7xl mx-auto p-4 flex w-full">
-        <div className="flex flex-col w-[60%] md:flex-row bg-white shadow-md rounded-lg overflow-hidden">
-          {/* Imagen del producto */}
-          <div className="md:w-1/2">
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              className="w-full h-full object-cover"
-            />
+      <div className='w-[80%] justify-start mx-auto'>
+        <div className="max-w-7xl mx-auto p-4 flex w-full">
+          <div className="flex flex-col w-[60%] h-[30rem] md:flex-row bg-white rounded-lg overflow-hidden">
+            {/* Imagen del producto */}
+            <div className="md:w-1/2">
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+          {/* Detalles del producto */}
+          <div className="md:w-1/2 p-6">
+            <p className="text-base text-gray-600">{product.brand?.name}</p>
+            <h2 className="text-3xl">{product.name}</h2>
+            <p className="text-2xl font-bold text-black my-6">
+              ${product.price}
+            </p>
+            {product.model ?
+              <p className='text-xl py-1'>Modelo: {product.model}</p> : null
+            }
+
+            {/* Mostrar categorías */}
+            <p className='text-xl py-1'>
+              Categoría(s): {product.categories && product.categories.length > 0 ? (
+                product.categories.map((category, index) => (
+                  <span key={category._id}>
+                    {category.name}{index < product.categories.length - 1 ? ', ' : ''}
+                  </span>
+                ))
+              ) : (
+                'Sin categoría'
+              )}
+            </p>
+
+            <div className="flex items-center mt-4 space-x-2">
+              <div>
+                <Button onClick={handleDecrease} className="bg-gray-200 text-black px-3 py-2 rounded-lg mr-1">-</Button>
+                <input
+                  type="number"
+                  value={quantity}
+                  onChange={handleInputChange}
+                  className="text-center w-16 border rounded-lg py-2"
+                  min="1"
+                  max={product.countInStock}
+                />
+                <Button onClick={handleIncrease} className="bg-gray-200 text-black px-3 py-2 rounded-lg ml-1">+</Button>
+              </div>
+              <Button className="bg-indigo-600 text-white font-bold rounded-xl">
+                <h1 className="p-2">Agregar</h1>
+              </Button>
+            </div>
+
+            {/* Inventario */}
+
+            <p className='text-md my-2'>
+              {product.countInStock > 20 ?
+                "Más de 20 unidades disponibles"
+                : product.countInStock <= 20 && product.countInStock > 1 ?
+                  product.countInStock + " unidades disponibles"
+                  : product.countInStock === 1 ?
+                    "Solo queda " + product.countInStock + " unidad"
+                    : "Producto agotado"}
+            </p>
+
           </div>
         </div>
-        {/* Detalles del producto */}
-        <div className="md:w-1/2 p-6">
-          <p className="text-base text-gray-600">{product.brand?.name || product.brand}</p>
-          <h2 className="text-3xl font-bold text-gray-600">{product.name}</h2>
-          <p className="text-2xl font-bold text-black mt-4">
-            ${product.price}
-          </p>
-          {product.countInStock > 20 ? (
-            <p className='text-md'>Quedan más de 20 unidades</p>
-          ) : product.countInStock <= 20 && product.countInStock > 1 ? (
-            <p className='text-md'>Quedan {product.countInStock} unidades</p>
-          ) : product.countInStock === 1 ? (
-            <p className='text-md'>Solo queda {product.countInStock} unidad</p>
-          ) : (
-            <p className='text-md text-red-500'>Producto agotado</p>
-          )}
-          <Button className="mt-6 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">
-            Agregar al carrito
-          </Button>
+        <div className='w-full'>
+          <h1 className='text-2xl py-4'>Acerca de este producto</h1>
+          <div className='flex'>
+            <div className='w-1/2'>
+              <span className='font-bold text-xl'>Descripción</span>
+              <p className='text-gray-700 my-4'>
+                {product.description ? product.description : 'Sin descripción'}
+              </p>
+            </div>
+            <div className='w-1/2'>
+              <span className='font-bold'>Valoraciones</span>
+            </div>
+          </div>
         </div>
-      </div>
-      <div>
-        {product.description ?
-          <p className="text-gray-700 mt-4">{product.description}</p>
-          : <p className="text-gray-700 mt-4">Sin Descripción</p>}
       </div>
     </>
   );
-}
+};
 
-export default ProductView
+export default ProductView;

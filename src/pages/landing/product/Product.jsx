@@ -315,7 +315,7 @@ const Product = () => {
                                     </div>
                                     <div className="flex justify-center p-2 w-full">
                                         <Button className="bg-indigo-600 text-white font-bold rounded-xl">
-                                            <h1 className="p-2">Agregar al carrito</h1>
+                                            <h1 className="p-2">Agregar</h1>
                                         </Button>
                                     </div>
                                 </div>

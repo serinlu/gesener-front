@@ -38,7 +38,7 @@ const Whatsapp = () => {
             {/* Botón de WhatsApp */}
             <animated.div
                 style={buttonAnimation}
-                className={`fixed bottom-8 right-8 z-50 p-2 rounded-full cursor-pointer transition-transform duration-300 w-16 h-16 items-center justify-center flex
+                className={`fixed bottom-8 right-8 z-10 p-2 rounded-full cursor-pointer transition-transform duration-300 w-16 h-16 items-center justify-center flex
                 ${isOpen ? 'bg-green-500 text-white' : 'bg-green-500 text-white'}`}
                 onClick={handleButtonClick}
                 // Make sure button only clickable when chat is open
@@ -59,7 +59,7 @@ const Whatsapp = () => {
             {isOpen ? (
                 <animated.div
                     style={chatAnimation}
-                    className={`fixed bottom-24 right-8 bg-white text-white rounded shadow-lg transition-transform duration-300 z-50`}
+                    className={`fixed bottom-24 right-8 bg-white text-white rounded shadow-lg transition-transform duration-300 z-10`}
                 >
                     <div className="w-[22rem] bg-green-500 flex text-base">
                         <FontAwesomeIcon icon={faWhatsapp} className="text-white text-4xl p-4" />
