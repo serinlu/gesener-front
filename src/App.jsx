@@ -17,6 +17,7 @@ import Training from "./pages/landing/solutions/training";
 import Us from "./pages/us/us";
 import Product from "./pages/landing/product/Product";
 import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
 
 import MainMenu from "./components/dashboard-pages/MainMenu";
 import UsersMenu from "./components/dashboard-pages/UsersMenu";
@@ -33,42 +34,45 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route path="/" element={<LandingLayout />}>
-            <Route index element={<Home />} />
-            {/* Solutions Page */}
-            <Route path="solutions/energy-efficiency" element={<EnergyEfficiency />} />
-            <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
-            <Route path="solutions/infrared-thermography" element={<InfraredThermography />} />
-            <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
-            <Route path="solutions/renewable-energy" element={<RenewableEnergy />} />
-            <Route path="solutions/training" element={<Training />} />
-            {/* other pages */}
-            <Route path="contact" element={<Contact />} />
-            <Route path="us" element={<Us />} />
-            {/* product pages */}
-            <Route path="products" element={<Product />} />
-            <Route path="products/:id" element={<ProductView />} />
-          </Route>
-          <Route element={<AuthLayout />}>
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-            <Route path="recover-password" element={<RecoverPassword />} />
-          </Route>
-          <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<MainMenu />} />
-            <Route path='users' element={<UsersMenu />} />
-            <Route path="products" element={<ProductsMenu />} />
-            <Route path="brands" element={<BrandsMenu />} />
-            <Route path="categories" element={<CategoriesMenu />} />
-            <Route path="orders" element={<OrdersMenu />} />
-            <Route path="sales" element={<SalesMenu />} />
-            <Route path="success-cases" element={<SuccessCasesMenu />} />
-            <Route path="news" element={<NewsMenu />} />
-          </Route>
-        </Routes>
+        <CartProvider>
+
+          <Routes>
+            <Route path="/" element={<LandingLayout />}>
+              <Route index element={<Home />} />
+              {/* Solutions Page */}
+              <Route path="solutions/energy-efficiency" element={<EnergyEfficiency />} />
+              <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
+              <Route path="solutions/infrared-thermography" element={<InfraredThermography />} />
+              <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
+              <Route path="solutions/renewable-energy" element={<RenewableEnergy />} />
+              <Route path="solutions/training" element={<Training />} />
+              {/* other pages */}
+              <Route path="contact" element={<Contact />} />
+              <Route path="us" element={<Us />} />
+              {/* product pages */}
+              <Route path="products" element={<Product />} />
+              <Route path="products/:id" element={<ProductView />} />
+            </Route>
+            <Route element={<AuthLayout />}>
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
+              <Route path="recover-password" element={<RecoverPassword />} />
+            </Route>
+            <Route path="/dashboard" element={<DashboardLayout />}>
+              <Route index element={<MainMenu />} />
+              <Route path='users' element={<UsersMenu />} />
+              <Route path="products" element={<ProductsMenu />} />
+              <Route path="brands" element={<BrandsMenu />} />
+              <Route path="categories" element={<CategoriesMenu />} />
+              <Route path="orders" element={<OrdersMenu />} />
+              <Route path="sales" element={<SalesMenu />} />
+              <Route path="success-cases" element={<SuccessCasesMenu />} />
+              <Route path="news" element={<NewsMenu />} />
+            </Route>
+          </Routes>
+        </CartProvider>
       </AuthProvider>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 }
 

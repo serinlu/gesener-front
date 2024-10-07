@@ -3,6 +3,7 @@ export const cartInitialState = JSON.parse(window.localStorage.getItem('cart')) 
 export const CART_ACTION_TYPES = {
     ADD_TO_CART: 'ADD_TO_CART',
     REMOVE_FROM_CART: 'REMOVE_FROM_CART',
+    REMOVE_ITEM_UNIT_FROM_CART: 'REMOVE_ITEM_UNIT_FROM_CART',
     CLEAR_CART: 'CLEAR_CART'
 }
 
@@ -13,8 +14,8 @@ export const updateLocalStorage = state => {
 
 const UPDATE_STATE_BY_ACTION = {
     [CART_ACTION_TYPES.ADD_TO_CART]: (state, action) => {
-        const { id } = action.payload
-        const productInCartIndex = state.findIndex(item => item.id === id)
+        const { _id } = action.payload
+        const productInCartIndex = state.findIndex(item => item._id === _id)
 
         if (productInCartIndex >= 0) {
             // 👀 una forma sería usando structuredClone
@@ -56,15 +57,33 @@ const UPDATE_STATE_BY_ACTION = {
         return newState
     },
     [CART_ACTION_TYPES.REMOVE_FROM_CART]: (state, action) => {
-        const { id } = action.payload
-        const newState = state.filter(item => item.id !== id)
+        const { _id } = action.payload
+        const newState = state.filter(item => item._id !== _id)
         updateLocalStorage(newState)
         return newState
     },
     [CART_ACTION_TYPES.CLEAR_CART]: () => {
         updateLocalStorage([])
         return []
-    }
+    },
+    [CART_ACTION_TYPES.REMOVE_ITEM_UNIT_FROM_CART]: (state, action) => {
+        const { _id } = action.payload;
+        const productInCartIndex = state.findIndex(item => item._id === _id);
+        
+        if (productInCartIndex >= 0 && state[productInCartIndex].quantity > 1) {
+            // Reducir cantidad en lugar de eliminar
+            const newState = [
+                ...state.slice(0, productInCartIndex),
+                { ...state[productInCartIndex], quantity: state[productInCartIndex].quantity - 1 },
+                ...state.slice(productInCartIndex + 1)
+            ];
+            updateLocalStorage(newState);
+            return newState;
+        }
+
+        // Si la cantidad es 1, eliminar el producto del carrito
+        return state.filter(item => item._id !== _id);
+    },
 }
 
 export const cartReducer = (state, action) => {

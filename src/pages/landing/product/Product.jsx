@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useId } from 'react';
-import { useCart } from '../../../hooks/useCart';
 import { Link, useParams } from 'react-router-dom';
 import { getProducts } from '../../../services/ProductService';
 import { getCategories } from '../../../services/CategoryService';
@@ -7,6 +6,7 @@ import { getBrands } from '../../../services/BrandService';
 import { motion } from 'framer-motion';
 import { FaAngleRight } from 'react-icons/fa6';
 import { Button } from '@nextui-org/react';
+import { useCart } from '../../../hooks/useCart';
 import clsx from 'clsx';
 
 const accordionVariants = {
@@ -41,7 +41,11 @@ const Product = () => {
     const [minPrice, setMinPrice] = useState(0); // Valor mínimo del slider
     const [maxPrice, setMaxPrice] = useState(50000); // Valor máximo del slider
     const [priceRange, setPriceRange] = useState([0, 50000]); // Rango actual (min y max)
+    const [isCartOpen, setIsCartOpen] = useState(false);
 
+    const toggleCart = () => {
+        setIsCartOpen(!isCartOpen); // Alterna el estado de apertura del carrito
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -80,6 +84,12 @@ const Product = () => {
         setFilteredProducts(filtered);
     }, [selectedCategories, selectedBrands, priceRange, products]);
 
+    const { addToCart } = useCart()
+
+    const handleAddToCart = (product) => {
+        addToCart(product); // Agregar el producto al carrito
+        toggleCart(); // Abrir el carrito
+    };
 
     const handleCategoryChange = (categoryId) => {
         setLoading(true);
@@ -315,7 +325,10 @@ const Product = () => {
                                         {product.categories.length === 0 ? 'Sin categorizar' : product.categories.map(category => category.name).join(', ')}
                                     </div>
                                     <div className="flex justify-center p-2 w-full">
-                                        <Button className="bg-indigo-600 text-white font-bold rounded-xl">
+                                        <Button
+                                            className="bg-indigo-600 text-white font-bold rounded-xl"
+                                            onClick={() => handleAddToCart(product)}
+                                        >
                                             <h1 className="p-2">Agregar</h1>
                                         </Button>
                                     </div>
@@ -329,6 +342,7 @@ const Product = () => {
                     </div>
                 )}
             </div>
+
         </div>
     );
 };

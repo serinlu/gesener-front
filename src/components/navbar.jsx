@@ -9,6 +9,7 @@ import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@
 import ModalComponent from './Modal';
 import { AuthContext } from '../context/AuthContext';
 import clsx from 'clsx';
+import Cart from './Cart';
 
 const Navbar = () => {
     const [showSearch, setShowSearch] = useState(false);
@@ -41,6 +42,7 @@ const Navbar = () => {
         setIsCartOpen(!isCartOpen);
     }
 
+
     const ItemsUser = [
         { key: "login", label: "Iniciar sesión", path: "/login" },
         { key: "register", label: "Registrarse", path: "/register" }
@@ -61,13 +63,9 @@ const Navbar = () => {
         { key: "training", label: "Capacitación", path: "/solutions/training" }
     ];
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (searchMenuRef.current && !searchMenuRef.current.contains(event.target)) {
-                setShowSearch(false);
-            }
-        };
-    }, []);
+    const calculateSubtotal = () => {
+        return cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
+    }
 
     return (
         <div className='w-full py-3 bg-white shadow-md text-black z-20 outline-none'>
@@ -222,53 +220,7 @@ const Navbar = () => {
                         <FaCartShopping />
                     </Button>
                     <ModalComponent />
-                    {isCartOpen && (
-                        <>
-                            {/* Fondo oscuro con transición de opacidad */}
-                            <div
-                                className={clsx(
-                                    "fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-500",
-                                    { 'opacity-0 pointer-events-none': !isCartOpen, 'opacity-100': isCartOpen }
-                                )}
-                                onClick={toggleCart}
-                            ></div>
-
-                            {/* Menú del carrito que se desplaza de derecha a izquierda */}
-                            <div
-                                className={clsx(
-                                    "fixed top-0 right-0 h-full w-[75%] md:w-[40%] lg:w-[30%] bg-white shadow-lg z-50 transform transition-transform duration-500",
-                                    { '-translate-x-full': !isCartOpen, 'translate-x-0': isCartOpen }
-                                )}
-                            >
-                                <div className='flex justify-between items-center p-6 h-[10%] border-b-1'>
-                                    <div className='font-bold text-xl'>
-                                        <h1>Tu carrito</h1>
-                                    </div>
-                                    <Button onClick={toggleCart}>
-                                        <FaXmark className='text-2xl' />
-                                    </Button>
-                                </div>
-                                <div className="flex flex-col justify-center items-center h-[75%] border-b-1">
-                                    <h1 className='text-center mb-4'>Tu carrito está vacío</h1>
-                                    <Button
-                                        className='bg-indigo-500 text-white font-bold rounded-xl px-6 py-2'
-                                        onClick={handleExplore}
-                                    >
-                                        Explora la tienda
-                                    </Button>
-                                </div>
-                                <div className='my-auto space-y-2 items-center py-5'>
-                                    <div className='flex justify-between items-center mx-6 text-xl'>
-                                        <h1>Subtotal</h1>
-                                        <h1 className='text-red-500 font-semibold'>$ </h1>
-                                    </div>
-                                    <Button className='w-[90%] flex mx-auto bg-indigo-600 rounded-lg'>
-                                        <h1 className='my-2 text-white font-semibold'>Finalizar compra</h1>
-                                    </Button>
-                                </div>
-                            </div>
-                        </>
-                    )}
+                    <Cart isCartOpen={isCartOpen} toggleCart={toggleCart} handleExplore={handleExplore} />
                 </div>
             </nav>
         </div>
