@@ -103,6 +103,7 @@ const ProductView = () => {
                     "Solo queda " + product.countInStock + " unidad"
                     : "Producto agotado"}
             </p>
+            <h1 className='text-xs'>SKU: {product.sku}</h1>
 
           </div>
         </div>
