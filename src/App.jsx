@@ -29,6 +29,7 @@ import SalesMenu from "./components/dashboard-pages/SalesMenu";
 import SuccessCasesMenu from "./components/dashboard-pages/SuccessCasesMenu";
 import NewsMenu from "./components/dashboard-pages/NewsMenu";
 import ProductView from "./pages/landing/product/ProductView";
+import Cart from "./pages/cart/Cart";
 
 function App() {
   return (
@@ -52,6 +53,8 @@ function App() {
               {/* product pages */}
               <Route path="products" element={<Product />} />
               <Route path="products/:id" element={<ProductView />} />
+              {/* cart */}
+              <Route path="cart" element={<Cart />} />
             </Route>
             <Route element={<AuthLayout />}>
               <Route path="login" element={<Login />} />

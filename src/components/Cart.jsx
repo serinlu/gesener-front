@@ -5,6 +5,7 @@ import { FaXmark } from 'react-icons/fa6';
 import clsx from 'clsx';
 import { useCart } from '../hooks/useCart'; // Asegúrate de importar correctamente tu hook de carrito
 import CartItem from './CartItem'; // Componente para cada producto del carrito
+import { Link } from 'react-router-dom';
 
 const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
     const { cart, clearCart, addToCart, removeFromCart } = useCart();
@@ -19,10 +20,11 @@ const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
             <div
                 className={clsx(
                     "fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-500",
-                    { 'opacity-0 pointer-events-none': !isCartOpen, 'opacity-100': isCartOpen }
+                    { 'opacity-0 pointer-events-none': !isCartOpen, 'opacity-50': isCartOpen }
                 )}
                 onClick={toggleCart}
             ></div>
+
 
             {/* Menú del carrito que se desplaza de derecha a izquierda */}
             <div
@@ -39,7 +41,7 @@ const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
                 </div>
 
                 {/* Contenido del carrito */}
-                <div className="flex flex-col justify-center items-center h-[75%] border-b overflow-y-auto">
+                <div className={clsx(`flex flex-col items-center h-[75%] border-b overflow-y-auto ${cart.length === 0 ? "justify-center" : ""}`)}>
                     {cart.length === 0 ? (
                         <>
                             <h1 className="text-center mb-4">Tu carrito está vacío</h1>
@@ -72,9 +74,11 @@ const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
                             <h1>Subtotal</h1>
                             <h1 className="text-red-500 font-semibold">${calculateSubtotal().toFixed(2)}</h1>
                         </div>
-                        <Button className="w-[90%] flex mx-auto bg-indigo-600 rounded-lg">
-                            <h1 className="my-2 text-white font-semibold">Finalizar compra</h1>
-                        </Button>
+                        <Link to="/cart">
+                            <Button className="w-[90%] flex mx-auto bg-indigo-600 rounded-lg">
+                                <h1 className="my-2 text-white font-semibold">Ir al carrito</h1>
+                            </Button>
+                        </Link>
                         <Button
                             className="w-[90%] flex mx-auto bg-red-600 rounded-lg mt-4"
                             onClick={clearCart}

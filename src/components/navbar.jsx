@@ -1,15 +1,13 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
-import { FaBars, FaCross, FaSearch, FaTimes, FaUser } from 'react-icons/fa';
-import { FaCartShopping, FaX, FaXmark } from 'react-icons/fa6';
-import { IoSearch } from 'react-icons/io5';
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import logo from '../uploads/logo.png';
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import React, { useContext, useRef, useState } from 'react';
+import { FaUser } from 'react-icons/fa';
+import { FaCartShopping } from 'react-icons/fa6';
 import { IoIosArrowDown } from 'react-icons/io';
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
-import ModalComponent from './Modal';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import clsx from 'clsx';
+import logo from '../uploads/logo.png';
 import Cart from './Cart';
+import ModalComponent from './Modal';
 
 const Navbar = () => {
     const [showSearch, setShowSearch] = useState(false);
@@ -41,7 +39,6 @@ const Navbar = () => {
         }
         setIsCartOpen(!isCartOpen);
     }
-
 
     const ItemsUser = [
         { key: "login", label: "Iniciar sesión", path: "/login" },

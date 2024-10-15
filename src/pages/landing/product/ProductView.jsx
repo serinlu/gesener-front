@@ -96,12 +96,13 @@ const ProductView = () => {
 
             <p className='text-md my-2'>
               {product.countInStock > 20 ?
-                "Más de 20 unidades disponibles"
+                <h1 className='text-green-500'>Más de 20 unidades disponibles</h1>
                 : product.countInStock <= 20 && product.countInStock > 1 ?
-                  product.countInStock + " unidades disponibles"
+                  <h1 className='text-green-500'>{product.countInStock} unidades disponibles"</h1>
                   : product.countInStock === 1 ?
-                    "Solo queda " + product.countInStock + " unidad"
-                    : "Producto agotado"}
+                    <h1 className='text-orange-500'>Solo queda {product.countInStock} unidad
+                    </h1>
+                    : <h1 className='text-red-500'>Producto agotado</h1>}
             </p>
             <h1 className='text-xs'>SKU: {product.sku}</h1>
 

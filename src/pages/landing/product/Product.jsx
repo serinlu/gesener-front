@@ -8,6 +8,7 @@ import { FaAngleRight } from 'react-icons/fa6';
 import { Button } from '@nextui-org/react';
 import { useCart } from '../../../hooks/useCart';
 import clsx from 'clsx';
+import Cart from '../../../components/Cart';
 
 const accordionVariants = {
     open: {
@@ -331,6 +332,10 @@ const Product = () => {
                                         >
                                             <h1 className="p-2">Agregar</h1>
                                         </Button>
+                                        <Cart
+                                            isCartOpen={isCartOpen}
+                                            toggleCart={toggleCart}
+                                        />
                                     </div>
                                 </div>
                             ))
