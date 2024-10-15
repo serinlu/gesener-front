@@ -21,7 +21,7 @@ const AuthProvider = ({ children }) => {
 			}
 		}
 		autenticarUsuario();
-	}, [setAuth]);
+	}, []);
 
 	const logout = () => {
 		logoutUser();
