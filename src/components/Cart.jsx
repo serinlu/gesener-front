@@ -1,5 +1,5 @@
 // Cart.tsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@nextui-org/react';
 import { FaXmark } from 'react-icons/fa6';
 import clsx from 'clsx';
@@ -8,7 +8,7 @@ import CartItem from './CartItem'; // Componente para cada producto del carrito
 import { Link } from 'react-router-dom';
 
 const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
-    const { cart, clearCart, addToCart, removeFromCart } = useCart();
+    const { cart, clearCart, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity } = useCart();
 
     const calculateSubtotal = () => {
         return cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
@@ -59,7 +59,8 @@ const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
                                     key={product._id}
                                     addToCart={() => addToCart(product)}
                                     removeFromCart={() => removeFromCart(product)}
-                                    removeItem={() => removeItem(product._id)}
+                                    removeItemUnitFromCart={() => removeItemUnitFromCart(product)}
+                                    setItemQuantity={setItemQuantity}
                                     {...product}
                                 />
                             ))}

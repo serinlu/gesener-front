@@ -1,13 +1,12 @@
-// CartItem.tsx
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
-const CartItem = ({ thumbnail, price, name, quantity, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, _id }) => {
+const CartPageItem = ({ thumbnail, price, name, quantity, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, _id }) => {
     const [manualQuantity, setManualQuantity] = useState(quantity);
 
+    // Sincronizar el estado local con el estado global (cuando cambia el carrito global)
     useEffect(() => {
         setManualQuantity(quantity);
-    }, { quantity });
+    }, [quantity]);
 
     const handleIncrement = () => {
         const newQuantity = manualQuantity + 1;
@@ -38,36 +37,33 @@ const CartItem = ({ thumbnail, price, name, quantity, addToCart, removeFromCart,
     };
 
     const handleBlur = () => {
-        if (manualQuantity === '' || isNaN(manualQuantity)) {
+        if(manualQuantity === '' || isNaN(manualQuantity)) {
             setManualQuantity(1)
             setItemQuantity(_id, 1);
         }
     }
 
     const handleRemove = () => {
-        removeFromCart();
+        removeFromCart(); // Eliminar del contexto global
     };
 
     return (
-        <li className="flex justify-between items-center p-4 border-b">
+        <li className="grid grid-cols-6 items-center p-4 border-b">
             <img src={thumbnail} alt={name} className="w-16 h-16 object-cover mr-4" />
-            <div className="flex-1">
-                <Link to='/products'>
-                    <strong>{name}</strong>
-                </Link>
-                <div>${price.toFixed(2)}</div>
-                <div className="flex items-center mt-2">
-                    <button onClick={handleDecrement} className="bg-indigo-500 text-white px-2 py-1 rounded mr-2">-</button>
-                    <input
-                        type="number"
-                        value={manualQuantity}
-                        onChange={handleManualChange}
-                        onBlur={handleBlur}
-                        className="border rounded w-16 text-center"
-                    />
-                    <button onClick={handleIncrement} className="bg-indigo-500 text-white px-2 py-1 rounded ml-2">+</button>
-                </div>
+            <strong>{name}</strong>
+            <div>${price.toFixed(2)}</div>
+            <div className="flex items-center mt-2">
+                <button onClick={handleDecrement} className="bg-indigo-500 text-white px-2 py-1 rounded mr-2">-</button>
+                <input
+                    type="number"
+                    value={manualQuantity}
+                    onChange={handleManualChange}
+                    onBlur={handleBlur}
+                    className="border rounded w-16 text-center"
+                />
+                <button onClick={handleIncrement} className="bg-indigo-500 text-white px-2 py-1 rounded ml-2">+</button>
             </div>
+            <div>${(price * manualQuantity).toFixed(2)}</div>
             <button onClick={handleRemove} className="bg-red-600 text-white px-2 py-1 rounded">
                 Eliminar
             </button>
@@ -75,4 +71,4 @@ const CartItem = ({ thumbnail, price, name, quantity, addToCart, removeFromCart,
     );
 };
 
-export default CartItem;
+export default CartPageItem;

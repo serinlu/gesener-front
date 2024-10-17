@@ -5,13 +5,8 @@ export const CartContext = createContext()
 
 function useCartReducer() {
     const [state, dispatch] = useReducer(cartReducer, cartInitialState)
-    const [isCartOpen, setIsCartOpen] = useState(false)
 
     const addToCart = product => {
-        const productInCartIndex = state.findIndex(item => item._id === product._id)
-        if (productInCartIndex === -1) {
-            setIsCartOpen(true)
-        }
         dispatch({
             type: 'ADD_TO_CART',
             payload: product
@@ -23,26 +18,40 @@ function useCartReducer() {
         payload: product
     })
 
+    const removeItemUnitFromCart = product => {
+        dispatch({
+            type: 'REMOVE_ITEM_UNIT_FROM_CART',
+            payload: product
+        })
+    }
+
+    const setItemQuantity = (_id, quantity) => {
+        dispatch({
+            type: 'SET_ITEM_QUANTITY',
+            payload: { _id, quantity }
+        });
+    };
+
     const clearCart = () => dispatch({ type: 'CLEAR_CART' })
 
-    const toggleCart = () => setIsCartOpen(prev => !prev)
+    // const toggleCart = () => setIsCartOpen(prev => !prev)
 
-    return { state, addToCart, removeFromCart, clearCart, isCartOpen, toggleCart }
+    return { state, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, clearCart }
 }
 
 // la dependencia de usar React Context
 // es MÍNIMA
 export function CartProvider({ children }) {
-    const { state, addToCart, removeFromCart, clearCart, isCartOpen, toggleCart } = useCartReducer()
+    const { state, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, clearCart } = useCartReducer()
 
     return (
         <CartContext.Provider value={{
             cart: state,
             addToCart,
             removeFromCart,
-            clearCart,
-            isCartOpen,
-            toggleCart
+            removeItemUnitFromCart,
+            setItemQuantity,
+            clearCart
         }}
         >
             {children}

@@ -30,6 +30,7 @@ import SuccessCasesMenu from "./components/dashboard-pages/SuccessCasesMenu";
 import NewsMenu from "./components/dashboard-pages/NewsMenu";
 import ProductView from "./pages/landing/product/ProductView";
 import Cart from "./pages/cart/Cart";
+import Checkout from "./pages/checkout/Checkout";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
               <Route path="products/:id" element={<ProductView />} />
               {/* cart */}
               <Route path="cart" element={<Cart />} />
+              <Route path="checkout" element={<Checkout />} />
             </Route>
             <Route element={<AuthLayout />}>
               <Route path="login" element={<Login />} />

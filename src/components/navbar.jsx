@@ -60,10 +60,6 @@ const Navbar = () => {
         { key: "training", label: "Capacitación", path: "/solutions/training" }
     ];
 
-    const calculateSubtotal = () => {
-        return cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
-    }
-
     return (
         <div className='w-full py-3 bg-white shadow-md text-black z-20 outline-none'>
             <nav className='w-[90%] mx-auto flex justify-between items-center'>
