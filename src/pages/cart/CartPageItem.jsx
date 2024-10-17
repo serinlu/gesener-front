@@ -1,4 +1,6 @@
+import { Button } from '@nextui-org/react';
 import React, { useState, useEffect } from 'react';
+import { FaTrash } from 'react-icons/fa';
 
 const CartPageItem = ({ thumbnail, price, name, quantity, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, _id }) => {
     const [manualQuantity, setManualQuantity] = useState(quantity);
@@ -53,20 +55,20 @@ const CartPageItem = ({ thumbnail, price, name, quantity, addToCart, removeFromC
             <strong>{name}</strong>
             <div>${price.toFixed(2)}</div>
             <div className="flex items-center mt-2">
-                <button onClick={handleDecrement} className="bg-indigo-500 text-white px-2 py-1 rounded mr-2">-</button>
+                <Button onClick={handleDecrement} className="bg-gray-500 text-white px-2 py-1 rounded mr-1">-</Button>
                 <input
                     type="number"
                     value={manualQuantity}
                     onChange={handleManualChange}
                     onBlur={handleBlur}
-                    className="border rounded w-16 text-center"
+                    className="border rounded py-1 w-12 text-center"
                 />
-                <button onClick={handleIncrement} className="bg-indigo-500 text-white px-2 py-1 rounded ml-2">+</button>
+                <Button onClick={handleIncrement} className="bg-gray-500 text-white px-2 py-1 rounded ml-1">+</Button>
             </div>
-            <div>${(price * manualQuantity).toFixed(2)}</div>
-            <button onClick={handleRemove} className="bg-red-600 text-white px-2 py-1 rounded">
-                Eliminar
-            </button>
+            <div className='flex items-center'>${(price * manualQuantity).toFixed(2)}</div>
+            <Button onClick={handleRemove} className="bg-red-600 text-white px-2 py-2 rounded-md w-[30%] mx-auto">
+                <FaTrash className='mx-auto'/>
+            </Button>
         </li>
     );
 };

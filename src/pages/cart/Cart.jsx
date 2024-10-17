@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useCart } from '../../hooks/useCart';
 import CartPageItem from './CartPageItem';
 import { Button } from '@nextui-org/react';
+import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 
 const cart = () => {
     const { cart, clearCart, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity } = useCart();
+
+    const { auth } = useContext(AuthContext);
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const navigate = useNavigate();
 
     const calculateSubtotal = () => {
         return cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
@@ -14,10 +20,26 @@ const cart = () => {
     const envio = cart.length === 0 ? 0 : 7;
 
     const total = calculateSubtotal() + envio;
-    console.log(total);
 
     const handleExplore = () => {
-        window.location.href = '/products'; // Redirecciona a la página principal
+        navigate('/products')
+    };
+
+    const handleFinishPurchase = () => {
+        // verifica si el usuario esta logueado
+        // si no esta logueado, abre modal que recomienda ingresar a su cuenta
+        // si esta logueado, redicrecciona a formulario de compra
+        if (!auth) {
+            setIsModalOpen(true); // Si no está logueado, abrir el modal
+            localStorage.setItem('lastVisited', window.location.pathname); // Guardar la URL actual
+        } else {
+            navigate('/checkout'); // Si está logueado, redirigir a la página de checkout
+        }
+    };
+
+    const handleLoginRedirect = () => {
+        // Redireccionar al login
+        navigate('/login');
     };
 
     return (
@@ -60,12 +82,12 @@ const cart = () => {
                             <div className='mt-6'>
 
                                 <div className='space-y-4 mt-4'>
-                                    <button
+                                    <Button
                                         className='bg-red-600 text-white font-semibold py-2 px-4 rounded-lg'
                                         onClick={clearCart}
                                     >
                                         Vaciar carrito
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         </>
@@ -86,11 +108,32 @@ const cart = () => {
                     <Button
                         className={clsx(`text-xl font-bold text-white rounded-3xl p-2 w-full ${cart.length > 0 ? 'bg-blue-600' : 'bg-blue-300'}`)}
                         disabled={cart.length === 0}
+                        onClick={handleFinishPurchase}
                     >
                         Finalizar compra
                     </Button>
                 </div>
             </div>
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg shadow-lg w-1/3">
+                        <div className="p-4 border-b">
+                            <h2 className="text-2xl font-bold">Iniciar sesión</h2>
+                        </div>
+                        <div className="p-4">
+                            <p className="text-lg">Debes iniciar sesión para finalizar tu compra.</p>
+                        </div>
+                        <div className="p-4 border-t flex justify-end space-x-2">
+                            <Button className="bg-blue-600 text-white px-4 py-2 rounded-md" onClick={handleLoginRedirect}>
+                                Iniciar sesión
+                            </Button>
+                            <Button className="bg-gray-300 text-black px-4 py-2 rounded-md" onClick={() => setIsModalOpen(false)}>
+                                Cancelar
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };

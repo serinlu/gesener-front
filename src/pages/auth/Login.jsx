@@ -22,14 +22,20 @@ const Login = () => {
         return;
       }
       const user = await getProfile();
-      console.log(user.data)
       setAuth(user.data);
-      navigate('/');
+
+      const lastVisited = localStorage.getItem('lastVisited');
+      if (lastVisited) {
+        localStorage.removeItem('lastVisited');
+        navigate(lastVisited);
+      } else {
+        navigate('/');
+      }
     }
     catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <>

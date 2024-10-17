@@ -1,11 +1,18 @@
 import { Button } from '@nextui-org/react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useCart } from '../../../hooks/useCart';
+import Cart from '../../../components/Cart';
 
 const ProductView = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const toggleCart = () => {
+    setIsCartOpen(!isCartOpen);
+  };
 
   useEffect(() => {
     const getProduct = async () => {
@@ -34,6 +41,13 @@ const ProductView = () => {
   const handleInputChange = () => {
     const value = Math.max(1, Math.min(product.countInStock, Number(e.target.value)))
     setQuantity(value);
+  }
+
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart(product)
+    toggleCart()
   }
 
   return (
@@ -75,21 +89,16 @@ const ProductView = () => {
             </p>
 
             <div className="flex items-center mt-4 space-x-2">
-              <div>
-                <Button onClick={handleDecrease} className="bg-gray-200 text-black px-3 py-2 rounded-lg mr-1">-</Button>
-                <input
-                  type="number"
-                  value={quantity}
-                  onChange={handleInputChange}
-                  className="text-center w-16 border rounded-lg py-2"
-                  min="1"
-                  max={product.countInStock}
-                />
-                <Button onClick={handleIncrease} className="bg-gray-200 text-black px-3 py-2 rounded-lg ml-1">+</Button>
-              </div>
-              <Button className="bg-indigo-600 text-white font-bold rounded-xl">
-                <h1 className="p-2">Agregar</h1>
+              <Button
+                className="bg-indigo-600 text-white font-bold rounded-xl"
+                onClick={() => handleAddToCart(product)}
+              >
+                <h1 className="p-2">Agregar al carrito</h1>
               </Button>
+              <Cart
+                isCartOpen={isCartOpen}
+                toggleCart={toggleCart}
+              />
             </div>
 
             {/* Inventario */}
@@ -105,7 +114,6 @@ const ProductView = () => {
                     : <h1 className='text-red-500'>Producto agotado</h1>}
             </p>
             <h1 className='text-xs'>SKU: {product.sku}</h1>
-
           </div>
         </div>
         <div className='w-full'>
