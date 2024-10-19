@@ -6,11 +6,10 @@ import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 
-const cart = () => {
+const Cart = () => {
     const { cart, clearCart, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity } = useCart();
-
     const { auth } = useContext(AuthContext);
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
     const calculateSubtotal = () => {
@@ -18,27 +17,51 @@ const cart = () => {
     };
 
     const envio = cart.length === 0 ? 0 : 7;
-
     const total = calculateSubtotal() + envio;
 
     const handleExplore = () => {
-        navigate('/products')
+        navigate('/products');
     };
 
     const handleFinishPurchase = () => {
-        // verifica si el usuario esta logueado
-        // si no esta logueado, abre modal que recomienda ingresar a su cuenta
-        // si esta logueado, redicrecciona a formulario de compra
         if (!auth) {
             setIsModalOpen(true); // Si no está logueado, abrir el modal
             localStorage.setItem('lastVisited', window.location.pathname); // Guardar la URL actual
         } else {
-            navigate('/checkout'); // Si está logueado, redirigir a la página de checkout
+            // Si el usuario está autenticado
+            const userData = {
+                userId: auth._id,
+                name: auth.name,
+                lastname: auth.lastname,
+                companyName: auth.companyName,
+                socialReason: auth.socialReason,
+                tipoDocumento: auth.tipoDocumento,
+                numDoc: auth.numDoc,
+                email: auth.email,
+                phone: auth.phone,
+                address: auth.address,
+                country: auth.country,
+                province: auth.province,
+                district: auth.district,
+                city: auth.city,
+                postalCode: auth.postalCode,
+                total: total.toFixed(2),
+                cart: cart,
+            };
+
+            // Guardar el objeto en el localStorage
+            localStorage.setItem('pedido', JSON.stringify(userData));
+
+            // Verificar que los datos se guardaron en localStorage
+            const pedidoGuardado = JSON.parse(localStorage.getItem('pedido'));
+            console.log('Datos del pedido guardados en localStorage:', pedidoGuardado);
+
+            // Redirigir a la página de checkout
+            navigate('/checkout');
         }
     };
 
     const handleLoginRedirect = () => {
-        // Redireccionar al login
         navigate('/login');
     };
 
@@ -52,7 +75,9 @@ const cart = () => {
                     {cart.length === 0 ? (
                         <>
                             <h1 className='text-xl'>Tu carrito está vacío. Comienza a explorar nuestro catálogo.</h1>
-                            <Button className='text-white bg-blue-600 rounded-lg py-2 mt-3 font-bold' onClick={handleExplore}>Explora la tienda</Button>
+                            <Button className='text-white bg-blue-600 rounded-lg py-2 mt-3 font-bold' onClick={handleExplore}>
+                                Explora la tienda
+                            </Button>
                         </>
                     ) : (
                         <>
@@ -77,10 +102,8 @@ const cart = () => {
                                 />
                             ))}
 
-
                             {/* Resumen de pedido */}
                             <div className='mt-6'>
-
                                 <div className='space-y-4 mt-4'>
                                     <Button
                                         className='bg-red-600 text-white font-semibold py-2 px-4 rounded-lg'
@@ -99,11 +122,9 @@ const cart = () => {
                         <h1>Subtotal</h1>
                         <h1 className='font-bold'>${calculateSubtotal().toFixed(2)}</h1>
                         <h1>Envío</h1>
-                        <h1 className='font-bold'>$
-                            {envio.toFixed(2)}
-                        </h1>
+                        <h1 className='font-bold'>${envio.toFixed(2)}</h1>
                         <h1>Total</h1>
-                        <h1 className='font-bold'>${(calculateSubtotal() + envio).toFixed(2)}</h1>
+                        <h1 className='font-bold'>${total.toFixed(2)}</h1>
                     </div>
                     <Button
                         className={clsx(`text-xl font-bold text-white rounded-3xl p-2 w-full ${cart.length > 0 ? 'bg-blue-600' : 'bg-blue-300'}`)}
@@ -138,4 +159,4 @@ const cart = () => {
     );
 };
 
-export default cart;
+export default Cart;

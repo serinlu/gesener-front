@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import { getProfile, logoutUser } from '../services/UserService';
+import { getUserById } from '../services/AuthService';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
@@ -10,7 +11,6 @@ const AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		const autenticarUsuario = async () => {
-			
 			try {
 				const user = await getProfile();
 				setAuth(user.data);

@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react';
+import CheckoutStages from '../../components/CheckoutStages';
 
 const Checkout = () => {
+    const [factureChecked, setFactureChecked] = useState(false);
     const [formData, setFormData] = useState({
         nombre: '',
         apellidos: '',
@@ -15,6 +17,8 @@ const Checkout = () => {
         correoElectronico: '',
         notas: '',
         enviarDireccionDiferente: false,
+        ruc: '',
+        razonSocial: ''
     });
 
     const handleChange = (e) => {
@@ -31,15 +35,18 @@ const Checkout = () => {
         // Aquí puedes manejar el envío de los datos
     };
 
+    const handleFacture = () => {
+        setFactureChecked(!factureChecked);
+    };
+
     return (
         <div className='w-[80%] mx-auto mb-8'>
+            <CheckoutStages />
             <div className='my-8 text-3xl font-bold'>
                 Detalles de facturación
             </div>
             <div className='flex space-x-4'>
                 <form onSubmit={handleSubmit} className="w-2/3 space-y-6">
-                    <h2 className="text-xl font-bold mb-4">Detalles de facturación</h2>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Nombre *</label>
@@ -66,16 +73,60 @@ const Checkout = () => {
                         </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Nombre de la empresa (opcional)</label>
-                        <input
-                            type="text"
-                            name="empresa"
-                            value={formData.empresa}
-                            onChange={handleChange}
-                            className="mt-1 px-3 block w-full h-10 rounded-md border-gray-300 border-1 focus:border-indigo-500 focus:ring-indigo-500"
-                        />
+                    {/* Checkbox y texto "Solicitar factura" clicable */}
+                    <div className='flex items-center mt-4'>
+                        <label className="flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                className='mr-2'
+                                name="solicitarFactura"
+                                checked={factureChecked}
+                                onChange={handleFacture}
+                            />
+                            <span className="text-sm font-medium text-gray-700">Solicitar factura</span>
+                        </label>
                     </div>
+
+                    {/* Campos adicionales si se selecciona "Solicitar factura" */}
+                    {factureChecked && (
+                        <div className="mt-6 space-y-6 p-4 border-2 rounded-2xl">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Nombre de la empresa *</label>
+                                <input
+                                    type="text"
+                                    name="empresa"
+                                    value={formData.empresa}
+                                    onChange={handleChange}
+                                    required
+                                    className="mt-1 px-3 block w-full h-10 rounded-md border-gray-300 border-1 focus:border-indigo-500 focus:ring-indigo-500"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Razón social *</label>
+                                <input
+                                    type="text"
+                                    name="razonSocial"
+                                    value={formData.razonSocial}
+                                    onChange={handleChange}
+                                    required
+                                    className="mt-1 px-3 block w-full h-10 rounded-md border-gray-300 border-1 focus:border-indigo-500 focus:ring-indigo-500"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Número de RUC *</label>
+                                <input
+                                    type="text"
+                                    name="ruc"
+                                    value={formData.ruc}
+                                    onChange={handleChange}
+                                    required
+                                    className="mt-1 px-3 block w-full h-10 rounded-md border-gray-300 border-1 focus:border-indigo-500 focus:ring-indigo-500"
+                                />
+                            </div>
+                        </div>
+                    )}
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700">País / Región *</label>
@@ -89,7 +140,6 @@ const Checkout = () => {
                             <option value="Perú">Perú</option>
                             <option value="México">México</option>
                             <option value="Argentina">Argentina</option>
-                            {/* Añade más países según sea necesario */}
                         </select>
                     </div>
 
@@ -214,11 +264,11 @@ const Checkout = () => {
                     </div>
                 </form>
                 <div>
-                    fewnfiowe
+                    {/* Aquí puedes añadir algo más si lo deseas */}
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Checkout
+export default Checkout;

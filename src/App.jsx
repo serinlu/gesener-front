@@ -31,6 +31,7 @@ import NewsMenu from "./components/dashboard-pages/NewsMenu";
 import ProductView from "./pages/landing/product/ProductView";
 import Cart from "./pages/cart/Cart";
 import Checkout from "./pages/checkout/Checkout";
+import Payment from "./pages/payment/Payment";
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
               {/* cart */}
               <Route path="cart" element={<Cart />} />
               <Route path="checkout" element={<Checkout />} />
+              <Route path='payment' element={<Payment />} />
             </Route>
             <Route element={<AuthLayout />}>
               <Route path="login" element={<Login />} />
