@@ -75,7 +75,7 @@ const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
                             <h1>Subtotal</h1>
                             <h1 className="text-red-500 font-semibold">${calculateSubtotal().toFixed(2)}</h1>
                         </div>
-                        <Link to="/cart">
+                        <Link to="/checkout/cart">
                             <Button className="w-[90%] flex mx-auto bg-indigo-600 rounded-lg">
                                 <h1 className="my-2 text-white font-semibold">Ir al carrito</h1>
                             </Button>

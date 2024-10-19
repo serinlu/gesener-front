@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AuthLayout from "./layouts/AuthLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
 import LandingLayout from "./layouts/LandingLayout";
+import CheckoutLayout from "./layouts/CheckoutLayout";
 
 import Login from "./pages/auth/Login";
 import RecoverPassword from "./pages/auth/RecoverPassword";
@@ -56,9 +57,7 @@ function App() {
               <Route path="products" element={<Product />} />
               <Route path="products/:id" element={<ProductView />} />
               {/* cart */}
-              <Route path="cart" element={<Cart />} />
-              <Route path="checkout" element={<Checkout />} />
-              <Route path='payment' element={<Payment />} />
+
             </Route>
             <Route element={<AuthLayout />}>
               <Route path="login" element={<Login />} />
@@ -75,6 +74,11 @@ function App() {
               <Route path="sales" element={<SalesMenu />} />
               <Route path="success-cases" element={<SuccessCasesMenu />} />
               <Route path="news" element={<NewsMenu />} />
+            </Route>
+            <Route path='/checkout' element={<CheckoutLayout />}>
+              <Route path="cart" element={<Cart />} />
+              <Route path="user-info" element={<Checkout />} />
+              <Route path='payment' element={<Payment />} />
             </Route>
           </Routes>
         </CartProvider>

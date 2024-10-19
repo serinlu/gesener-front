@@ -29,35 +29,14 @@ const Cart = () => {
             localStorage.setItem('lastVisited', window.location.pathname); // Guardar la URL actual
         } else {
             // Si el usuario está autenticado
-            const userData = {
-                userId: auth._id,
-                name: auth.name,
-                lastname: auth.lastname,
-                companyName: auth.companyName,
-                socialReason: auth.socialReason,
-                tipoDocumento: auth.tipoDocumento,
-                numDoc: auth.numDoc,
-                email: auth.email,
-                phone: auth.phone,
-                address: auth.address,
-                country: auth.country,
-                province: auth.province,
-                district: auth.district,
-                city: auth.city,
-                postalCode: auth.postalCode,
-                total: total.toFixed(2),
-                cart: cart,
-            };
+            const totalPedido = total.toFixed(2);
+            console.log(total.toFixed(2))
 
             // Guardar el objeto en el localStorage
-            localStorage.setItem('pedido', JSON.stringify(userData));
-
-            // Verificar que los datos se guardaron en localStorage
-            const pedidoGuardado = JSON.parse(localStorage.getItem('pedido'));
-            console.log('Datos del pedido guardados en localStorage:', pedidoGuardado);
+            localStorage.setItem('total', totalPedido);
 
             // Redirigir a la página de checkout
-            navigate('/checkout');
+            navigate('/checkout/user-info');
         }
     };
 
@@ -67,10 +46,10 @@ const Cart = () => {
 
     return (
         <>
-            <div className='w-[80%] mx-auto my-8'>
+            <div className='mx-auto my-8'>
                 <h1 className='text-3xl font-bold'>Carrito</h1>
             </div>
-            <div className='flex w-[80%] mx-auto my-8 space-x-4 justify-between'>
+            <div className='flex mx-auto my-8 space-x-4 justify-between'>
                 <div className='w-2/3'>
                     {cart.length === 0 ? (
                         <>
@@ -127,7 +106,7 @@ const Cart = () => {
                         <h1 className='font-bold'>${total.toFixed(2)}</h1>
                     </div>
                     <Button
-                        className={clsx(`text-xl font-bold text-white rounded-3xl p-2 w-full ${cart.length > 0 ? 'bg-blue-600' : 'bg-blue-300'}`)}
+                        className={clsx(`text-xl font-bold text-white rounded-3xl items-center w-full ${cart.length > 0 ? 'bg-blue-600' : 'bg-blue-300'}`)}
                         disabled={cart.length === 0}
                         onClick={handleFinishPurchase}
                     >
