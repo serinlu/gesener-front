@@ -51,4 +51,49 @@ const getProfile = async () => {
     }
 }
 
-export { loginUser, registerUser, getProfile, logoutUser };
+const getUsers = async () => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        const response = await clientAxios.get('/users', config);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+const checkPassword = async () => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        const response = await clientAxios.post('/auth/checkPassword', config);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+const changeRole = async (id, form) => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        const response = await clientAxios.post(`/users/change-role/${id}`, form, config );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+export { loginUser, registerUser, getProfile, logoutUser, getUsers, checkPassword, changeRole };

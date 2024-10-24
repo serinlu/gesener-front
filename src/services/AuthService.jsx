@@ -45,19 +45,18 @@ const getUserById = async (userId) => {
     }
 }
 
-// services/AuthService.js
-export const getUserFromCookie = () => {
-    return new Promise((resolve, reject) => {
-        // Ejemplo simple de lectura de cookie
-        const userCookie = document.cookie.split('; ').find(row => row.startsWith('user='));
-        if (userCookie) {
-            const userData = JSON.parse(decodeURIComponent(userCookie.split('=')[1])); // Decodifica y convierte a objeto
-            resolve(userData);
-        } else {
-            resolve(null);
-        }
-    });
-};
+const updateUser = async (id, form) => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        const response = await clientAxios.put(`/users/${id}`, form, config);
+        return response.data;       
+    } catch (error) {
+        
+    }
+}
 
-
-export { loginUser, registerUser, getUserById };
+export { loginUser, registerUser, getUserById, updateUser };
