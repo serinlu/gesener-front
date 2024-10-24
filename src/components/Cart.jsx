@@ -41,7 +41,7 @@ const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
                 </div>
 
                 {/* Contenido del carrito */}
-                <div className={clsx(`flex flex-col items-center h-[75%] border-b overflow-y-auto ${cart.length === 0 ? "justify-center" : ""}`)}>
+                <div className={clsx(`flex flex-col items-center h-[70%] border-b overflow-y-auto ${cart.length === 0 ? "justify-center" : ""}`)}>
                     {cart.length === 0 ? (
                         <>
                             <h1 className="text-center mb-4">Tu carrito está vacío</h1>
@@ -70,8 +70,8 @@ const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
 
                 {/* Subtotal y botón para finalizar compra */}
                 {cart.length > 0 && (
-                    <div className="space-y-2 items-center py-5">
-                        <div className="flex justify-between items-center mx-6 text-xl">
+                    <div className="space-y-2">
+                        <div className="flex justify-between items-center mx-6 py-4 text-xl">
                             <h1>Subtotal</h1>
                             <h1 className="text-red-500 font-semibold">${calculateSubtotal().toFixed(2)}</h1>
                         </div>
