@@ -5,6 +5,9 @@ import { updateUser } from '../../services/AuthService'
 import { Button } from '@nextui-org/react'
 import { FaEye, FaEdit } from 'react-icons/fa'
 import { AuthContext } from '../../context/AuthContext'
+import departamentos from '../../utils/departamentos.json'
+import provincias from '../../utils/provincias.json'
+import distritos from '../../utils/distritos.json'
 
 const UsersMenu = () => {
     const [users, setUsers] = useState([])
@@ -15,34 +18,18 @@ const UsersMenu = () => {
     const [newRole, setNewRole] = useState('')
     const [form, setForm] = useState({
         name: '', lastname: '', companyNmae: '', socialReason: '', ruc: '',
-        tipoDocumento: '', numDoc: '', country: '', address: '', province: '',
+        tipoDocumento: '', numDoc: '', department: '', address: '', province: '',
         district: '', city: '', postalCode: '', phone: '', email: '', role: ''
     })
     const [authForm, setAuthForm] = useState({ email: '', password: '' })
+    const [provinces, setProvinces] = useState([])
+    const [districts, setDistricts] = useState([])
 
     useEffect(() => {
         fetchUsers();
         fetchProfile();
     }, []);
 
-    const userData = [
-        { title: 'Nombre', value: form.name },
-        { title: 'Apellidos', value: form.lastname },
-        { title: 'Empresa', value: form.companyNmae },
-        { title: 'Razón social', value: form.socialReason },
-        { title: 'RUC', value: form.ruc },
-        { title: 'Tipo de documento', value: form.tipoDocumento },
-        { title: 'N° de documento', value: form.numDoc },
-        { title: 'País', value: form.country },
-        { title: 'Dirección', value: form.address },
-        { title: 'Provincia', value: form.province },
-        { title: 'Distrito', value: form.district },
-        { title: 'Ciudad', value: form.city },
-        { title: 'Código Postal', value: form.postalCode },
-        { title: 'Teléfono', value: form.phone },
-        { title: 'Correo electrónico', value: form.email },
-        { title: 'Rol', value: form.role }
-    ]
 
     const fetchProfile = async () => {
         const response = await getProfile();
@@ -50,7 +37,7 @@ const UsersMenu = () => {
             setForm({
                 name: response.name, lastname: response.lastname, companyNmae: response.companyNmae || '-',
                 socialReason: response.socialReason || '-', ruc: response.ruc || '-', tipoDocumento: response.tipoDocumento || '-',
-                numDoc: response.numDoc || '-', country: response.country || '-', address: response.address || '-',
+                numDoc: response.numDoc || '-', department: response.department || '-', address: response.address || '-',
                 province: response.province || '-', district: response.district || '-', city: response.city || '-',
                 postalCode: response.postalCode || '-', phone: response.phone || '-', email: response.email, role: response.role
             });
@@ -64,15 +51,46 @@ const UsersMenu = () => {
         }
     };
 
+    const testDepartments = async (user) => {
+        const id_dep = user.department || '';
+        const id_pro = user.province || '';
+        const id_dist = user.district || '';
+
+        // Buscar el departamento
+        const department = departamentos.find(data => data.id_ubigeo === id_dep.toString());
+
+        // Establecer provincias y distritos en función de `id_dep` y `id_pro`
+        const updatedProvinces = id_dep ? provincias[id_dep] : [];
+        const updatedDistricts = id_pro ? distritos[id_pro] : [];
+        setProvinces(updatedProvinces);
+        setDistricts(updatedDistricts);
+
+        // Buscar la provincia y distrito con los datos actualizados
+        const province_n = updatedProvinces.find(data => data.id_ubigeo === id_pro.toString());
+        const district_n = updatedDistricts.find(data => data.id_ubigeo === id_dist.toString());
+
+        // Actualizar `form` con los datos nuevos o dejar en blanco si no se encuentra
+        setForm((prevForm) => ({
+            ...prevForm,
+            department: department ? department.nombre_ubigeo : '-',
+            province: province_n ? province_n.nombre_ubigeo : '-',
+            district: district_n ? district_n.nombre_ubigeo : '-'
+        }));
+    };
+
+
     const handleOpenModal = (user) => {
         setShowViewModal(true);
         setForm({
             name: user.name, lastname: user.lastname, companyNmae: user.companyNmae || '-',
             socialReason: user.socialReason || '-', ruc: user.ruc || '-', tipoDocumento: user.tipoDocumento || '-',
-            numDoc: user.numDoc || '-', country: user.country || '-', address: user.address || '-',
+            numDoc: user.numDoc || '-', department: user.department || '-', address: user.address || '-',
             province: user.province || '-', district: user.district || '-', city: user.city || '-',
             postalCode: user.postalCode || '-', phone: user.phone || '-', email: user.email, role: user.role
         });
+        setProvinces([]); // Reiniciar provincias al abrir el modal
+        setDistricts([]); // Reiniciar distritos al abrir el modal
+        testDepartments(user);
     };
 
     const handleOpenEditRoleModal = (user) => {
@@ -112,6 +130,26 @@ const UsersMenu = () => {
     const isFormValid = () => {
         return newRole !== selectedUser.role && authForm.email !== '' && authForm.password !== '';
     }
+
+
+    const userData = [
+        { title: 'Nombre', value: form.name },
+        { title: 'Apellidos', value: form.lastname },
+        { title: 'Empresa', value: form.companyNmae },
+        { title: 'Razón social', value: form.socialReason },
+        { title: 'RUC', value: form.ruc },
+        { title: 'Tipo de documento', value: form.tipoDocumento },
+        { title: 'N° de documento', value: form.numDoc },
+        { title: 'Departamento', value: form.department },
+        { title: 'Dirección', value: form.address },
+        { title: 'Provincia', value: form.province },
+        { title: 'Distrito', value: form.district },
+        { title: 'Ciudad', value: form.city },
+        { title: 'Código Postal', value: form.postalCode },
+        { title: 'Teléfono', value: form.phone },
+        { title: 'Correo electrónico', value: form.email },
+        { title: 'Rol', value: form.role }
+    ]
 
     return (
         <div className='bg-white p-3 rounded-lg'>

@@ -2,7 +2,7 @@ import { Button } from '@nextui-org/react';
 import React, { useState, useEffect } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
-const CartPageItem = ({ thumbnail, price, name, quantity, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, _id }) => {
+const CartPageItem = ({ imageUrl, price, name, quantity, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, _id }) => {
     const [manualQuantity, setManualQuantity] = useState(quantity);
 
     // Sincronizar el estado local con el estado global (cuando cambia el carrito global)
@@ -51,7 +51,7 @@ const CartPageItem = ({ thumbnail, price, name, quantity, addToCart, removeFromC
 
     return (
         <li className="grid grid-cols-6 items-center p-4 border-b">
-            <img src={thumbnail} alt={name} className="w-16 h-16 object-cover mr-4" />
+            <img src={imageUrl} alt={name} className="w-16 h-16 object-cover mr-4" />
             <strong>{name}</strong>
             <div>${price.toFixed(2)}</div>
             <div className="flex items-center mt-2">

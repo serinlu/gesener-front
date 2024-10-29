@@ -312,6 +312,13 @@ const Product = () => {
                         {filteredProducts.length > 0 ? (
                             filteredProducts.map((product) => (
                                 <div key={product._id} className="border rounded-lg p-4">
+                                    <div className='mb-2 w-60 h-60'>
+                                        <img
+                                            src={product.imageUrl}
+                                            alt={product.name}
+                                            className="object-cover rounded-lg"
+                                        />
+                                    </div>
                                     <div className="text-sm text-gray-500 mb-2">
                                         {product.brand ? product.brand.name : 'Sin marca'}
                                     </div>

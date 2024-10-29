@@ -4,6 +4,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import logo from "../uploads/logo.png";
 import { AuthContext } from '../context/AuthContext';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
+import { FaImage } from 'react-icons/fa6';
 
 const DashboardLayout = () => {
   const location = useLocation(); // Obtener la ubicación actual
@@ -22,6 +23,7 @@ const DashboardLayout = () => {
     { name: 'Usuarios', icon: <FaUser />, path: '/dashboard/users' },
     { name: 'Productos', icon: <FaTag />, path: '/dashboard/products' },
     { name: 'Categorías', icon: <FaAward />, path: '/dashboard/categories' },
+    { name: 'Imágenes', icon: <FaImage />, path: '/dashboard/images' },
     { name: 'Marcas', icon: <FaList />, path: '/dashboard/brands' },
     { name: 'Pedidos', icon: <FaBox />, path: '/dashboard/orders' },
     { name: 'Ventas', icon: <FaDollarSign />, path: '/dashboard/sales' },
@@ -81,7 +83,7 @@ const DashboardLayout = () => {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <div className="bg-white text-black w-64 flex flex-col justify-between">
+      <div className="bg-white text-black w-64 flex flex-col justify-between h-full sticky top-0">
         <div>
           <Link to="/">
             <img src={logo} alt="logo" className="w-[70%] mx-auto mt-10 mb-10" />
@@ -127,7 +129,7 @@ const DashboardLayout = () => {
         </div>
       </div>
 
-      <div className="flex-1 p-10 bg-gray-100">
+      <div className="flex-1 p-10 bg-gray-100 overflow-y-auto">
         <h1 className="text-3xl font-bold mb-6">{selectedOption}</h1>
         <Outlet />
       </div>

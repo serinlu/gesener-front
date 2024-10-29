@@ -4,6 +4,7 @@ import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
 import { getBrands } from '../../services/BrandService';
 import { getCategories } from '../../services/CategoryService';
 import { createProduct, deleteProduct, getProducts, updateProduct } from '../../services/ProductService';
+import { getImages } from '../../services/ImageService.jsx';
 import { validateProduct } from './validations/productValidations.js';
 
 const ProductsMenu = () => {
@@ -11,9 +12,11 @@ const ProductsMenu = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showImagesListModal, setShowImagesListModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [categories, setCategories] = useState([]);
     const [brands, setBrands] = useState([]);
+    const [images, setImages] = useState([]);
     const [form, setForm] = useState({
         sku: '',
         name: '',
@@ -41,6 +44,7 @@ const ProductsMenu = () => {
         fetchProducts();
         fetchCategories();
         fetchBrands();
+        fetchImages()
     }, []);
 
     const fetchProducts = () => {
@@ -61,6 +65,20 @@ const ProductsMenu = () => {
             .catch((error) => console.error(error));
     };
 
+    const fetchImages = () => {
+        getImages()
+            .then((data) => setImages(data))
+            .catch((error) => console.error(error));
+    };
+
+    const handleImageSelect = (imageUrl) => {
+        setForm((prevForm) => ({
+            ...prevForm,
+            imageUrl
+        }))
+        setShowImagesListModal(false);
+    }
+
     const handleCreateClick = () => {
         setErrors(null)
         setForm({
@@ -80,7 +98,6 @@ const ProductsMenu = () => {
         const existingSkus = products.map(product => product.sku);
         console.log(existingSkus);
     };
-
 
     const handleEditClick = (product) => {
         setShowEditModal(true);
@@ -220,19 +237,28 @@ const ProductsMenu = () => {
                 </Button>
             </div>
             <div className='bg-white w-full p-4 rounded-lg h-auto space-y-2'>
-                <div className='p-2 h-auto grid grid-cols-7 text-gray-400 border-b-1 border-gray-200'>
+                <div className='p-2 h-auto grid grid-cols-8 text-gray-400 border-b-1 border-gray-200'>
+                    <h1>IMAGEN</h1>
                     <h1>SKU</h1>
                     <h1>NOMBRE</h1>
                     <h1>CATEGORÍA</h1>
                     <h1>MARCA</h1>
-                    <h1>PRECIO</h1>
+                    <h1>PRECIO ($)</h1>
                     <h1>STOCK</h1>
                     <h1>ACCIONES</h1>
                 </div>
                 <div className="p-2 text-black">
                     {products.length > 0 ? (
                         products.map((product) => (
-                            <div key={product._id} className="grid grid-cols-7 items-start gap-4 p-2">
+                            <div key={product._id} className="grid grid-cols-8 items-start gap-4 p-2">
+                                <td className="p-2 text-center">
+                                    {/* Renderizar la imagen usando la URL */}
+                                    <img
+                                        src={product.imageUrl} // URL de la imagen guardada en el producto
+                                        alt={product.name}
+                                        className="w-16 h-16 object-cover rounded" // Ajusta el tamaño de la imagen según tus necesidades
+                                    />
+                                </td>
                                 <h1 className="col-span-1 text-left">{product.sku}</h1>
                                 <h1 className="col-span-1 text-left">{product.name}</h1>
                                 <h1 className="col-span-1 text-left">
@@ -425,13 +451,25 @@ const ProductsMenu = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block mb-2">URL de la Imagen</label>
-                                    <input
-                                        type="text"
-                                        value={form.imageUrl}
-                                        onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-                                        className="w-full p-2 border rounded"
-                                    />
+                                    <div className='flex items-center pb-2 space-x-3'>
+                                        <label className="block">Imagen del Producto</label>
+                                        <Button className='bg-blue-600 rounded-lg text-white p-2' onPress={() => setShowImagesListModal(true)}>Seleccionar</Button>
+                                    </div>
+
+                                    {/* Vista previa de la imagen seleccionada */}
+                                    {form.imageUrl ? (
+                                        <div className="flex flex-col items-center mt-2">
+                                            <img src={form.imageUrl} alt="Vista previa de imagen" className="w-full h-40 object-cover border rounded" />
+                                            <button
+                                                className="mt-2 bg-red-500 text-white px-4 py-1 rounded"
+                                                onClick={() => setForm({ ...form, imageUrl: '' })}
+                                            >
+                                                Quitar Imagen
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <p className="text-gray-500 text-sm">No se ha seleccionado ninguna imagen</p>
+                                    )}
                                 </div>
                             </div>
                             {/* Botones */}
@@ -601,13 +639,29 @@ const ProductsMenu = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block mb-2">URL de la Imagen</label>
-                                    <input
-                                        type="text"
-                                        value={form.imageUrl}
-                                        onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-                                        className="w-full p-2 border rounded"
-                                    />
+                                    <label className="block mb-2">Imagen del Producto</label>
+                                    {form.imageUrl ? (
+                                        <div className="mb-4">
+                                            <img
+                                                src={form.imageUrl}
+                                                alt="Previsualización de la imagen"
+                                                className="w-full h-40 object-cover rounded mb-2 border"
+                                            />
+                                            <button
+                                                className="bg-blue-600 text-white px-4 py-2 rounded mt-2"
+                                                onClick={() => setShowImagesListModal(true)}
+                                            >
+                                                Cambiar Imagen
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <button
+                                            className="bg-blue-600 text-white px-4 py-2 rounded"
+                                            onClick={() => setShowImagesListModal(true)}
+                                        >
+                                            Seleccionar Imagen
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                             {/* Botones */}
@@ -619,7 +673,6 @@ const ProductsMenu = () => {
                     </div>
                 )}
 
-
                 {/* Modal para Eliminar Producto */}
                 {showDeleteModal && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style={{ marginTop: 0 }}>
@@ -629,6 +682,28 @@ const ProductsMenu = () => {
                             <div className="flex justify-end space-x-2">
                                 <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowDeleteModal(false)}>Cancelar</button>
                                 <button className="bg-red-600 text-white px-4 py-2 rounded" onClick={handleDelete}>Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {showImagesListModal && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style={{ marginTop: 0 }}>
+                        <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-[50%] h-[80%]">
+                            <h2 className="text-xl font-bold">Imágenes del Producto</h2>
+                            <div className="grid grid-cols-3 gap-4 overflow-y-auto h-[85%]">
+                                {images.map((image, index) => (
+                                    <img
+                                        key={index}
+                                        src={image.url}
+                                        alt={image?.name}
+                                        className="w-full h-full object-cover border-2 cursor-pointer"
+                                        onClick={() => handleImageSelect(image.url)} // Asegúrate de pasar 'image.url' aquí
+                                    />
+                                ))}
+                            </div>
+                            <div className="flex justify-end space-x-2">
+                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowImagesListModal(false)}>Cerrar</button>
                             </div>
                         </div>
                     </div>

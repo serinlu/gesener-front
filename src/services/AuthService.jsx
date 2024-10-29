@@ -53,9 +53,10 @@ const updateUser = async (id, form) => {
             },
         };
         const response = await clientAxios.put(`/users/${id}`, form, config);
-        return response.data;       
+        return response.data;
     } catch (error) {
-        
+        console.error(error);
+        return null;
     }
 }
 

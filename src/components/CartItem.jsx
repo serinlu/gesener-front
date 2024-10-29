@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const CartItem = ({ thumbnail, price, name, quantity, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, _id }) => {
+const CartItem = ({ imageUrl, price, name, quantity, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, _id }) => {
     const [manualQuantity, setManualQuantity] = useState(quantity);
 
     useEffect(() => {
@@ -50,7 +50,9 @@ const CartItem = ({ thumbnail, price, name, quantity, addToCart, removeFromCart,
 
     return (
         <li className="flex justify-between items-center p-4 border-b">
-            <img src={thumbnail} alt={name} className="w-16 h-16 object-cover mr-4" />
+            <div>
+                <img src={imageUrl} alt={name} className="w-16 h-16 object-cover mr-4" />
+            </div>
             <div className="flex-1">
                 <Link to='/products'>
                     <strong>{name}</strong>

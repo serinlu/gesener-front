@@ -16,9 +16,9 @@ const CheckoutLayout = () => {
     ];
 
     const itemsAuthUser = [
-        { key: "profile", label: "Perfil", path: "/dashboard/profile" },
+        { key: "profile", label: "Perfil", path: "/profile" },
         { key: "dashboard", label: "Dashboard", path: "/dashboard" },
-        { key: "orders", label: "Mis pedidos", path: "/dashboard/orders" },
+        { key: "orders", label: "Mis pedidos", path: "/orders" },
         { key: "logout", label: "Cerrar sesión", action: logout }
     ];
 

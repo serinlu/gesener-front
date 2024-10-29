@@ -56,7 +56,7 @@ const ProductView = () => {
         <div className="max-w-7xl mx-auto p-4 flex w-full">
           <div className="flex flex-col w-[60%] h-[30rem] md:flex-row bg-white rounded-lg overflow-hidden">
             {/* Imagen del producto */}
-            <div className="md:w-1/2">
+            <div>
               <img
                 src={product.imageUrl}
                 alt={product.name}

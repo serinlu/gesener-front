@@ -25,6 +25,7 @@ import UsersMenu from "./components/dashboard-pages/UsersMenu";
 import ProductsMenu from "./components/dashboard-pages/ProductsMenu";
 import BrandsMenu from "./components/dashboard-pages/BrandsMenu";
 import CategoriesMenu from "./components/dashboard-pages/CategoriesMenu";
+import ImagesMenu from "./components/dashboard-pages/ImagesMenu";
 import OrdersMenu from "./components/dashboard-pages/OrdersMenu";
 import SalesMenu from "./components/dashboard-pages/SalesMenu";
 import SuccessCasesMenu from "./components/dashboard-pages/SuccessCasesMenu";
@@ -33,6 +34,8 @@ import ProductView from "./pages/landing/product/ProductView";
 import Cart from "./pages/cart/Cart";
 import Checkout from "./pages/checkout/Checkout";
 import Payment from "./pages/payment/Payment";
+import Profile from "./pages/profile/Profile";
+import Orders from "./pages/profile/Orders";
 
 function App() {
   return (
@@ -56,6 +59,8 @@ function App() {
               {/* product pages */}
               <Route path="products" element={<Product />} />
               <Route path="products/:id" element={<ProductView />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="orders" element={<Orders />} />
               {/* cart */}
 
             </Route>
@@ -70,6 +75,7 @@ function App() {
               <Route path="products" element={<ProductsMenu />} />
               <Route path="brands" element={<BrandsMenu />} />
               <Route path="categories" element={<CategoriesMenu />} />
+              <Route path="images" element={<ImagesMenu />} />
               <Route path="orders" element={<OrdersMenu />} />
               <Route path="sales" element={<SalesMenu />} />
               <Route path="success-cases" element={<SuccessCasesMenu />} />
