@@ -21,8 +21,8 @@ const EquipmentRental = () => {
     <div className="font-sans pb-10">
       <TitleSection />
       <div className="w-[70%] mx-auto py-10">
-        <div className='flex space-x-14'>
-          <div className='w-2/3'>
+        <div className='md:flex md:space-x-14'>
+          <div className='md:w-2/3'>
             <p className="text-lg pb-8 text-justify">
             Prestamos el servicio especializado de alquiler de equipos de medición de parámetros eléctricos y energía con certificado de calibración, contamos con una variedad de equipos que se detallan a continuación:
             </p>

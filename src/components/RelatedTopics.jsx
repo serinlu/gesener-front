@@ -27,10 +27,7 @@ const RelatedTopics = () => {
     };
 
     return (
-        <div className='text-lg w-1/3'>
-            <h1 className='font-bold'>Temas relacionados</h1>
-            <div></div>
-            <hr className="border-t border-gray-400 my-6" />
+        <div className='text-lg md:w-1/3 py-12 md:py-0'>
             <h1 className='font-bold'>Empecemos a trabajar</h1>
             <h1 className='pb-2'>Da el siguiente paso</h1>
             <button

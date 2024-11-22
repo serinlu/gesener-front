@@ -66,20 +66,22 @@ const getUsers = async () => {
     }
 }
 
-const checkPassword = async () => {
+const checkPassword = async (currentPassword) => {
     try {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
             },
         };
-        const response = await clientAxios.post('/auth/checkPassword', config);
-        return response.data;
+        // Wrap the password in an object for correct JSON formatting
+        const response = await clientAxios.post('/auth/checkPassword', { password: currentPassword }, config);
+        return response.data; // El backend devolverá el mensaje de verificación
     } catch (error) {
         console.error(error);
         return null;
     }
-}
+};
+
 
 const changeRole = async (id, form) => {
     try {
@@ -88,7 +90,7 @@ const changeRole = async (id, form) => {
                 'Content-Type': 'application/json',
             },
         };
-        const response = await clientAxios.post(`/users/change-role/${id}`, form, config );
+        const response = await clientAxios.post(`/users/change-role/${id}`, form, config);
         return response.data;
     } catch (error) {
         console.error(error);

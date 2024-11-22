@@ -17,6 +17,8 @@ import RenewableEnergy from "./pages/landing/solutions/renewable-energy";
 import Training from "./pages/landing/solutions/training";
 import Us from "./pages/us/us";
 import Product from "./pages/landing/product/Product";
+import NewsPage from "./pages/news/NewsPage";
+import New from "./pages/news/New";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 
@@ -36,6 +38,8 @@ import Checkout from "./pages/checkout/Checkout";
 import Payment from "./pages/payment/Payment";
 import Profile from "./pages/profile/Profile";
 import Orders from "./pages/profile/Orders";
+import SuccessCases from "./pages/success-cases/SuccessCases";
+import ViewSuccessCase from "./pages/success-cases/ViewSuccessCase";
 
 function App() {
   return (
@@ -61,6 +65,10 @@ function App() {
               <Route path="products/:id" element={<ProductView />} />
               <Route path="profile" element={<Profile />} />
               <Route path="orders" element={<Orders />} />
+              <Route path='news' element={<NewsPage />} />
+              <Route path='news/:id' element={<New />} />
+              <Route path='success-cases' element={<SuccessCases />} />
+              <Route path='success-cases/:id' element={<ViewSuccessCase />} />
               {/* cart */}
 
             </Route>

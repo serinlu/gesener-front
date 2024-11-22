@@ -20,8 +20,8 @@ const EnergyEfficiency = () => {
     <div className="font-sans pb-10">
       <TitleSection />
       <div className="w-[70%] mx-auto py-10">
-        <div className='flex space-x-14'>
-          <div className='w-2/3'>
+        <div className='md:flex md:space-x-14'>
+          <div className='md:w-2/3'>
             <p className="text-lg pb-8 text-justify">
               Los servicios de Gestión Energética permiten que puedas reducir y mejorar tu consumo energético y ahorrar de forma significativa manteniendo el nivel óptimo de tus instalaciones y mejorando los estándares de producción industrial. Además, nuestras soluciones reducen las emisiones de gases de efecto invernadero al producir un bajo impacto ambiental para ayudar a que su empresa sea más sostenible.
             </p>

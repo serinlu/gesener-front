@@ -32,21 +32,31 @@ const getImages = async () => {
     }
 }
 
-const getImage = async (imageName) => {
+const getImage = async (imageNames) => {
     const config = {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
-    }
+    };
+
     try {
-        // Realiza una solicitud GET con imageName en la URL
-        const response = await clientAxios.get(`/images/${imageName}`, config);
-        
-        // Retorna los datos de la imagen (nombre y URL pública)
-        return response.data;
+        // Si imageNames es un array, ejecuta múltiples solicitudes
+        if (Array.isArray(imageNames)) {
+            const imageRequests = imageNames.map(async (name) => {
+                const response = await clientAxios.get(`/images/${name}`, config);
+                return response.data;
+            });
+
+            // Espera a que todas las solicitudes de imagen se completen y devuelve los resultados
+            return await Promise.all(imageRequests);
+        } else {
+            // Si no es un array, simplemente trae una imagen
+            const response = await clientAxios.get(`/images/${imageNames}`, config);
+            return response.data;
+        }
     } catch (error) {
-        console.error('Error al obtener la imagen:', error);
-        return null; // O maneja el error según tu lógica
+        console.error('Error al obtener las imágenes:', error);
+        return null;
     }
 };
 

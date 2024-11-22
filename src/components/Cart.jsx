@@ -12,24 +12,30 @@ const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
 
     const calculateSubtotal = () => {
         return cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
-    };
+    };  
 
     return (
-        <>
+        <div>
             {/* Fondo oscuro con transición de opacidad */}
             <div
                 className={clsx(
-                    "fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-500",
+                    "fixed inset-0 h-screen bg-black bg-opacity-50 z-40 transition-opacity duration-500",
                     { 'opacity-0 pointer-events-none': !isCartOpen, 'opacity-50': isCartOpen }
                 )}
                 onClick={toggleCart}
             ></div>
-
+            {isCartOpen && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-50 z-20" // Asegura que el overlay está detrás del navbar
+                    style={{ top: '4rem' }} // Ajusta la parte superior según la altura del navbar
+                    onClick={toggleCart} // Cierra el menú al hacer clic fuera
+                ></div>
+            )}
 
             {/* Menú del carrito que se desplaza de derecha a izquierda */}
             <div
                 className={clsx(
-                    "fixed top-0 right-0 h-full w-[75%] md:w-[40%] lg:w-[30%] bg-white shadow-lg z-50 transform transition-transform duration-500",
+                    "fixed top-0 right-0 w-[75%] md:w-[40%] lg:w-[30%] bg-white shadow-lg z-50 transform h-screen transition-transform duration-500",
                     { 'translate-x-full': !isCartOpen, 'translate-x-0': isCartOpen }
                 )}
             >
@@ -89,7 +95,7 @@ const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
                     </div>
                 )}
             </div>
-        </>
+        </div>
     );
 };
 

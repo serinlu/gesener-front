@@ -13,7 +13,8 @@ const Cart = () => {
     const navigate = useNavigate();
 
     const calculateSubtotal = () => {
-        return cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
+        const subTotal = cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
+        return subTotal
     };
 
     const envio = cart.length === 0 ? 0 : 7;
@@ -29,11 +30,12 @@ const Cart = () => {
             localStorage.setItem('lastVisited', window.location.pathname); // Guardar la URL actual
         } else {
             // Si el usuario está autenticado
-            const totalPedido = total.toFixed(2);
-            console.log(total.toFixed(2))
+            const totalPedido = total;
 
             // Guardar el objeto en el localStorage
             localStorage.setItem('total', totalPedido);
+            localStorage.setItem('envio', envio);
+            localStorage.setItem('subtotal', calculateSubtotal());
 
             // Redirigir a la página de checkout
             navigate('/checkout/user-info');

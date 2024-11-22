@@ -58,8 +58,8 @@ const NuestraEmpresa = () => {
                 animate={section1InView ? "visible" : "hidden"}
                 transition={{ duration: 0.7, delay: 0.3 }}
             >
-                <h2 className='text-4xl font-bold pb-6'>Nuestra empresa</h2>
-                <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4'>
+                <h2 className='text-2xl sm:text-4xl font-bold pb-6'>Nuestra empresa</h2>
+                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
                     {cards.map((card, index) => (
                         <Card
                             key={index}

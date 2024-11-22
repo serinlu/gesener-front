@@ -20,8 +20,8 @@ const InfraredThermography = () => {
     <div className="font-sans pb-10">
       <TitleSection />
       <div className="w-[70%] mx-auto py-10">
-        <div className='flex space-x-14'>
-          <div className='w-2/3'>
+        <div className='md:flex md:space-x-14'>
+          <div className='md:w-2/3'>
             <p className="text-lg pb-8 text-justify">
               Los principales beneficios de implementar un sistema fotovoltaico en su negocio son el de producir su propia energía eléctrica con fuentes renovables, Ahorra considerablemente en la factura de energía eléctrica y reducir su huella de carbono. Para ello ofrecemos desde el diseño, instalación, operación y mantenimiento de sistemas fotovoltaicos a pequeña y gran escala, garantizando el óptimo funcionamiento y potenciando el crecimiento sustentable de su negocio.
             </p>

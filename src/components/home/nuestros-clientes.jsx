@@ -41,13 +41,13 @@ const NuestrosClientes = () => {
                 animate={section2InView ? "visible" : "hidden"}
                 transition={{ duration: 0.7, delay: 0.5 }}
             >
-                <h2 className='text-4xl font-bold pb-6'>Nuestros clientes</h2>
+                <h2 className='text-2xl sm:text-4xl font-bold pb-6'>Nuestros clientes</h2>
                 <div className='h-[20rem]'>
                     <Swiper
                         scrollbar={{ hide: true }}
                         modules={[Scrollbar, Autoplay]}
                         className="mySwiper"
-                        slidesPerView={3}
+                        slidesPerView={1}
                         spaceBetween={10}
                         loop={true}
                         autoplay={{
@@ -56,16 +56,20 @@ const NuestrosClientes = () => {
                         }}
                         breakpoints={{
                             640: {
-                                slidesPerView: 1,
-                                spaceBetween: 20,
-                            },
-                            768: {
                                 slidesPerView: 2,
                                 spaceBetween: 20,
                             },
                             1024: {
                                 slidesPerView: 3,
                                 spaceBetween: 30,
+                            },
+                            1280: {
+                                slidesPerView: 4,
+                                spaceBetween: 40,
+                            },
+                            1536: {
+                                slidesPerView: 5,
+                                spaceBetween: 50,
                             },
                         }}
                     >

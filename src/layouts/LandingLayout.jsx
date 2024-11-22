@@ -5,9 +5,9 @@ import WhatsAppButton from "../components/Whatsapp";
 
 const LandingLayout = () => {
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col w-full -z-50">
             <Navbar />
-            <div className="flex-1 text-gray-500 bg-white">
+            <div className="flex-1 text-gray-500 bg-white py-8">
                 <Outlet />
                 <WhatsAppButton />
             </div>
