@@ -10,6 +10,7 @@ import { useCart } from '../../../hooks/useCart';
 import clsx from 'clsx';
 import Cart from '../../../components/Cart';
 import ProductFilters from '../../../components/ProductFilters';
+import { Helmet } from 'react-helmet-async';
 
 const accordionVariants = {
     open: {
@@ -143,6 +144,10 @@ const Product = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>Catálogo de productos | Gesener</title>
+                <meta name="description" content="Explora el catálogo de productos." />
+            </Helmet>
             <div className='w-[90%] mx-auto mt-8 md:hidden'>
                 <Button
                     className='bg-blue-500 text-white font-bold rounded-lg'

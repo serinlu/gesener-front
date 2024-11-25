@@ -3,6 +3,7 @@ import { getSuccessById } from '../../services/SuccessService'
 import { Link, useParams } from 'react-router-dom'
 import { FaNewspaper, FaUser } from 'react-icons/fa'
 import { FaClockRotateLeft } from 'react-icons/fa6'
+import { Helmet } from 'react-helmet-async'
 
 const ViewSuccessCase = () => {
     const { id } = useParams()
@@ -25,10 +26,17 @@ const ViewSuccessCase = () => {
 
     return (
         <div className='w-full bg-white py-8'>
+            <Helmet>
+                <title>{`${success.title} | Gesener`}</title>
+                <meta
+                    name="description"
+                    content={success.description}
+                />
+            </Helmet>
             <div className='w-[80%] mx-auto'>
                 <div className='text-center mb-6'>
-                    <Link to='/news'>
-                        <h1 className='text-xl text-blue-600 font-bold my-6 hover:underline'>NOTICIAS</h1>
+                    <Link to='/success-cases'>
+                        <h1 className='text-xl text-blue-600 font-bold my-6 hover:underline'>CASOS DE ÉXITO</h1>
                     </Link>
                     <h1 className='text-4xl font-bold'>{success.title}</h1>
                 </div>

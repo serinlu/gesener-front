@@ -5,6 +5,7 @@ import logo from "../uploads/logo.png";
 import { AuthContext } from '../context/AuthContext';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { FaImage } from 'react-icons/fa6';
+import { Helmet } from 'react-helmet-async';
 
 const DashboardLayout = () => {
   const location = useLocation(); // Obtener la ubicación actual
@@ -82,6 +83,14 @@ const DashboardLayout = () => {
 
   return (
     <div className="flex h-screen">
+      <Helmet>
+        <title>
+          {menuItems
+            .filter(item => item.name.toLowerCase() === selectedOption.toLowerCase())
+            .map(item => item.name)
+            .join('') || 'Dashboard'} | Gesener Dashboard
+        </title>
+      </Helmet>
       {/* Sidebar */}
       <div className="bg-white text-black w-64 flex flex-col justify-between h-full sticky top-0">
         <div>

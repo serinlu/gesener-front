@@ -8,6 +8,7 @@ import Provincias from '../../utils/provincias.json'
 import Distritos from '../../utils/distritos.json'
 import Alert, { showSuccessAlert, showErrorAlert } from '../../components/alert';
 import { Button } from '@nextui-org/react';
+import { Helmet } from 'react-helmet-async';
 
 const Profile = () => {
     const { auth } = useContext(AuthContext);
@@ -261,6 +262,9 @@ const Profile = () => {
 
     return (
         <div className="flex my-6">
+            <Helmet>
+                <title>Mi información | Gesener</title>
+            </Helmet>
             <ProfileSidebar />
             <div className="flex-grow mx-8 p-6">
                 <Alert />

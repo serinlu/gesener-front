@@ -7,6 +7,7 @@ import departamentos from '../../utils/departamentos.json';
 import provincias from '../../utils/provincias.json';
 import distritos from '../../utils/distritos.json';
 import { updateUser } from '../../services/AuthService';
+import { Helmet } from 'react-helmet-async';
 
 const Checkout = () => {
     const { auth } = useContext(AuthContext);
@@ -27,7 +28,7 @@ const Checkout = () => {
         socialReason: '',
         ruc: '',
         tipoDocumento: '',
-        numDoc:'',
+        numDoc: '',
         address: '',
         optionalAddress: '',
         department: '',
@@ -151,6 +152,9 @@ const Checkout = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>Checkout | Gesener</title>
+            </Helmet>
             <div className='my-8 text-3xl font-bold'>
                 Datos de facturación
             </div>

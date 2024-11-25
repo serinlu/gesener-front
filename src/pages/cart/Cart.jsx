@@ -5,6 +5,7 @@ import { Button } from '@nextui-org/react';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
+import { Helmet } from 'react-helmet-async';
 
 const Cart = () => {
     const { cart, clearCart, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity } = useCart();
@@ -47,7 +48,10 @@ const Cart = () => {
     };
 
     return (
-        <>
+        <div>
+            <Helmet>
+                <title>Carrito | Gesener</title>
+            </Helmet>
             <div className='mx-auto my-8'>
                 <h1 className='text-3xl font-bold'>Carrito</h1>
             </div>
@@ -136,7 +140,7 @@ const Cart = () => {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

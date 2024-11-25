@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import logo from '../../../uploads/home-page.png';
 import NuestraEmpresa from '../../../components/home/nuestra-empresa';
 import NuestrosClientes from '../../../components/home/nuestros-clientes';
 import { getImage } from '../../../services/ImageService';
-import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -42,6 +42,10 @@ const Home = () => {
 
     return (
         <div className='w-full mx-auto'>
+            <Helmet>
+                <title>Inicio | Gesener</title>
+                <meta name="description" content="Bienvenido a Gesener!" />
+            </Helmet>
             <motion.div
                 ref={homeRef}
                 className="lg:relative h-auto w-[90%] mx-auto grid lg:grid-cols-2 grid-cols-1 items-center overflow-hidden gap-y-10 lg:gap-y-0 my-16"

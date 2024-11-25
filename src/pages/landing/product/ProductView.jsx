@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useCart } from '../../../hooks/useCart';
 import Cart from '../../../components/Cart';
+import { Helmet } from 'react-helmet-async';
 
 const ProductView = () => {
   const { id } = useParams();
@@ -51,7 +52,11 @@ const ProductView = () => {
   }
 
   return (
-    <>
+    <div>
+      <Helmet>
+        <title>{`${product.name} | Gesener`}</title>
+        <meta name="description" content={product.description} />
+      </Helmet>
       <div className='w-[80%] justify-start mx-auto'>
         <div className="max-w-7xl mx-auto p-4 flex w-full">
           <div className="flex flex-col w-[60%] h-[30rem] md:flex-row bg-white rounded-lg overflow-hidden">
@@ -131,7 +136,7 @@ const ProductView = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

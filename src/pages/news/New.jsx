@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getNewById } from '../../services/NewService'
 import { Link, useParams } from 'react-router-dom'
 import { FaNewspaper, FaClockRotateLeft, FaUser } from 'react-icons/fa6'
+import { Helmet } from 'react-helmet-async'
 
 const New = () => {
     const { id } = useParams()
@@ -25,6 +26,13 @@ const New = () => {
 
     return (
         <div className='w-full bg-white py-8'>
+            <Helmet>
+                <title>{`${notice.title} | Gesener`}</title>
+                <meta
+                    name="description"
+                    content={notice.title}
+                />
+            </Helmet>
             <div className='w-[80%] mx-auto'>
                 <div className='text-center mb-6'>
                     <Link to='/news'>

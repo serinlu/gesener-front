@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 
 import AuthLayout from "./layouts/AuthLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
@@ -43,61 +44,62 @@ import ViewSuccessCase from "./pages/success-cases/ViewSuccessCase";
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <CartProvider>
+    <HelmetProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <CartProvider>
+            <Routes>
+              <Route path="/" element={<LandingLayout />}>
+                <Route index element={<Home />} />
+                {/* Solutions Page */}
+                <Route path="solutions/energy-efficiency" element={<EnergyEfficiency />} />
+                <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
+                <Route path="solutions/infrared-thermography" element={<InfraredThermography />} />
+                <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
+                <Route path="solutions/renewable-energy" element={<RenewableEnergy />} />
+                <Route path="solutions/training" element={<Training />} />
+                {/* other pages */}
+                <Route path="contact" element={<Contact />} />
+                <Route path="us" element={<Us />} />
+                {/* product pages */}
+                <Route path="products" element={<Product />} />
+                <Route path="products/:id" element={<ProductView />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path='news' element={<NewsPage />} />
+                <Route path='news/:id' element={<New />} />
+                <Route path='success-cases' element={<SuccessCases />} />
+                <Route path='success-cases/:id' element={<ViewSuccessCase />} />
+                {/* cart */}
 
-          <Routes>
-            <Route path="/" element={<LandingLayout />}>
-              <Route index element={<Home />} />
-              {/* Solutions Page */}
-              <Route path="solutions/energy-efficiency" element={<EnergyEfficiency />} />
-              <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
-              <Route path="solutions/infrared-thermography" element={<InfraredThermography />} />
-              <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
-              <Route path="solutions/renewable-energy" element={<RenewableEnergy />} />
-              <Route path="solutions/training" element={<Training />} />
-              {/* other pages */}
-              <Route path="contact" element={<Contact />} />
-              <Route path="us" element={<Us />} />
-              {/* product pages */}
-              <Route path="products" element={<Product />} />
-              <Route path="products/:id" element={<ProductView />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="orders" element={<Orders />} />
-              <Route path='news' element={<NewsPage />} />
-              <Route path='news/:id' element={<New />} />
-              <Route path='success-cases' element={<SuccessCases />} />
-              <Route path='success-cases/:id' element={<ViewSuccessCase />} />
-              {/* cart */}
-
-            </Route>
-            <Route element={<AuthLayout />}>
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
-              <Route path="recover-password" element={<RecoverPassword />} />
-            </Route>
-            <Route path="/dashboard" element={<DashboardLayout />}>
-              <Route index element={<MainMenu />} />
-              <Route path='users' element={<UsersMenu />} />
-              <Route path="products" element={<ProductsMenu />} />
-              <Route path="brands" element={<BrandsMenu />} />
-              <Route path="categories" element={<CategoriesMenu />} />
-              <Route path="images" element={<ImagesMenu />} />
-              <Route path="orders" element={<OrdersMenu />} />
-              <Route path="sales" element={<SalesMenu />} />
-              <Route path="success-cases" element={<SuccessCasesMenu />} />
-              <Route path="news" element={<NewsMenu />} />
-            </Route>
-            <Route path='/checkout' element={<CheckoutLayout />}>
-              <Route path="cart" element={<Cart />} />
-              <Route path="user-info" element={<Checkout />} />
-              <Route path='payment' element={<Payment />} />
-            </Route>
-          </Routes>
-        </CartProvider>
-      </AuthProvider>
-    </BrowserRouter >
+              </Route>
+              <Route element={<AuthLayout />}>
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
+                <Route path="recover-password" element={<RecoverPassword />} />
+              </Route>
+              <Route path="/dashboard" element={<DashboardLayout />}>
+                <Route index element={<MainMenu />} />
+                <Route path='users' element={<UsersMenu />} />
+                <Route path="products" element={<ProductsMenu />} />
+                <Route path="brands" element={<BrandsMenu />} />
+                <Route path="categories" element={<CategoriesMenu />} />
+                <Route path="images" element={<ImagesMenu />} />
+                <Route path="orders" element={<OrdersMenu />} />
+                <Route path="sales" element={<SalesMenu />} />
+                <Route path="success-cases" element={<SuccessCasesMenu />} />
+                <Route path="news" element={<NewsMenu />} />
+              </Route>
+              <Route path='/checkout' element={<CheckoutLayout />}>
+                <Route path="cart" element={<Cart />} />
+                <Route path="user-info" element={<Checkout />} />
+                <Route path='payment' element={<Payment />} />
+              </Route>
+            </Routes>
+          </CartProvider>
+        </AuthProvider>
+      </BrowserRouter >
+    </HelmetProvider>
   );
 }
 
