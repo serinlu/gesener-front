@@ -8,10 +8,12 @@ import provincias from '../../utils/provincias.json';
 import distritos from '../../utils/distritos.json';
 import { updateUser } from '../../services/AuthService';
 import { Helmet } from 'react-helmet-async';
+import { usePayment } from '../../context/PaymentContext';
 
 const Checkout = () => {
     const { auth } = useContext(AuthContext);
     const { cart } = useCart();
+    const { formData, setFormData } = usePayment();
     const navigate = useNavigate();
     const [saveData, setSaveData] = useState(false);
     const [subTotal, setSubtotal] = useState(null);
@@ -21,25 +23,25 @@ const Checkout = () => {
     const [loading, setLoading] = useState(true);
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
-    const [formData, setFormData] = useState({
-        name: '',
-        lastname: '',
-        companyName: '',
-        socialReason: '',
-        ruc: '',
-        tipoDocumento: '',
-        numDoc: '',
-        address: '',
-        optionalAddress: '',
-        department: '',
-        province: '',
-        district: '',
-        city: '',
-        postalCode: '',
-        phone: '',
-        email: '',
-        notes: ''
-    });
+    // const [formData, setFormData] = useState({
+    //     name: '',
+    //     lastname: '',
+    //     companyName: '',
+    //     socialReason: '',
+    //     ruc: '',
+    //     tipoDocumento: '',
+    //     numDoc: '',
+    //     address: '',
+    //     optionalAddress: '',
+    //     department: '',
+    //     province: '',
+    //     district: '',
+    //     city: '',
+    //     postalCode: '',
+    //     phone: '',
+    //     email: '',
+    //     notes: ''
+    // });
 
     useEffect(() => {
         // Verificamos que `auth` esté disponible antes de actualizar `formData`
@@ -106,6 +108,8 @@ const Checkout = () => {
                 console.error("Error al actualizar los datos");
             }
         }
+
+        navigate('/checkout/payment');
     };
 
     const handleFacture = () => {

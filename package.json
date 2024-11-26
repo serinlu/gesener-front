@@ -17,6 +17,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@mercadopago/sdk-react": "^0.0.19",
     "@mui/material": "^6.0.2",
     "@nextui-org/card": "^2.0.34",
     "@nextui-org/checkbox": "^2.1.5",
