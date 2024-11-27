@@ -261,7 +261,7 @@ const Profile = () => {
     };
 
     return (
-        <div className="flex my-6">
+        <div className="md:flex my-6">
             <Helmet>
                 <title>Mi información | Gesener</title>
             </Helmet>
@@ -342,7 +342,7 @@ const Profile = () => {
                         <form className="space-y-6" onSubmit={handleSubmit}>
                             <div>
                                 <h1 className='font-bold py-6'>1. Información del usuario</h1>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block mb-1 font-semibold">Nombre</label>
                                         <input
@@ -401,7 +401,7 @@ const Profile = () => {
                                     <h1 className='font-bold'>2. Datos corporativos (opcional)</h1>
                                     <h1>Agrega datos de tu empresa si deseas adquirir una factura al momento de realizar una compra</h1>
                                 </div>
-                                <div className="grid grid-cols-3 gap-4">
+                                <div className="grid sm:grid-cols-3 gap-4">
                                     <div>
                                         <label className="block mb-1 font-semibold">Nombre de la Empresa</label>
                                         <input
@@ -437,8 +437,8 @@ const Profile = () => {
                             <div>
                                 <h1 className='font-bold py-6'>3. Datos de contacto</h1>
                                 <div className='space-y-3'>
-                                    <div className='grid grid-cols-3 gap-4'>
-                                        <div className='col-span-2'>
+                                    <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
+                                        <div className='sm:col-span-2'>
                                             <label className="block mb-1 font-semibold">Dirección</label>
                                             <input
                                                 type="text"
@@ -448,7 +448,7 @@ const Profile = () => {
                                                 className="w-full p-2 border rounded"
                                             />
                                         </div>
-                                        <div className="col-span-1">
+                                        <div className='sm:col-span-1'>
                                             <label className="block mb-1 font-semibold">Teléfono</label>
                                             <input
                                                 type="text"
@@ -459,8 +459,7 @@ const Profile = () => {
                                             />
                                         </div>
                                     </div>
-
-                                    <div className="grid grid-cols-4 gap-4">
+                                    <div className="grid lg:grid-cols-4 sm:grid-cols-2 gap-4">
                                         <div>
                                             <label className="block mb-1 font-semibold">Región</label>
                                             <select
