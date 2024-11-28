@@ -9,8 +9,11 @@ import logo from '../uploads/logo.png';
 import Cart from './Cart';
 import debounce from "lodash.debounce";
 import clientAxios from "../config/axios";
+import { useCart } from "../hooks/useCart";
 
 const Navbar = () => {
+    const { cart } = useCart()
+    const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
     const { auth, logout } = useContext(AuthContext);
     const [results, setResults] = useState({
         products: [],
@@ -148,10 +151,6 @@ const Navbar = () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, [lastScrollY, openSearch, isOpen, isCartOpen]);
-
-    useEffect(() => {
-        console.log(auth)
-    }, [])
 
     return (
         <div className="z-10 relative">
@@ -334,9 +333,10 @@ const Navbar = () => {
                                     ) : (
                                         <Button
                                             variant="bordered"
-                                            className='p-2 text-2xl hover:text-indigo-500 duration-300 rounded-lg'
+                                            className='p-2 text-2xl hover:text-indigo-500 duration-300 rounded-lg flex'
                                         >
                                             <FaUser />
+                                            <h1 className="text-base hidden sm:block">Ingresar</h1>
                                         </Button>
                                     )}
                                 </DropdownTrigger>
@@ -376,11 +376,14 @@ const Navbar = () => {
 
                             <Button
                                 variant="bordered"
-                                className='p-2 text-2xl hover:text-indigo-500 duration-300 rounded-lg'
+                                className='text-2xl hover:text-indigo-500 duration-300 rounded-lg flex'
                                 style={{ outline: 'none', boxShadow: 'none' }}
                                 onClick={toggleCart}
                             >
                                 <FaCartShopping />
+                                <span className="absolute -top-0 -right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center font-bold">
+                                    {totalItems > 0 ? (totalItems > 9 ? '9+' : totalItems) : 0}
+                                </span>
                             </Button>
                             <Button
                                 className="p-2 text-2xl hover:text-indigo-500 duration-300 rounded-lg"

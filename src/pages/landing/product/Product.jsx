@@ -242,12 +242,14 @@ const Product = () => {
                                             {/* Botón de agregar */}
                                             <div className="w-full">
                                                 <Button
-                                                    className="bg-indigo-600 text-white font-bold w-full py-2 rounded-xl hover:bg-indigo-700 transition"
+                                                    className={`bg-indigo-600 text-white font-bold w-full py-2 rounded-xl hover:bg-indigo-700 transition ${product.countInStock === 0 ? 'bg-gray-300 cursor-not-allowed hover:bg-gray-300' : ''}`}
                                                     onClick={() => handleAddToCart(product)}
+                                                    disabled={product.countInStock === 0}
                                                 >
-                                                    Agregar
+                                                    {product.countInStock === 0 ? 'Sin stock' : 'Agregar'}
                                                 </Button>
                                             </div>
+
                                         </div>
                                     </div>
                                 ))

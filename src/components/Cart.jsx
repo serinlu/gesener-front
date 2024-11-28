@@ -22,7 +22,7 @@ const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
                     "fixed inset-0 h-screen bg-black bg-opacity-50 z-40 transition-opacity duration-500",
                     { 'opacity-0 pointer-events-none': !isCartOpen, 'opacity-50': isCartOpen }
                 )}
-                onClick={toggleCart}
+                onClick={toggleCart}    
             ></div>
             {isCartOpen && (
                 <div
