@@ -42,6 +42,7 @@ import Orders from "./pages/profile/Orders";
 import SuccessCases from "./pages/success-cases/SuccessCases";
 import ViewSuccessCase from "./pages/success-cases/ViewSuccessCase";
 import { PaymentProvider } from "./context/PaymentContext";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -80,7 +81,10 @@ function App() {
                   <Route path="register" element={<Register />} />
                   <Route path="recover-password" element={<RecoverPassword />} />
                 </Route>
-                <Route path="/dashboard" element={<DashboardLayout />}>
+                <Route path="/dashboard" element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <DashboardLayout />
+                  </ProtectedRoute>}>
                   <Route index element={<MainMenu />} />
                   <Route path='users' element={<UsersMenu />} />
                   <Route path="products" element={<ProductsMenu />} />

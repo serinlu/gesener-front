@@ -22,7 +22,9 @@ const ProductsMenu = () => {
         name: '',
         category: [],
         brand: {}, // Se inicializa como objeto vacío
+        model: '',
         description: '',
+        maxItems: '',
         price: '',
         countInStock: '',
         imageUrl: '',
@@ -33,6 +35,8 @@ const ProductsMenu = () => {
         name: false,
         category: false,
         brand: false,
+        model: false,
+        maxItems: false,
         description: false,
         price: false,
     });
@@ -86,6 +90,8 @@ const ProductsMenu = () => {
                 category: product.categories || [], // Manejar caso en que no haya categorías
                 brand: product.brand || {}, // Manejar caso en que no haya marca
                 description: product.description || '',
+                model: product.model,
+                maxItems: product.maxItems,
                 price: product.price,
                 countInStock: product.countInStock,
                 imageUrl: product.imageUrl || '',
@@ -99,6 +105,8 @@ const ProductsMenu = () => {
                 category: [],
                 brand: {}, // Inicializa como objeto vacío
                 description: '',
+                model: '',
+                maxItems: '',
                 price: '',
                 countInStock: 0,
                 imageUrl: '',
@@ -146,6 +154,8 @@ const ProductsMenu = () => {
             brand: form.brand || null, // Permitir que no tenga marca
             categories: form.category || [], // Permitir que sea un array vacío
             description: form.description || '',
+            model: form.model,
+            maxItems: form.maxItems,
             price: form.price,
             countInStock: form.countInStock,
             imageUrl: form.imageUrl || '',
@@ -174,6 +184,8 @@ const ProductsMenu = () => {
             brand: form.brand || null, // Permitir que no tenga marca
             categories: form.category || [], // Permitir que sea un array vacío
             description: form.description || '',
+            model: form.model,
+            maxItems: form.maxItems,
             price: form.price,
             countInStock: form.countInStock,
             imageUrl: form.imageUrl || '',
@@ -301,7 +313,7 @@ const ProductsMenu = () => {
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style={{ marginTop: 0 }}>
                         <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 max-h-[90%] flex flex-col z-10">
                             <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-xl font-bold">Crear Producto</h2>
+                                <h2 className="text-xl font-bold">{isEditing ? 'Editar producto' : 'Crear producto'}</h2>
                                 <h1 className="text-xs"><span className="text-red-400 text-md pr-1">*</span>Campos obligatorios</h1>
                             </div>
                             {/* Contenido del formulario */}
@@ -411,6 +423,23 @@ const ProductsMenu = () => {
                                     {errors?.brand && <p className="text-xs text-red-400">{errors.brand}</p>}
                                 </div>
                                 <div>
+                                    <label className="block mb-1">Modelo<span className="pl-1 text-red-400 font-bold">*</span></label>
+                                    <input
+                                        type="text"
+                                        value={form.model}
+                                        onChange={(e) => {
+                                            setForm({ ...form, model: e.target.value });
+                                            setErrors({ ...errors, model: '' }); // Limpiar el error mientras el usuario escribe
+                                        }}
+                                        onBlur={() => {
+                                            const newErrors = validateProduct(form); // Validar el campo cuando pierde el foco
+                                            setErrors((prevErrors) => ({ ...prevErrors, model: newErrors.model })); // Mostrar el error solo para el campo SKU
+                                        }}
+                                        className={`w-full p-2 border rounded ${errors?.model ? 'border-red-500' : ''}`}
+                                    />
+                                    {errors?.model && <p className="text-xs text-red-400">{errors.model}</p>}
+                                </div>
+                                <div>
                                     <label className="block mb-1">Descripción<span className="pl-1 text-red-400 font-bold">*</span></label>
                                     <input
                                         type="text"
@@ -450,6 +479,15 @@ const ProductsMenu = () => {
                                         type="number"
                                         value={form.countInStock}
                                         onChange={(e) => setForm({ ...form, countInStock: e.target.value })}
+                                        className="w-full p-2 border rounded"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block mb-1">Cantidad máxima de items por carrito<span className="pl-1 text-red-400 font-bold">*</span></label>
+                                    <input
+                                        type="number"
+                                        value={form.maxItems}
+                                        onChange={(e) => setForm({ ...form, maxItems: e.target.value })}
                                         className="w-full p-2 border rounded"
                                     />
                                 </div>
