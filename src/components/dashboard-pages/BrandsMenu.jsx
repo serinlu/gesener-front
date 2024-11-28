@@ -5,12 +5,12 @@ import { Button } from '@nextui-org/react';
 
 const BrandsMenu = () => {
     const [brands, setBrands] = useState([]);
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedBrand, setSelectedBrand] = useState(null);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         fetchBrands();
@@ -22,47 +22,36 @@ const BrandsMenu = () => {
             .catch(error => console.error('Error al obtener las marcas:', error));
     };
 
-    const handleCreateClick = () => {
-        setShowCreateModal(true);
-        setName('');
-        setDescription('');
-    };
-
-    const handleEditClick = (brand) => {
-        setSelectedBrand(brand);
-        setName(brand.name);
-        setDescription(brand.description);
-        setShowEditModal(true);
-        console.log(brand)
-    };
-
-    const handleCreate = async () => {
-        const newBrand = {
-            name,
-            description,
-        };
-        const response = await createBrand(newBrand)
-        if (response) {
-            fetchBrands();
-            setShowCreateModal(false);
+    const openFormModal = (brand = null) => {
+        if (brand) {
+            setSelectedBrand(brand);
+            setName(brand.name);
+            setDescription(brand.description);
+            setIsEditing(true)
+        } else {
+            setSelectedBrand(null);
+            setName('');
+            setDescription('');
+            setIsEditing(false)
         }
+        setShowModal(true);
     }
 
-    const handleUpdate = async () => {
-        if (!selectedBrand) return; // Verificar que hay una categoría seleccionada
-        console.log(selectedBrand);
+    const handleSave = async () => {
+        const brandData = { name, description }
 
-        const updatedBrand = {
-            // Asegúrate de incluir el ID
-            name,
-            description,
-        };
-
-        const response = await updateBrand(selectedBrand._id, updatedBrand)
-        console.log(response);
-        fetchBrands();
-        setShowEditModal(false);
-    };
+        if (isEditing) {
+            if (!selectedBrand) return
+            await updateBrand(selectedBrand._id, brandData)
+                .then(() => fetchBrands())
+                .catch(error => console.error('error al actualizar la marca', error))
+        } else {
+            await createBrand(brandData)
+                .then(() => fetchBrands())
+                .catch(error => console.error('error al crear la marca', error))
+        }
+        setShowModal(false);
+    }
 
     const handleDeleteClick = (brand) => {
         setSelectedBrand(brand);
@@ -86,7 +75,7 @@ const BrandsMenu = () => {
             <div className='mb-3 flex justify-end'>
                 <Button
                     className='p-3 text-sm w-[5%] flex text-white font-bold rounded-xl bg-blue-600'
-                    onPress={handleCreateClick}
+                    onPress={() => openFormModal()}
                 >
                     <FaPlus />
                 </Button>
@@ -106,7 +95,7 @@ const BrandsMenu = () => {
                                 <div className="col-span-1 flex space-x-2 text-base items-left">
                                     <Button
                                         className="bg-green-500 rounded-md w-1/8 flex items-center justify-start py-2"
-                                        onClick={() => handleEditClick(brand)}
+                                        onClick={() => openFormModal(brand)}
                                     >
                                         <FaEdit className="text-white text-sm" />
                                     </Button>
@@ -123,9 +112,9 @@ const BrandsMenu = () => {
                         <div className="text-center text-gray-400 p-2">No hay marcas creadas</div>
                     )}
                 </div>
-                
-                {showCreateModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+
+                {showModal && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style={{ marginTop: 0 }}>
                         <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-1/3 transform transition-transform duration-300">
                             <h2 className="text-xl font-bold">Crear Marca</h2>
                             <div>
@@ -146,44 +135,15 @@ const BrandsMenu = () => {
                                 ></textarea>
                             </div>
                             <div className="flex justify-end space-x-2">
-                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowCreateModal(false)}>Cancelar</button>
-                                <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleCreate}>Crear</button>
+                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowModal(false)}>Cancelar</button>
+                                <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSave}>
+                                    {isEditing ? "Guardar cambios" : "Crear"}
+                                </button>
                             </div>
                         </div>
                     </div>
                 )}
 
-                {/* Modal para Editar Categoría */}
-                {showEditModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-1/3 transform transition-transform duration-300">
-                            <h2 className="text-xl font-bold">Editar Marca</h2>
-                            <div>
-                                <label className="block mb-2">Nombre</label>
-                                <input
-                                    type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    className="w-full p-2 border rounded"
-                                />
-                            </div>
-                            <div>
-                                <label className="block mb-2">Descripción</label>
-                                <textarea
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    className="w-full p-2 border rounded"
-                                ></textarea>
-                            </div>
-                            <div className="flex justify-end space-x-2">
-                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowEditModal(false)}>Cancelar</button>
-                                <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleUpdate}>Guardar Cambios</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Modal para Confirmar Eliminación */}
                 {showDeleteModal && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-1/3 transform transition-transform duration-300">

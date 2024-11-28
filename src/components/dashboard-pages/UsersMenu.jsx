@@ -153,45 +153,58 @@ const UsersMenu = () => {
 
     return (
         <div className='bg-white p-3 rounded-lg'>
-            <div className='p-2 h-auto grid grid-cols-7 text-gray-400 border-b-1 border-gray-200'>
-                <h1>NOMBRE</h1>
-                <h1>APELLIDO</h1>
-                <h1>TIPO DE DOC.</h1>
-                <h1>N° DE DOC.</h1>
-                <h1>EMAIL</h1>
-                <h1>ROL</h1>
-                <h1>ACCIONES</h1>
-            </div>
-            <div className="p-2 text-black">
-                {users.length > 0 ? (
-                    users.map((user) => (
-                        <div key={user._id} className="grid grid-cols-7 items-start gap-4 p-4">
-                            <h1 className="col-span-1 text-left">{user.name}</h1>
-                            <h1 className="col-span-1 text-left">{user.lastname}</h1>
-                            <h1 className="col-span-1 text-left">{user.tipoDocumento}</h1>
-                            <h1 className="col-span-1 text-left">{user.numDoc}</h1>
-                            <h1 className="col-span-1 text-left">{user.email}</h1>
-                            <h1 className="col-span-1 text-left">{user.role}</h1>
-                            <div className='flex space-x-2'>
-                                <Button className="bg-orange-500 rounded-md w-1/3 flex items-center justify-center px-4 py-2" onClick={() => handleOpenModal(user)}>
-                                    <FaEye className="text-white text-xl" />
-                                </Button>
-                                <Button className="bg-blue-500 rounded-md w-1/3 flex items-center justify-center px-4 py-2" onClick={() => handleOpenEditRoleModal(user)}>
-                                    <FaEdit className="text-white text-xl" />
-                                </Button>
+            <div className="overflow-x-auto">
+                <div className="p-2 h-auto grid grid-cols-7 min-w-[768px] text-gray-400 border-b-1 border-gray-200">
+                    <h1>NOMBRE</h1>
+                    <h1>APELLIDO</h1>
+                    <h1>TIPO DE DOC.</h1>
+                    <h1>N° DE DOC.</h1>
+                    <h1>EMAIL</h1>
+                    <h1>ROL</h1>
+                    <h1>ACCIONES</h1>
+                </div>
+                <div className="p-2 text-black">
+                    {users.length > 0 ? (
+                        users.map((user) => (
+                            <div
+                                key={user._id}
+                                className="grid grid-cols-7 items-start gap-4 p-4 min-w-[768px]"
+                            >
+                                <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">{user.name}</h1>
+                                <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">{user.lastname}</h1>
+                                <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">{user.tipoDocumento}</h1>
+                                <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">{user.numDoc}</h1>
+                                <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">{user.email}</h1>
+                                <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">{user.role}</h1>
+                                <div className="flex space-x-2">
+                                    <button
+                                        className="bg-orange-500 rounded-md w-12 h-12 flex items-center justify-center"
+                                        onClick={() => handleOpenModal(user)}
+                                    >
+                                        <FaEye className="text-white text-xl" />
+                                    </button>
+                                    <button
+                                        className="bg-blue-500 rounded-md w-12 h-12 flex items-center justify-center"
+                                        onClick={() => handleOpenEditRoleModal(user)}
+                                    >
+                                        <FaEdit className="text-white text-xl" />
+                                    </button>
+                                </div>
                             </div>
+                        ))
+                    ) : (
+                        <div className="text-center text-gray-400 p-2">
+                            No hay usuarios registrados
                         </div>
-                    ))
-                ) : (
-                    <div className="text-center text-gray-400 p-2">No hay usuarios registrados</div>
-                )}
+                    )}
+                </div>
             </div>
 
             {showViewModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg h-auto max-h-[80vh] overflow-y-auto mx-8">
                         <h2 className="text-xl font-bold mb-4">Detalles del usuario</h2>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid sm:grid-cols-2 gap-4">
                             {userData.map((item) => (
                                 <div key={item.title} className="mb-4">
                                     <h1 className="text-sm font-medium">{item.title}:</h1>
@@ -199,8 +212,10 @@ const UsersMenu = () => {
                                 </div>
                             ))}
                         </div>
-                        <div className='flex justify-end'>
-                            <Button className='bg-red-500 rounded-lg text-white font-bold' onClick={() => setShowViewModal(false)}>Cerrar</Button>
+                        <div className="flex justify-end mt-4">
+                            <Button className="bg-red-500 rounded-lg text-white font-bold" onClick={() => setShowViewModal(false)}>
+                                Cerrar
+                            </Button>
                         </div>
                     </div>
                 </div>

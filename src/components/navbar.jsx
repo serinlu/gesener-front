@@ -97,10 +97,18 @@ const Navbar = () => {
         setSearchQuery('');
     };
 
+
+
     const ItemsUser = [
         { key: "login", label: "Iniciar sesión", path: "/login" },
         { key: "register", label: "Registrarse", path: "/register" }
     ];
+
+    const itemsClient = [
+        { key: "profile", label: "Mi cuenta", path: "/client/profile" },
+        { key: "orders", label: "Mis pedidos", path: "/orders" },
+        { key: "logout", label: "Cerrar sesión", action: logout }
+    ]
 
     const itemsAuthUser = [
         { key: "profile", label: "Perfil", path: "/profile" },
@@ -141,6 +149,9 @@ const Navbar = () => {
         };
     }, [lastScrollY, openSearch, isOpen, isCartOpen]);
 
+    useEffect(() => {
+        console.log(auth)
+    }, [])
 
     return (
         <div className="z-10 relative">
@@ -309,31 +320,31 @@ const Navbar = () => {
                             </div>
                         </div>
 
-                        {/* Overlay oscuro */}
-
                         <div className='flex sm:space-x-1'>
                             <Dropdown>
                                 <DropdownTrigger>
                                     {auth ? (
                                         <Button
                                             variant="bordered"
-                                            className='p-2 text-2xl hover:text-indigo-500 duration-300 rounded-lg'
+                                            className='p-2 text-2xl hover:text-indigo-500 duration-300 rounded-lg flex'
                                         >
                                             <FaUserCircle />
+                                            <h1 className="text-base hidden sm:block">{auth.name}</h1>
                                         </Button>
                                     ) : (
                                         <Button
                                             variant="bordered"
                                             className='p-2 text-2xl hover:text-indigo-500 duration-300 rounded-lg'
                                         >
-                                            <FaUserCircle />
+                                            <FaUser />
                                         </Button>
                                     )}
                                 </DropdownTrigger>
 
                                 <DropdownMenu aria-label="Opciones de usuario" className='bg-white shadow-lg rounded-lg p-2 text-base'>
                                     {auth ? (
-                                        itemsAuthUser.map(item => (
+                                        // Verificar si el usuario logueado es "admin" o "user"
+                                        (auth.role === "admin" ? itemsAuthUser : itemsClient).map(item => (
                                             <DropdownItem
                                                 key={item.key}
                                                 className="p-2"
@@ -359,6 +370,7 @@ const Navbar = () => {
                                             </DropdownItem>
                                         ))
                                     )}
+
                                 </DropdownMenu>
                             </Dropdown>
 

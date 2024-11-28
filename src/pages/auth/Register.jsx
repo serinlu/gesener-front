@@ -29,7 +29,7 @@ const Register = () => {
                 Crea tu cuenta y agiliza tus compras
             </h2>
             <form
-                className="bg-white w-full max-w-md p-4 rounded-lg flex flex-col gap-y-4 mx-auto"
+                className="bg-white w-full p-4 rounded-lg flex flex-col gap-y-4 mx-auto"
                 onSubmit={handleSubmit} // Manejador único aquí
             >
                 <TextField

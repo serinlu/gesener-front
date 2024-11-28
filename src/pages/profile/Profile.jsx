@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import ProfileSidebar from '../../components/ProfileSidebar';
-import { AuthContext } from '../../context/AuthContext';
-import { updateUser } from '../../services/AuthService';
-import { checkPassword } from '../../services/UserService';
-import Departamentos from '../../utils/departamentos.json'
-import Provincias from '../../utils/provincias.json'
-import Distritos from '../../utils/distritos.json'
-import Alert, { showSuccessAlert, showErrorAlert } from '../../components/alert';
+import ProfileSidebar from '@/components/ProfileSidebar';
+import { updateUser } from '@/services/AuthService';
+import { checkPassword } from '@/services/UserService';
+import Departamentos from '@/utils/departamentos.json'
+import Provincias from '@/utils/provincias.json'
+import Distritos from '@/utils/distritos.json'
+import Alert, { showSuccessAlert, showErrorAlert } from '@/components/alert';
 import { Button } from '@nextui-org/react';
 import { Helmet } from 'react-helmet-async';
 

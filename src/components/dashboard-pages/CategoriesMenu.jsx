@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { createCategory, getCategories, updateCategory, deleteCategory } from '../../services/CategoryService';
+import { createCategory, getCategories, updateCategory, deleteCategory } from '@/services/CategoryService';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import { Button } from '@nextui-org/react';
 
 const CategoriesMenu = () => {
     const [categories, setCategories] = useState([]);
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false);
+    const [showFormModal, setShowFormModal] = useState(false); // Usar un solo modal
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const [isEditing, setIsEditing] = useState(false); // Estado para distinguir entre crear y editar
 
     useEffect(() => {
         fetchCategories();
@@ -22,46 +22,39 @@ const CategoriesMenu = () => {
             .catch(error => console.error('Error al obtener categorías:', error));
     };
 
-    const handleCreateClick = () => {
-        setShowCreateModal(true);
-        setName('');
-        setDescription('');
-    };
-
-    const handleEditClick = (category) => {
-        setSelectedCategory(category);
-        setName(category.name);
-        setDescription(category.description);
-        setShowEditModal(true);
-    };
-
-    const handleCreate = async () => {
-        const newCategory = {
-            name,
-            description,
-        };
-        const response = await createCategory(newCategory);
-
-        if (response) {
-            fetchCategories();
-            setShowCreateModal(false);
+    const openFormModal = (category = null) => {
+        if (category) {
+            // Modo Editar
+            setSelectedCategory(category);
+            setName(category.name);
+            setDescription(category.description);
+            setIsEditing(true);
+        } else {
+            // Modo Crear
+            setSelectedCategory(null);
+            setName('');
+            setDescription('');
+            setIsEditing(false);
         }
-    }
+        setShowFormModal(true);
+    };
 
-    const handleUpdate = async () => {
-        if (!selectedCategory) return; // Verificar que hay una categoría seleccionada
-        console.log(selectedCategory);
+    const handleSave = async () => {
+        const categoryData = { name, description };
 
-        const updatedCategory = {
-            // Asegúrate de incluir el ID
-            name,
-            description,
-        };
-
-        const response = await updateCategory(selectedCategory._id, updatedCategory)
-        console.log(response);
-        fetchCategories();
-        setShowEditModal(false);
+        if (isEditing) {
+            // Editar categoría
+            if (!selectedCategory) return;
+            await updateCategory(selectedCategory._id, categoryData)
+                .then(() => fetchCategories())
+                .catch(error => console.error('Error al actualizar categoría:', error));
+        } else {
+            // Crear categoría
+            await createCategory(categoryData)
+                .then(() => fetchCategories())
+                .catch(error => console.error('Error al crear categoría:', error));
+        }
+        setShowFormModal(false); // Cerrar modal al guardar
     };
 
     const handleDeleteClick = (category) => {
@@ -69,16 +62,12 @@ const CategoriesMenu = () => {
         setShowDeleteModal(true);
     };
 
-    const handleDelete = () => {
-        deleteCategory(selectedCategory._id)
-            .then(() => {
-                fetchCategories();
-                setShowDeleteModal(false);
-                console.log('Categoría eliminada:', selectedCategory); // Log para verificar
-            })
-            .catch(error => {
-                console.error('Error al eliminar la categoría:', error);
-            });
+    const handleDelete = async () => {
+        if (!selectedCategory) return;
+        await deleteCategory(selectedCategory._id)
+            .then(() => fetchCategories())
+            .catch(error => console.error('Error al eliminar categoría:', error));
+        setShowDeleteModal(false); // Cerrar modal al eliminar
     };
 
     return (
@@ -86,7 +75,7 @@ const CategoriesMenu = () => {
             <div className='mb-3 flex justify-end'>
                 <Button
                     className='p-3 text-sm w-[5%] flex text-white font-bold rounded-xl bg-blue-600'
-                    onPress={handleCreateClick}
+                    onPress={() => openFormModal()}
                 >
                     <FaPlus />
                 </Button>
@@ -106,7 +95,7 @@ const CategoriesMenu = () => {
                                 <div className="col-span-1 flex space-x-2 text-base items-left">
                                     <Button
                                         className="bg-green-500 rounded-md w-1/8 flex items-center justify-start py-2"
-                                        onClick={() => handleEditClick(category)}
+                                        onClick={() => openFormModal(category)}
                                     >
                                         <FaEdit className="text-white text-sm" />
                                     </Button>
@@ -124,11 +113,11 @@ const CategoriesMenu = () => {
                     )}
                 </div>
 
-                {/* Modal para Crear Categoría */}
-                {showCreateModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                {/* Modal para Crear/Editar Categoría */}
+                {showFormModal && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style={{ marginTop: 0 }}>
                         <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-1/3 transform transition-transform duration-300">
-                            <h2 className="text-xl font-bold">Crear Categoría</h2>
+                            <h2 className="text-xl font-bold">{isEditing ? 'Editar Categoría' : 'Crear Categoría'}</h2>
                             <div>
                                 <label className="block mb-2">Nombre</label>
                                 <input
@@ -147,38 +136,10 @@ const CategoriesMenu = () => {
                                 ></textarea>
                             </div>
                             <div className="flex justify-end space-x-2">
-                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowCreateModal(false)}>Cancelar</button>
-                                <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleCreate}>Crear</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Modal para Editar Categoría */}
-                {showEditModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-1/3 transform transition-transform duration-300">
-                            <h2 className="text-xl font-bold">Editar Categoría</h2>
-                            <div>
-                                <label className="block mb-2">Nombre</label>
-                                <input
-                                    type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    className="w-full p-2 border rounded"
-                                />
-                            </div>
-                            <div>
-                                <label className="block mb-2">Descripción</label>
-                                <textarea
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    className="w-full p-2 border rounded"
-                                ></textarea>
-                            </div>
-                            <div className="flex justify-end space-x-2">
-                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowEditModal(false)}>Cancelar</button>
-                                <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleUpdate}>Guardar Cambios</button>
+                                <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowFormModal(false)}>Cancelar</button>
+                                <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSave}>
+                                    {isEditing ? 'Guardar Cambios' : 'Crear'}
+                                </button>
                             </div>
                         </div>
                     </div>

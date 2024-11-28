@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { uploadImage, getImages, deleteImage } from '../../services/ImageService';
+import { uploadImage, getImages, deleteImage } from '@/services/ImageService';
 import { Button } from '@nextui-org/react';
 import { FaEye, FaPlus, FaTrash } from 'react-icons/fa';
 

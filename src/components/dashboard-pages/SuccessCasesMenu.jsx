@@ -9,8 +9,8 @@ import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa'
 const SuccessCasesMenu = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [success, setSuccess] = useState([])
-    const [showCreateModal, setShowCreateModal] = useState(false)
-    const [showEditModal, setShowEditModal] = useState(false)
+    const [showModal, setShowModal] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [selectedSuccess, setSelectedSuccess] = useState(false)
     const [form, setForm] = useState({
@@ -31,14 +31,37 @@ const SuccessCasesMenu = () => {
             .finally(() => setIsLoading(false))
     }
 
-    const handleCreateClick = () => {
-        setForm({
-            title: '',
-            description: '',
-            image: '',
-            video: ''
-        })
-        setShowCreateModal(true)
+    const openFormModal = (success = null) => {
+        if (success) {
+            setIsEditing(true)
+            setSelectedSuccess(success)
+            setForm({
+                title: success.title,
+                description: success.description,
+                image: success.image || '',
+                video: success.video || ''
+            })
+        } else {
+            setIsEditing(false)
+            setSelectedSuccess(null)
+            setForm({
+                title: '',
+                description: '',
+                image: '',
+                video: ''
+            })
+        }
+        setShowModal(true)
+    }
+
+    const handleSave = async () => {
+        if (isEditing) {
+            if (!selectedSuccess) return
+            handleEdit()
+        } else {
+            handleCreate()
+        }
+        setShowModal(false)
     }
 
     const handleCreate = async () => {
@@ -54,22 +77,11 @@ const SuccessCasesMenu = () => {
 
             if (response) {
                 fetchSuccess()
-                setShowCreateModal(false)
+                setShowModal(false)
             }
         } catch {
             console.error('Error al crear el caso de éxito:', error)
         }
-    }
-
-    const handleEditClick = (successItem) => {
-        setShowEditModal(true)
-        setForm({
-            title: successItem.title,
-            description: successItem.description,
-            image: successItem.image,
-            video: successItem.video
-        })
-        setSelectedSuccess(successItem)
     }
 
     const handleEdit = () => {
@@ -86,7 +98,7 @@ const SuccessCasesMenu = () => {
             .then((response) => {
                 console.log('Caso de éxito actualizado', response)
                 fetchSuccess()
-                setShowEditModal(false)
+                setShowModal(false)
             }).catch((error) => {
                 console.error('Error al actualizar el caso de éxito:', error)
             })
@@ -120,7 +132,7 @@ const SuccessCasesMenu = () => {
             <div className='mb-3 flex justify-end'>
                 <Button
                     className='p-3 text-sm w-[5%] flex text-white font-bold rounded-xl bg-blue-600'
-                    onPress={handleCreateClick}
+                    onPress={() => openFormModal()}
                 >
                     <FaPlus />
                 </Button>
@@ -144,7 +156,7 @@ const SuccessCasesMenu = () => {
                                 <div className="col-span-1 flex justify-start items-center space-x-2 text-base">
                                     <Button
                                         className='bg-green-500 rounded-md flex items-center justify-center py-2 px-3'
-                                        onPress={() => handleEditClick(successItem)}
+                                        onPress={() => openFormModal(successItem)}
                                     >
                                         <FaEdit className="text-white text-sm" />
                                     </Button>
@@ -162,10 +174,10 @@ const SuccessCasesMenu = () => {
                     )}
                 </div>
 
-                {showCreateModal && (
+                {showModal && (
                     <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50' style={{ marginTop: 0 }}>
-                        <div className='bg-white p-6 rounded-lg shadow-lg w-2/3 max-h-[80vh] overflow-y-auto'>
-                            <h1 className='text-xl font-bold'>Crear noticia</h1>
+                        <div className='bg-white p-6 rounded-lg shadow-lg w-2/3 max-h-[80vh] overflow-y-auto space-y-4'>
+                            <h1 className='text-xl font-bold'>{isEditing ? 'Editar noticia' : 'Crear noticia'}</h1>
                             <div>
                                 <label className="block mb-2">Título</label>
                                 <input
@@ -203,70 +215,13 @@ const SuccessCasesMenu = () => {
                                 />
                             </div>
                             <div className="flex justify-end space-x-2">
-                                <Button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowCreateModal(false)}>Cancelar</Button>
-                                <Button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleCreate}>Crear</Button>
+                                <Button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowModal(false)}>Cancelar</Button>
+                                <Button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSave}>{isEditing ? 'Guardar cambios' : 'Crear'}</Button>
                             </div>
                         </div>
                     </div>
                 )}
 
-                {showEditModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style={{ marginTop: 0 }}>
-                        <div className="bg-white p-6 rounded-lg shadow-lg w-2/3 max-h-[80vh] overflow-y-auto">
-                            <h1 className='text-xl font-bold'>Editar noticia</h1>
-                            <div>
-                                <label className="block mb-2">Título</label>
-                                <input
-                                    type="text"
-                                    value={form.title}
-                                    onChange={(e) => setForm({ ...form, title: e.target.value })}
-                                    className="w-full p-2 border rounded"
-                                />
-                            </div>
-                            <div>
-                                <label className="block mb-2">Contenido</label>
-                                <ReactQuill
-                                    theme="snow"
-                                    value={form.description}
-                                    onChange={(value) => setForm({ ...form, description: value })}
-                                    placeholder="Contenido"
-                                />
-                            </div>
-                            <div>
-                                <label className="block mb-2">Imagen (URL)</label>
-                                <input
-                                    type="text"
-                                    value={form.image}
-                                    onChange={(e) => setForm({ ...form, image: e.target.value })}
-                                    className="w-full p-2 border rounded"
-                                />
-                            </div>
-                            <div>
-                                <label className="block mb-2">Video (URL)</label>
-                                <input
-                                    type="text"
-                                    value={form.video}
-                                    onChange={(e) => setForm({ ...form, video: e.target.value })}
-                                    className="w-full p-2 border rounded"
-                                />
-                            </div>
-                            <div className="flex justify-end space-x-2">
-                                <Button
-                                    className="bg-gray-500 text-white px-4 py-2 rounded"
-                                    onClick={() => setShowEditModal(false)}
-                                >
-                                    Cancelar
-                                </Button>
-                                <Button
-                                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                                    onClick={handleEdit}
-                                >
-                                    Guardar cambios
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                )}
                 {showDeleteModal && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style={{ marginTop: 0 }}>
                         <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-1/3">

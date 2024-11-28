@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
-import { getProfile, loginUser } from '../../services/UserService';
+import { AuthContext } from '@/context/AuthContext';
+import { getProfile, loginUser } from '@/services/UserService';
 import { Button } from '@nextui-org/react';
+import { TextField } from '@mui/material';
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -43,41 +44,29 @@ const Login = () => {
         <h2 className="text-3xl font-bold mb-6 text-center">Iniciar sesión</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className='space-y-4'>
-            <div className="relative">
-              <input
+            <div className="relative space-y-4">
+              <TextField
                 type="email"
                 id="email"
                 name="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
+                label="Correo electrónico"
                 required
                 className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
-                placeholder=" "
+                size="small"
               />
-              <label
-                htmlFor="email"
-                className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
-              >
-                Correo electrónico
-              </label>
-            </div>
-            <div className="relative">
-              <input
+              <TextField
                 type="password"
                 id="password"
                 name="password"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
+                label="Contraseña"
                 required
                 className="mx-auto peer block w-full pt-6 pb-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm peer-focus:border-indigo-500 peer-focus:-bottom-2"
-                placeholder=" "
+                size="small"
               />
-              <label
-                htmlFor="password"
-                className="my-auto mt-2 absolute left-4 -top-1 text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:left-4 peer-focus:text-gray-600 peer-focus:text-sm"
-              >
-                Contraseña
-              </label>
             </div>
           </div>
           <Button
