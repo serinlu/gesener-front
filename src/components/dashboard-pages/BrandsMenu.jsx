@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { createBrand, getBrands, updateBrand, deleteBrand } from '../../services/BrandService';
+import { createBrand, getBrands, updateBrand, deleteBrand } from '@/services/BrandService';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
 import { Button } from '@nextui-org/react';
 

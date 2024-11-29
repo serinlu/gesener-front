@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { useCart } from '../../hooks/useCart';
-import CartPageItem from './CartPageItem';
+import { useCart } from '@/hooks/useCart';
+import CartPageItem from '@/pages/cart/CartPageItem';
 import { Button } from '@nextui-org/react';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { Helmet } from 'react-helmet-async';

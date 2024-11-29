@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '@nextui-org/react'
-import { createSuccess, getSuccess, updateSuccess, deleteSuccess } from '../../services/SuccessService'
+import { createSuccess, getSuccess, updateSuccess, deleteSuccess } from '@/services/SuccessService'
 import { useState, useEffect } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'

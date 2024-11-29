@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useId } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getProducts } from '../../../services/ProductService';
-import { getCategories } from '../../../services/CategoryService';
-import { getBrands } from '../../../services/BrandService';
-import { motion } from 'framer-motion';
-import { FaAngleRight } from 'react-icons/fa6';
+import { getProducts } from '@/services/ProductService';
+import { getCategories } from '@/services/CategoryService';
+import { getBrands } from '@/services/BrandService';
 import { Button } from '@nextui-org/react';
-import { useCart } from '../../../hooks/useCart';
-import clsx from 'clsx';
-import Cart from '../../../components/Cart';
-import ProductFilters from '../../../components/ProductFilters';
+import { useCart } from '@/hooks/useCart';
+import ProductFilters from '@/components/ProductFilters';
 import { Helmet } from 'react-helmet-async';
 
 const accordionVariants = {

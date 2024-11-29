@@ -1,5 +1,5 @@
 import axios from 'axios';
-import clientAxios from '../config/axios';
+import clientAxios from '@/config/axios';
 
 const createBrand = async (form) => {
     const config = {

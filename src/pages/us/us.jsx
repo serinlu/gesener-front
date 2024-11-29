@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import CountUp from "react-countup";
 import { useInView } from 'react-intersection-observer';
-import TitleSection from '../../components/TitleSection';
+import TitleSection from '@/components/TitleSection';
 
 const Contact = () => {
     const [startCount, setStartCount] = useState(false);

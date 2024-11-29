@@ -1,26 +1,26 @@
 import React, { useState } from "react";
-import TitleSection from "../../../components/TitleSection";
+import TitleSection from "@/components/TitleSection";
 
-import arcoElectrico from "../../../uploads/arco-electrico.jpg";
-import calidadEnergia from "../../../uploads/calidad-energia.jpg";
-import eficienciaEnergetica from "../../../uploads/eficiencia-energetica.jpg";
-import seguridadElectrica from "../../../uploads/seguridad-electrica.jpg";
-import sistemasEolicos from "../../../uploads/sistemas-eolicos.jpg";
-import sistemasFotovoltaicos from "../../../uploads/sistemas-fotovoltaicos.jpg";
-import sistemasPuestaTierra from "../../../uploads/sistemas-puesta-tierra.jpg";
-import termografiaInfrarroja from "../../../uploads/termografia-infrarroja.jpg";
+import arcoElectrico from "@/uploads/arco-electrico.jpg";
+import calidadEnergia from "@/uploads/calidad-energia.jpg";
+import eficienciaEnergetica from "@/uploads/eficiencia-energetica.jpg";
+import seguridadElectrica from "@/uploads/seguridad-electrica.jpg";
+import sistemasEolicos from "@/uploads/sistemas-eolicos.jpg";
+import sistemasFotovoltaicos from "@/uploads/sistemas-fotovoltaicos.jpg";
+import sistemasPuestaTierra from "@/uploads/sistemas-puesta-tierra.jpg";
+import termografiaInfrarroja from "@/uploads/termografia-infrarroja.jpg";
 
-import fuerteHoyos from "../../../uploads/fuerte-hoyos.jpg";
-import siderPeru from "../../../uploads/sider-peru.jpg";
-import sistemasElectricosTecsup from "../../../uploads/sistemas-electricos-tecsup.png";
-import sunatFotovoltaico from "../../../uploads/sunat-eficiencia.png";
-import tecsupFotovoltaico from "../../../uploads/tecsup-fotovoltaico.jpeg";
+import fuerteHoyos from "@/uploads/fuerte-hoyos.jpg";
+import siderPeru from "@/uploads/sider-peru.jpg";
+import sistemasElectricosTecsup from "@/uploads/sistemas-electricos-tecsup.png";
+import sunatFotovoltaico from "@/uploads/sunat-eficiencia.png";
+import tecsupFotovoltaico from "@/uploads/tecsup-fotovoltaico.jpeg";
 
-import energiaFuturo from "../../../uploads/energia-futuro.png";
-import infrarrojaIA from "../../../uploads/infrarroja-ia.png";
-import sostenibilidad from "../../../uploads/sostenibilidad.png";
+import energiaFuturo from "@/uploads/energia-futuro.png";
+import infrarrojaIA from "@/uploads/infrarroja-ia.png";
+import sostenibilidad from "@/uploads/sostenibilidad.png";
 
-import ContactForm from "../../../components/ContactForm";
+import ContactForm from "@/components/ContactForm";
 
 const Training = () => {
   const mainCards = [

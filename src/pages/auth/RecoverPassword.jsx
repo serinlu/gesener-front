@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../../uploads/logo.png'; // Asegúrate de ajustar la ruta de la imagen
 
 const RecoverPassword = () => {
   const [email, setEmail] = useState('');

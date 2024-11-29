@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useInView } from 'react-intersection-observer';
-import RelatedTopics from '../../../components/RelatedTopics';
-import TitleSection from "../../../components/TitleSection";
+import RelatedTopics from '@/components/RelatedTopics';
+import TitleSection from "@/components/TitleSection";
 
 const EnergyEfficiency = () => {
   const [startCount, setStartCount] = useState(false);

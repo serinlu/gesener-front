@@ -1,5 +1,5 @@
 import { useReducer, createContext, useState } from 'react'
-import { cartReducer, cartInitialState } from '../reducers/cartReducer.js'
+import { cartReducer, cartInitialState } from '@/reducers/cartReducer.js'
 
 export const CartContext = createContext()
 

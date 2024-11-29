@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useInView } from 'react-intersection-observer';
-import RelatedTopics from '../../../components/RelatedTopics';
-import TitleSection from "../../../components/TitleSection";
-import Equipo from "../../../components/energy-efficiency/Equipo";
+import RelatedTopics from '@/components/RelatedTopics';
+import TitleSection from "@/components/TitleSection";
+import Equipo from "@/components/energy-efficiency/Equipo";
 
 const EquipmentRental = () => {
   const [startCount, setStartCount] = useState(false);

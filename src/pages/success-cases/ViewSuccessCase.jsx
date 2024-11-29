@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getSuccessById } from '../../services/SuccessService'
+import { getSuccessById } from '@/services/SuccessService'
 import { Link, useParams } from 'react-router-dom'
 import { FaNewspaper, FaUser } from 'react-icons/fa'
 import { FaClockRotateLeft } from 'react-icons/fa6'

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getImage } from '../services/ImageService';
+import { getImage } from '@/services/ImageService';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 

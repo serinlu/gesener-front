@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { getSuccess } from '../../services/SuccessService'
-import TitleSection from '../../components/TitleSection'
+import { getSuccess } from '@/services/SuccessService'
+import TitleSection from '@/components/TitleSection'
 import { Link } from 'react-router-dom'
 
 const SuccessCases = () => {

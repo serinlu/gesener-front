@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
-import { usePayment } from '../../context/PaymentContext';
-import { generatePayment } from '../../services/PaymentService';
+import { usePayment } from '@/context/PaymentContext';
+import { generatePayment } from '@/services/PaymentService';
 initMercadoPago('TEST-8166d9c2-d8dd-4273-afa6-77b668c4864b'), { locale: 'es-PE' };
 
 

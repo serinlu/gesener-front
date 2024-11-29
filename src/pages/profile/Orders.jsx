@@ -1,5 +1,5 @@
 import React from 'react'
-import ProfileSidebar from '../../components/ProfileSidebar'
+import ProfileSidebar from '@/components/ProfileSidebar'
 import { Helmet } from 'react-helmet-async'
 
 const Orders = () => {

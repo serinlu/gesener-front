@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { registerUser } from '../../services/AuthService';
+import { registerUser } from '@/services/AuthService';
 import { TextField } from '@mui/material';
 import { Button } from '@nextui-org/react';
 

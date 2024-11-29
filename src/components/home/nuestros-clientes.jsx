@@ -3,22 +3,22 @@ import React from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
-import '../../pages/landing/home/home.css';
+import '@/pages/landing/home/home.css';
 import { Scrollbar, Autoplay } from 'swiper/modules';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
-import antamina from '../../uploads/clientes/antamina.png';
-import bbva from '../../uploads/clientes/bbva.png';
-import congreso from '../../uploads/clientes/congreso.png';
-import cye from '../../uploads/clientes/cye.png';
-import incn from '../../uploads/clientes/incn.png';
-import minrelex from '../../uploads/clientes/minrelex.png';
-import senamhi from '../../uploads/clientes/senamhi.png';
-import sodexo from '../../uploads/clientes/sodexo.png';
-import sutran from '../../uploads/clientes/sutran.png';
-import tecsup from '../../uploads/clientes/tecsup.png';
-import usil from '../../uploads/clientes/usil.png';
+import antamina from '@/uploads/clientes/antamina.png';
+import bbva from '@/uploads/clientes/bbva.png';
+import congreso from '@/uploads/clientes/congreso.png';
+import cye from '@/uploads/clientes/cye.png';
+import incn from '@/uploads/clientes/incn.png';
+import minrelex from '@/uploads/clientes/minrelex.png';
+import senamhi from '@/uploads/clientes/senamhi.png';
+import sodexo from '@/uploads/clientes/sodexo.png';
+import sutran from '@/uploads/clientes/sutran.png';
+import tecsup from '@/uploads/clientes/tecsup.png';
+import usil from '@/uploads/clientes/usil.png';
 
 const fadeInUp = {
     hidden: { opacity: 0, y: 20 },

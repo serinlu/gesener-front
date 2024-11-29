@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { changeRole, getUsers } from '../../services/UserService'
-import { getProfile, checkPassword } from '../../services/UserService'
-import { updateUser } from '../../services/AuthService'
+import { changeRole, getUsers } from '@/services/UserService'
+import { getProfile, checkPassword } from '@/services/UserService'
 import { Button } from '@nextui-org/react'
 import { FaEye, FaEdit } from 'react-icons/fa'
-import { AuthContext } from '../../context/AuthContext'
-import departamentos from '../../utils/departamentos.json'
-import provincias from '../../utils/provincias.json'
-import distritos from '../../utils/distritos.json'
+import { AuthContext } from '@/context/AuthContext'
+import departamentos from '@/utils/departamentos.json'
+import provincias from '@/utils/provincias.json'
+import distritos from '@/utils/distritos.json'
 
 const UsersMenu = () => {
     const [users, setUsers] = useState([])

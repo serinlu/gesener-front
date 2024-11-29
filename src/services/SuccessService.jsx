@@ -1,4 +1,4 @@
-import clientAxios from "../config/axios";
+import clientAxios from "@/config/axios";
 
 export const createSuccess = async (form) => {
     const config = {

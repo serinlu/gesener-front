@@ -1,4 +1,4 @@
-import clientAxios from "../config/axios";
+import clientAxios from "@/config/axios";
 
 import axios from 'axios';
 

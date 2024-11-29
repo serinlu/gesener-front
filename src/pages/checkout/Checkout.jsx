@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '@/context/AuthContext';
 import { Button } from '@nextui-org/react';
-import { useCart } from '../../hooks/useCart';
-import departamentos from '../../utils/departamentos.json';
-import provincias from '../../utils/provincias.json';
-import distritos from '../../utils/distritos.json';
-import { updateUser } from '../../services/AuthService';
+import { useCart } from '@/hooks/useCart';
+import departamentos from '@/utils/departamentos.json';
+import provincias from '@/utils/provincias.json';
+import distritos from '@/utils/distritos.json';
+import { updateUser } from '@/services/AuthService';
 import { Helmet } from 'react-helmet-async';
-import { usePayment } from '../../context/PaymentContext';
+import { usePayment } from '@/context/PaymentContext';
 
 const Checkout = () => {
     const { auth } = useContext(AuthContext);

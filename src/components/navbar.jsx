@@ -4,12 +4,12 @@ import { FaBars, FaSearch, FaUser, FaUserCircle } from 'react-icons/fa';
 import { FaCartShopping } from 'react-icons/fa6';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
-import logo from '../uploads/logo.png';
-import Cart from './Cart';
+import { AuthContext } from '@/context/AuthContext';
+import logo from '@/uploads/logo.png';
+import Cart from '@/components/Cart';
 import debounce from "lodash.debounce";
-import clientAxios from "../config/axios";
-import { useCart } from "../hooks/useCart";
+import clientAxios from "@/config/axios";
+import { useCart } from "@/hooks/useCart";
 
 const Navbar = () => {
     const { cart } = useCart()

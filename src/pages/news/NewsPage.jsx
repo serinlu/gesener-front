@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import TitleSection from '../../components/TitleSection'
-import { getNews } from '../../services/NewService'
+import TitleSection from '@/components/TitleSection'
+import { getNews } from '@/services/NewService'
 import { Link } from 'react-router-dom'
 
 const NewsPage = () => {

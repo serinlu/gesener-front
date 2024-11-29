@@ -1,8 +1,8 @@
 import { Button } from '@nextui-org/react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useCart } from '../../../hooks/useCart';
-import Cart from '../../../components/Cart';
+import { useCart } from '@/hooks/useCart';
+import Cart from '@/components/Cart';
 import { Helmet } from 'react-helmet-async';
 
 const ProductView = () => {

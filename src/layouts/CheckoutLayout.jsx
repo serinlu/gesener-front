@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
-import CheckoutStages from '../components/CheckoutStages'
-import logo from '../uploads/logo.png'
+import CheckoutStages from '@/components/CheckoutStages'
+import logo from '@/uploads/logo.png'
 import { Link, NavLink, Outlet } from 'react-router-dom'
-import Footer from '../components/Footer'
-import { AuthContext } from '../context/AuthContext'
+import Footer from '@/components/Footer'
+import { AuthContext } from '@/context/AuthContext'
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import { FaUser } from 'react-icons/fa'
 

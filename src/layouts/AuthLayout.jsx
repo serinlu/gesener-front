@@ -1,8 +1,8 @@
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
-import loginImage from "../uploads/1.jpg"
-import logo from "../uploads/logo.png"
+import loginImage from "@/uploads/1.jpg"
+import logo from "@/uploads/logo.png"
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "@/context/AuthContext";
 
 const AuthLayout = () => {
     const { auth } = useContext(AuthContext);

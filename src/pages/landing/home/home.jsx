@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import NuestraEmpresa from '../../../components/home/nuestra-empresa';
-import NuestrosClientes from '../../../components/home/nuestros-clientes';
-import { getImage } from '../../../services/ImageService';
+import NuestraEmpresa from '@/components/home/nuestra-empresa';
+import NuestrosClientes from '@/components/home/nuestros-clientes';
+import { getImage } from '@/services/ImageService';
 import { Helmet } from 'react-helmet-async';
 
 const fadeInUp = {

@@ -1,7 +1,7 @@
 import { Button } from '@nextui-org/react'
 import React, { useEffect, useState } from 'react'
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa'
-import { createNew, getNews, updateNew, deleteNew } from '../../services/NewService'
+import { createNew, getNews, updateNew, deleteNew } from '@/services/NewService'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 

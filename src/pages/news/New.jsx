@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getNewById } from '../../services/NewService'
+import { getNewById } from '@/services/NewService'
 import { Link, useParams } from 'react-router-dom'
 import { FaNewspaper, FaClockRotateLeft, FaUser } from 'react-icons/fa6'
 import { Helmet } from 'react-helmet-async'

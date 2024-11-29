@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion"; // Asegúrate de instalar framer-motion
 import { useParams } from "react-router-dom";
-import { getCategories } from "../services/CategoryService";
-import { getProducts } from "../services/ProductService";
+import { getCategories } from "@/services/CategoryService";
+import { getProducts } from "@/services/ProductService";
 
 const Accordion = () => {
     const { categoryId } = useParams(); // Captura el ID de la categoría de la URL

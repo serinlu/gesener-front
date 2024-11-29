@@ -3,8 +3,8 @@ import React, { useEffect } from 'react';
 import { Button } from '@nextui-org/react';
 import { FaXmark } from 'react-icons/fa6';
 import clsx from 'clsx';
-import { useCart } from '../hooks/useCart'; // Asegúrate de importar correctamente tu hook de carrito
-import CartItem from './CartItem'; // Componente para cada producto del carrito
+import { useCart } from '@/hooks/useCart'; // Asegúrate de importar correctamente tu hook de carrito
+import CartItem from '@/components/CartItem'; // Componente para cada producto del carrito
 import { Link } from 'react-router-dom';
 
 const Cart = ({ isCartOpen, toggleCart, handleExplore }) => {
