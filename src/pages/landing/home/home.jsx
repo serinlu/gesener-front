@@ -83,8 +83,6 @@ const Home = () => {
                 </motion.div>
             </motion.div>
 
-
-
             <div className='w-[90%] flex flex-col gap-y-12 mx-auto py-10'>
                 <NuestraEmpresa />
 

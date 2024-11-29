@@ -28,6 +28,7 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false); // Controla la visibilidad del menú lateral
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [showSolutionsDropdown, setShowSolutionsDropdown] = useState(false); // Controla el submenú de soluciones
+    const [showUserDropdown, setShowUserDropdown] = useState(false);
     const [openSearch, setOpenSearch] = useState(false);
     const searchRef = useRef(null);
 
@@ -89,6 +90,10 @@ const Navbar = () => {
         }
     };
 
+    const toggleUserDropdown = () => {
+        setShowUserDropdown(!showUserDropdown);
+    }
+
     const toggleSearch = () => {
         setOpenSearch(!openSearch);
         setSearchQuery('');
@@ -100,15 +105,13 @@ const Navbar = () => {
         setSearchQuery('');
     };
 
-
-
     const ItemsUser = [
         { key: "login", label: "Iniciar sesión", path: "/login" },
         { key: "register", label: "Registrarse", path: "/register" }
     ];
 
     const itemsClient = [
-        { key: "profile", label: "Mi cuenta", path: "/client/profile" },
+        { key: "profile", label: "Mi cuenta", path: "/profile" },
         { key: "orders", label: "Mis pedidos", path: "/orders" },
         { key: "logout", label: "Cerrar sesión", action: logout }
     ]
@@ -134,7 +137,7 @@ const Navbar = () => {
 
             // Solo esconder/mostrar el Navbar si el menú lateral no está abierto
             if (!isOpen) {
-                if (currentScrollY > lastScrollY && !openSearch && !isCartOpen) {
+                if (currentScrollY > lastScrollY && !openSearch && !isCartOpen && !showSolutionsDropdown && !showUserDropdown) {
                     // Usuario está bajando y la barra de búsqueda no está abierta
                     setIsScrollingUp(false);
                 } else {
@@ -150,7 +153,7 @@ const Navbar = () => {
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, [lastScrollY, openSearch, isOpen, isCartOpen]);
+    }, [lastScrollY, openSearch, isOpen, isCartOpen, showSolutionsDropdown, showUserDropdown]);
 
     return (
         <div className="z-10 relative">
@@ -319,64 +322,109 @@ const Navbar = () => {
                             </div>
                         </div>
 
-                        <div className='flex sm:space-x-1'>
-                            <Dropdown>
-                                <DropdownTrigger>
-                                    {auth ? (
-                                        <Button
-                                            variant="bordered"
-                                            className='p-2 text-2xl hover:text-indigo-500 duration-300 rounded-lg flex'
-                                        >
-                                            <FaUserCircle />
-                                            <h1 className="text-base hidden sm:block">{auth.name}</h1>
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            variant="bordered"
-                                            className='p-2 text-2xl hover:text-indigo-500 duration-300 rounded-lg flex'
-                                        >
-                                            <FaUser />
-                                            <h1 className="text-base hidden sm:block">Ingresar</h1>
-                                        </Button>
-                                    )}
-                                </DropdownTrigger>
+                        <div className="flex items-center justify-between sm:gap-2 xl:gap-4">
+                            {/* Dropdown de usuario */}
+                            <div className="relative">
+                                <button
+                                    onClick={() => setShowUserDropdown(!showUserDropdown)}
+                                    className="flex items-center text-lg p-2 rounded-md bg-white hover:bg-gray-100 transition-all"
+                                >
+                                    <FaUserCircle className="text-2xl sm:mr-2" />
+                                    <h1 className="hidden sm:block">{auth ? auth.name : 'Ingresar'}</h1>
+                                </button>
 
-                                <DropdownMenu aria-label="Opciones de usuario" className='bg-white shadow-lg rounded-lg p-2 text-base'>
-                                    {auth ? (
-                                        // Verificar si el usuario logueado es "admin" o "user"
-                                        (auth.role === "admin" ? itemsAuthUser : itemsClient).map(item => (
-                                            <DropdownItem
-                                                key={item.key}
-                                                className="p-2"
-                                                onClick={item.action ? item.action : null}
-                                            >
-                                                <NavLink
-                                                    to={item.path}
-                                                    className="hover:bg-gray-200 transition-all duration-300 ease-in-out p-2 rounded-lg"
-                                                >
-                                                    {item.label}
-                                                </NavLink>
-                                            </DropdownItem>
-                                        ))
-                                    ) : (
-                                        ItemsUser.map(item => (
-                                            <DropdownItem key={item.key} className="p-2">
-                                                <NavLink
-                                                    to={item.path}
-                                                    className="hover:bg-gray-200 transition-all duration-300 ease-in-out p-2 rounded-lg"
-                                                >
-                                                    {item.label}
-                                                </NavLink>
-                                            </DropdownItem>
-                                        ))
-                                    )}
+                                {/* Dropdown */}
+                                <div
+                                    className={`absolute -right-12 mt-2 w-48 bg-white rounded-md shadow-lg transition-[max-height,opacity] duration-500 ease-in-out ${showUserDropdown ? 'opacity-100 max-h-96' : 'opacity-0 max-h-0'
+                                        } overflow-hidden`}
+                                >
+                                    <ul className="py-2">
+                                        {auth ? (
+                                            auth.role === 'admin' ? (
+                                                itemsAuthUser.map((item) => (
+                                                    <li key={item.key}>
+                                                        {/* Verifica si el item tiene una acción, de ser así, ejecuta la acción */}
+                                                        {item.action ? (
+                                                            <button
+                                                                onClick={() => {
+                                                                    item.action(); // Ejecuta la acción (logout en este caso)
+                                                                    setShowUserDropdown(false); // Cierra el dropdown
+                                                                }}
+                                                                className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500 w-full text-left"
+                                                            >
+                                                                {item.label}
+                                                            </button>
+                                                        ) : (
+                                                            <NavLink
+                                                                to={item.path}
+                                                                onClick={() => setShowUserDropdown(false)} // Cierra el dropdown al hacer clic
+                                                                className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500"
+                                                            >
+                                                                {item.label}
+                                                            </NavLink>
+                                                        )}
+                                                    </li>
+                                                ))
+                                            ) : (
+                                                itemsClient.map((item) => (
+                                                    <li key={item.key}>
+                                                        {/* Verifica si el item tiene una acción, de ser así, ejecuta la acción */}
+                                                        {item.action ? (
+                                                            <button
+                                                                onClick={() => {
+                                                                    item.action(); // Ejecuta la acción (logout en este caso)
+                                                                    setShowUserDropdown(false); // Cierra el dropdown
+                                                                }}
+                                                                className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500 w-full text-left"
+                                                            >
+                                                                {item.label}
+                                                            </button>
+                                                        ) : (
+                                                            <NavLink
+                                                                to={item.path}
+                                                                onClick={() => setShowUserDropdown(false)} // Cierra el dropdown al hacer clic
+                                                                className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500"
+                                                            >
+                                                                {item.label}
+                                                            </NavLink>
+                                                        )}
+                                                    </li>
+                                                ))
+                                            )
+                                        ) : (
+                                            ItemsUser.map((item) => (
+                                                <li key={item.key}>
+                                                    {/* Verifica si el item tiene una acción, de ser así, ejecuta la acción */}
+                                                    {item.action ? (
+                                                        <button
+                                                            onClick={() => {
+                                                                item.action(); // Ejecuta la acción (logout en este caso)
+                                                                setShowUserDropdown(false); // Cierra el dropdown
+                                                            }}
+                                                            className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500 w-full text-left"
+                                                        >
+                                                            {item.label}
+                                                        </button>
+                                                    ) : (
+                                                        <NavLink
+                                                            to={item.path}
+                                                            onClick={() => setShowUserDropdown(false)} // Cierra el dropdown al hacer clic
+                                                            className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500"
+                                                        >
+                                                            {item.label}
+                                                        </NavLink>
+                                                    )}
+                                                </li>
+                                            ))
+                                        )}
+                                    </ul>
+                                </div>
+                            </div>
 
-                                </DropdownMenu>
-                            </Dropdown>
-
+                            {/* Botón del carrito */}
                             <Button
                                 variant="bordered"
-                                className='text-2xl hover:text-indigo-500 duration-300 rounded-lg flex'
+                                className="relative text-2xl p-2 hover:text-indigo-500 duration-300 rounded-lg flex items-center justify-center"
                                 style={{ outline: 'none', boxShadow: 'none' }}
                                 onClick={toggleCart}
                             >
@@ -385,15 +433,18 @@ const Navbar = () => {
                                     {totalItems > 0 ? (totalItems > 9 ? '9+' : totalItems) : 0}
                                 </span>
                             </Button>
+                            <Cart isCartOpen={isCartOpen} toggleCart={toggleCart} handleExplore={handleExplore} />
+
+                            {/* Botón de búsqueda */}
                             <Button
-                                className="p-2 text-2xl hover:text-indigo-500 duration-300 rounded-lg"
+                                className="text-2xl px-1 hover:text-indigo-500 duration-300 rounded-lg flex items-center justify-center"
                                 style={{ outline: 'none', boxShadow: 'none' }}
                                 onClick={toggleSearch}
                             >
                                 <FaSearch />
                             </Button>
-                            <Cart isCartOpen={isCartOpen} toggleCart={toggleCart} handleExplore={handleExplore} />
                         </div>
+
                     </nav>
                 </div>
             </div>

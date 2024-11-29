@@ -8,6 +8,7 @@ import Distritos from '@/utils/distritos.json'
 import Alert, { showSuccessAlert, showErrorAlert } from '@/components/alert';
 import { Button } from '@nextui-org/react';
 import { Helmet } from 'react-helmet-async';
+import { AuthContext } from '../../context/AuthContext';
 
 const Profile = () => {
     const { auth } = useContext(AuthContext);

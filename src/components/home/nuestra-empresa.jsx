@@ -3,12 +3,12 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Card, CardFooter, Button } from "@nextui-org/react";
 
-import casos from '../../uploads/casos-exito.jpg';
-import eficiencia from '../../uploads/eficiencia-energetica.jpg';
-import termografia from '../../uploads/termografia-infrarroja.jpg';
-import energias from '../../uploads/renewable-energy.jpg';
-import capacitacion from '../../uploads/training.jpg';
-import alquiler from '../../uploads/equipment-rental.jpeg';
+import casos from '@/uploads/casos-exito.jpg';
+import eficiencia from '@/uploads/eficiencia-energetica.jpg';
+import termografia from '@/uploads/termografia-infrarroja.jpg';
+import energias from '@/uploads/renewable-energy.jpg';
+import capacitacion from '@/uploads/training.jpg';
+import alquiler from '@/uploads/equipment-rental.jpeg';
 
 const cards = [
     {

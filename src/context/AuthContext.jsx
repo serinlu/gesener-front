@@ -27,6 +27,9 @@ const AuthProvider = ({ children }) => {
 		logoutUser();
 		setAuth(null);
 		navigate('/');
+		setTimeout(() => {
+			window.location.reload();
+		}, 200); // Le das un pequeño retraso para asegurar que el logout se complete
 	};
 
 	return (

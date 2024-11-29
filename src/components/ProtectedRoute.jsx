@@ -3,15 +3,17 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from '@/context//AuthContext';
 
 export const ProtectedRoute = ({ allowedRoles, children }) => {
-    const { auth } = useContext(AuthContext);
+    const { auth, loading } = useContext(AuthContext);
+
+    if (loading) {
+        return <div>Cargando...</div>; // Mostrar un indicador de carga mientras el contexto se inicializa
+    }
 
     if (!auth) {
-        // Si no está autenticado, redirigir al login
         return <Navigate to="/login" replace />;
     }
 
     if (!allowedRoles.includes(auth.role)) {
-        // Si no tiene el rol adecuado, redirigir a "Acceso denegado"
         return <Navigate to="/unauthorized" replace />;
     }
 
