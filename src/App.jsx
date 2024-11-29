@@ -44,6 +44,8 @@ import ViewSuccessCase from "@/pages/success-cases/ViewSuccessCase";
 import { PaymentProvider } from "@/context/PaymentContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
+import NotFoundPage from "@/pages/notFound/NotFound";
+
 function App() {
   return (
     <HelmetProvider>
@@ -73,7 +75,8 @@ function App() {
                   <Route path='news/:id' element={<New />} />
                   <Route path='success-cases' element={<SuccessCases />} />
                   <Route path='success-cases/:id' element={<ViewSuccessCase />} />
-                  {/* cart */}
+                  {/* Otras rutas */}
+                  <Route path="*" element={<NotFoundPage />} />
 
                 </Route>
                 <Route element={<AuthLayout />}>

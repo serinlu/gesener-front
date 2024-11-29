@@ -89,7 +89,7 @@ const BrandsMenu = () => {
                 <div className="p-2 text-black">
                     {brands.length > 0 ? (
                         brands.map((brand) => (
-                            <div key={brand.id} className="grid grid-cols-3 items-start gap-4 p-2">
+                            <div key={brand.id} className="grid grid-cols-3 items-center gap-4 p-2">
                                 <h1 className="col-span-1 text-left">{brand.name}</h1>
                                 <h1 className="col-span-1 text-left">{brand.description}</h1>
                                 <div className="col-span-1 flex space-x-2 text-base items-left">

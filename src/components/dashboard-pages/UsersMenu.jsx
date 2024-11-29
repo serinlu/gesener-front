@@ -167,7 +167,7 @@ const UsersMenu = () => {
                         users.map((user) => (
                             <div
                                 key={user._id}
-                                className="grid grid-cols-7 items-start gap-4 p-4 min-w-[768px]"
+                                className="grid grid-cols-7 gap-4 p-4 min-w-[768px] items-center"
                             >
                                 <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">{user.name}</h1>
                                 <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">{user.lastname}</h1>

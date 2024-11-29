@@ -89,7 +89,7 @@ const CategoriesMenu = () => {
                 <div className="p-2 text-black">
                     {categories.length > 0 ? (
                         categories.map((category) => (
-                            <div key={category.id} className="grid grid-cols-3 items-start gap-4 p-2">
+                            <div key={category.id} className="grid grid-cols-3 gap-4 p-2 items-center">
                                 <h1 className="col-span-1 text-left">{category.name}</h1>
                                 <h1 className="col-span-1 text-left">{category.description}</h1>
                                 <div className="col-span-1 flex space-x-2 text-base items-left">

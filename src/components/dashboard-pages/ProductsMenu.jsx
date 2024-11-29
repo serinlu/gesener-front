@@ -93,7 +93,7 @@ const ProductsMenu = () => {
                 model: product.model,
                 maxItems: product.maxItems,
                 price: product.price,
-                countInStock: product.countInStock,
+                countInStock: product.countInStock || 0,
                 imageUrl: product.imageUrl || '',
             })
         } else {
@@ -265,7 +265,7 @@ const ProductsMenu = () => {
                 <div className="p-2 text-black">
                     {products.length > 0 ? (
                         products.map((product) => (
-                            <div key={product._id} className="grid grid-cols-8 items-start gap-4 p-2">
+                            <div key={product._id} className="grid grid-cols-8 items-center gap-4 p-2">
                                 <td className="p-2 text-center">
                                     {/* Renderizar la imagen usando la URL */}
                                     <img

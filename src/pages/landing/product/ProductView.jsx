@@ -24,32 +24,12 @@ const ProductView = () => {
     getProduct();
   }, [id]);
 
-  console.log(id);
-  console.log(product);
-
-  const handleIncrease = () => {
-    if (quantity < product.countInStock) {
-      setQuantity(prev => prev + 1);
-    } else return
-  };
-
-  const handleDecrease = () => {
-    if (quantity > 1) {
-      setQuantity(prev => prev - 1);
-    } else return;
-  };
-
-  const handleInputChange = () => {
-    const value = Math.max(1, Math.min(product.countInStock, Number(e.target.value)))
-    setQuantity(value);
-  }
-
   const { addToCart } = useCart();
 
-  const handleAddToCart = () => {
-    addToCart(product)
-    toggleCart()
-  }
+  const handleAddToCart = (product) => {
+    addToCart(product); // Agregar el producto al carrito
+    toggleCart(); // Abrir el carrito
+  };
 
   return (
     <div>
@@ -95,10 +75,11 @@ const ProductView = () => {
 
             <div className="flex items-center mt-4 space-x-2">
               <Button
-                className="bg-indigo-600 text-white font-bold rounded-xl"
+                className={`bg-indigo-600 text-white font-bold w-full py-2 rounded-xl hover:bg-indigo-700 transition ${product.countInStock === 0 ? 'bg-gray-300 cursor-not-allowed hover:bg-gray-300' : ''}`}
                 onClick={() => handleAddToCart(product)}
+                disabled={product.countInStock === 0}
               >
-                <h1 className="p-2">Agregar al carrito</h1>
+                {product.countInStock === 0 ? 'Sin stock' : 'Agregar'}
               </Button>
               <Cart
                 isCartOpen={isCartOpen}

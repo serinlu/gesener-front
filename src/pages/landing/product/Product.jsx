@@ -7,6 +7,7 @@ import { Button } from '@nextui-org/react';
 import { useCart } from '@/hooks/useCart';
 import ProductFilters from '@/components/ProductFilters';
 import { Helmet } from 'react-helmet-async';
+import Cart from '@/components/Cart';
 
 const accordionVariants = {
     open: {
@@ -245,7 +246,6 @@ const Product = () => {
                                                     {product.countInStock === 0 ? 'Sin stock' : 'Agregar'}
                                                 </Button>
                                             </div>
-
                                         </div>
                                     </div>
                                 ))
