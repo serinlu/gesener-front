@@ -5,6 +5,8 @@ import NuestraEmpresa from '@/components/home/nuestra-empresa';
 import NuestrosClientes from '@/components/home/nuestros-clientes';
 import { getImage } from '@/services/ImageService';
 import { Helmet } from 'react-helmet-async';
+import SuccessCasesSlider from '../../../components/home/success-cases';
+import NewsSlider from '../../../components/home/news';
 
 const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -85,30 +87,9 @@ const Home = () => {
 
             <div className='w-[90%] flex flex-col gap-y-12 mx-auto py-10'>
                 <NuestraEmpresa />
-
                 <NuestrosClientes />
-
-                <motion.section
-                    ref={successRef}  // Agregar ref a "Casos de éxito"
-                    variants={fadeInUp}
-                    initial="hidden"
-                    animate={successInView ? "visible" : "hidden"}
-                    transition={{ duration: 0.7, delay: 0.7 }}
-                >
-                    <h2 className='text-2xl sm:text-4xl font-bold pb-6'>Casos de éxito</h2>
-                    {/* Agregar contenido relevante aquí */}
-                </motion.section>
-
-                <motion.section
-                    ref={newsRef}  // Agregar ref a "Noticias"
-                    variants={fadeInUp}
-                    initial="hidden"
-                    animate={newsInView ? "visible" : "hidden"}
-                    transition={{ duration: 0.7, delay: 0.9 }}
-                >
-                    <h2 className='text-2xl sm:text-4xl font-bold pb-6'>Noticias</h2>
-                    {/* Agregar contenido relevante aquí */}
-                </motion.section>
+                <SuccessCasesSlider />
+                <NewsSlider />
             </div>
         </div>
     );

@@ -9,31 +9,38 @@ import termografia from '@/uploads/termografia-infrarroja.jpg';
 import energias from '@/uploads/renewable-energy.jpg';
 import capacitacion from '@/uploads/training.jpg';
 import alquiler from '@/uploads/equipment-rental.jpeg';
+import { useNavigate } from 'react-router-dom';
 
 const cards = [
     {
         title: 'Casos de éxito',
         image: casos,
+        path: '/success-cases'
     },
     {
         title: 'Eficiencia energética',
         image: eficiencia,
+        path: '/solutions/energy-efficiency'
     },
     {
         title: 'Termografía infrarroja',
         image: termografia,
+        path: '/solutions/infrared-thermography'
     },
     {
         title: 'Energías renovables',
         image: energias,
+        path: '/solutions/renewable-energy'
     },
     {
         title: 'Capacitación',
         image: capacitacion,
+        path: '/solutions/training'
     },
     {
         title: 'Alquiler de equipos',
         image: alquiler,
+        path: '/solutions/equipment-rental'
     },
 ];
 
@@ -42,11 +49,19 @@ const fadeInUp = {
     visible: { opacity: 1, y: 0 },
 };
 
+
+
 const NuestraEmpresa = () => {
     const { ref: section1Ref, inView: section1InView } = useInView({
         triggerOnce: true,
         threshold: 0.1,
     });
+    const navigate = useNavigate()
+
+    const handleRoute = (path) => {
+        // Navigate to the specified path using Next.js router
+        navigate(path)
+    };
 
     return (
         <div>
@@ -79,6 +94,7 @@ const NuestraEmpresa = () => {
                                     color="default"
                                     radius="lg"
                                     size="sm"
+                                    onClick={() => handleRoute(card.path)}
                                 >
                                     <span className="relative z-10 group-hover:scale-105 transition-transform duration-300 ease-in-out">
                                         Explorar
