@@ -1,15 +1,17 @@
+import { AuthContext } from '@/context/AuthContext';
+import { getProfile } from '@/services/UserService';
+import { TextField } from '@mui/material';
+import { Button } from '@nextui-org/react';
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '@/context/AuthContext';
-import { getProfile, loginUser } from '@/services/UserService';
-import { Button } from '@nextui-org/react';
-import { TextField } from '@mui/material';
+import { loginUser } from '../../services/AuthService';
 
 const Login = () => {
   const [form, setForm] = useState({
     email: '',
     password: ''
   });
+  const [loading, setLoading] = useState(false);
 
   const { setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -17,13 +19,16 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const response = await loginUser(form);
       if (!response) {
         console.log("error al iniciar sesión");
         return;
       }
-      const user = await getProfile();
-      setAuth(user.data);
+      // const user = await getProfile();
+      // console.log("Respuesta de Profile", user)
+      console.log("Respuesta de Login", response.user)
+      setAuth(response.user);
 
       const lastVisited = localStorage.getItem('lastVisited');
       if (lastVisited) {
@@ -35,6 +40,8 @@ const Login = () => {
     }
     catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,7 +80,8 @@ const Login = () => {
             type="submit"
             className="w-full bg-indigo-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-base font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Iniciar sesión
+            {loading ? 'Cargando...' : 'Iniciar sesión'}
+            {/* Iniciar sesión */}
           </Button>
           <div className="flex justify-between mx-2">
             <Link to="/register" className="text-indigo-600 hover:underline">

@@ -1,12 +1,15 @@
 import { createContext, useEffect, useState } from 'react';
-import { getProfile, logoutUser } from '@/services/UserService';
+import { getProfile } from '@/services/UserService';
 import { useNavigate } from 'react-router-dom';
+import { logoutUser } from '../services/AuthService';
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
 	const [auth, setAuth] = useState(null);
+	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
+	console.log(auth)
 
 	useEffect(() => {
 		const autenticarUsuario = async () => {
@@ -17,18 +20,20 @@ const AuthProvider = ({ children }) => {
 			} catch (error) {
 				console.error(error);
 				setAuth(null);
+			} finally {
+				setLoading(false);
 			}
 		}
 		autenticarUsuario();
-	}, []);
+	}, [auth]);
 
 	const logout = () => {
 		logoutUser();
 		setAuth(null);
-		navigate('/');
-		setTimeout(() => {
-			window.location.reload();
-		}, 200); // Le das un pequeño retraso para asegurar que el logout se complete
+		// navigate('/');
+		// setTimeout(() => {
+		// 	window.location.reload();
+		// }, 200); // Le das un pequeño retraso para asegurar que el logout se complete
 	};
 
 	return (

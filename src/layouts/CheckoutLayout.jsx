@@ -1,11 +1,9 @@
-import React, { useContext, useState } from 'react'
 import CheckoutStages from '@/components/CheckoutStages'
-import logo from '@/uploads/logo.png'
-import { Link, NavLink, Outlet } from 'react-router-dom'
-import Footer from '@/components/Footer'
 import { AuthContext } from '@/context/AuthContext'
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
-import { FaUser, FaUserCircle } from 'react-icons/fa'
+import logo from '@/uploads/logo.png'
+import React, { useContext, useState } from 'react'
+import { FaUserCircle } from 'react-icons/fa'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 
 const CheckoutLayout = () => {
     const { auth, logout } = useContext(AuthContext)

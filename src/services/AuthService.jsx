@@ -60,4 +60,12 @@ const updateUser = async (id, form) => {
     }
 }
 
-export { loginUser, registerUser, getUserById, updateUser };
+const logoutUser = async () => {
+    try {
+        await clientAxios.post('/auth/logout');
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export { loginUser, registerUser, getUserById, updateUser, logoutUser };
