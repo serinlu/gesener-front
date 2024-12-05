@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useId } from 'react';
+import React, { useState, useEffect, useId, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getProducts } from '@/services/ProductService';
 import { getCategories } from '@/services/CategoryService';
@@ -8,6 +8,9 @@ import { useCart } from '@/hooks/useCart';
 import ProductFilters from '@/components/ProductFilters';
 import { Helmet } from 'react-helmet-async';
 import Cart from '@/components/Cart';
+import debounce from "lodash.debounce";
+import clientAxios from '@/config/axios';
+import { ProductCard } from '@/components/ProductCard'
 
 const accordionVariants = {
     open: {
@@ -35,6 +38,15 @@ const Product = () => {
     const [loading, setLoading] = useState(true);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedBrands, setSelectedBrands] = useState([]);
+    const [cartItems, setCartItems] = useState([]);
+
+    //estados para la busqueda de productos
+    const [searchQuery, setSearchQuery] = useState('');
+    const [results, setResults] = useState({
+        products: []
+    });
+    const [error, setError] = useState(null);
+
     const [categoryAccordionOpen, setCategoryAccordionOpen] = useState(false);
     const [brandAccordionOpen, setBrandAccordionOpen] = useState(false);
     const [priceAccordionOpen, setPriceAccordionOpen] = useState(false);
@@ -43,23 +55,68 @@ const Product = () => {
     const [priceRange, setPriceRange] = useState([0, 50000]); // Rango actual (min y max)
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [filtrosMenu, setFiltrosMenu] = useState(false)
+    const searchRef = useRef(null)
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        setLoading(true);
+        const [productsRes, categoriesRes, brandsRes] = await Promise.all([getProducts(), getCategories(), getBrands()]);
+        setProducts(productsRes);
+        setCategories(categoriesRes);
+        setBrands(brandsRes);
+        setFilteredProducts(productsRes);
+        setLoading(false);
+    };
 
     const toggleCart = () => {
         setIsCartOpen(!isCartOpen); // Alterna el estado de apertura del carrito
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            const [productsRes, categoriesRes, brandsRes] = await Promise.all([getProducts(), getCategories(), getBrands()]);
-            setProducts(productsRes);
-            setCategories(categoriesRes);
-            setBrands(brandsRes);
-            setFilteredProducts(productsRes);
+    const fetchSearchResults = debounce(async (query) => {
+        if (!query) {
+            setFilteredProducts(products); // Si no hay búsqueda, muestra todos los productos
+            console.log("Consulta vacía, resultados mostrados nuevamente.");
+            return;
+        }
+
+        console.log("Buscando productos con query:", query);
+        setLoading(true);
+        setError(null);
+
+        try {
+            // Filtrar los productos ya obtenidos por el nombre del producto
+            const filtered = products.filter(product =>
+                product.name.toLowerCase().includes(query.toLowerCase())
+            );
+
+            setFilteredProducts(filtered); // Actualiza el estado de productos filtrados
+        } catch (err) {
+            console.error("Error al buscar productos:", err);
+            setError('Error al buscar. Intenta nuevamente.');
+        } finally {
             setLoading(false);
-        };
-        fetchData();
-    }, []);
+        }
+    }, 300);
+
+
+    const handleResultSelect = () => {
+        setSearchQuery(null);
+    }
+
+    const clearSearchQuery = () => {
+        fetchSearchResults();
+        setSearchQuery('');
+        fetchData()
+    }
+
+    const handleInputChange = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+        fetchSearchResults(query); // Realiza la búsqueda sobre los productos ya cargados
+    };
 
     // Unificar el filtro por categorías y marcas en un solo efecto
     useEffect(() => {
@@ -85,12 +142,34 @@ const Product = () => {
         setFilteredProducts(filtered);
     }, [selectedCategories, selectedBrands, priceRange, products]);
 
-    const { addToCart } = useCart()
+
+    const { addToCart, removeFromCart } = useCart()
 
     const handleAddToCart = (product) => {
-        addToCart(product); // Agregar el producto al carrito
-        toggleCart(); // Abrir el carrito
+        // Validaciones antes de llamar a addToCart
+        if (product.countInStock === 0) {
+            alert("Este producto está agotado.");
+            return;
+        }
+
+        const existingItem = cartItems.find(item => item._id === product._id); // cartItems viene de useCart() o un contexto global.
+
+        if (existingItem) {
+            if (existingItem.quantity >= product.maxItems) {
+                alert(`Has alcanzado el máximo permitido de ${product.maxItems} para este producto.`);
+                return;
+            }
+
+            if (existingItem.quantity >= product.countInStock) {
+                alert("No hay suficiente stock disponible para agregar más unidades.");
+                return;
+            }
+        }
+
+        // Si las validaciones pasan, llama a addToCart del hook
+        addToCart(product);
     };
+
 
     const handleCategoryChange = (categoryId) => {
         setLoading(true);
@@ -150,7 +229,6 @@ const Product = () => {
                     className='bg-blue-500 text-white font-bold rounded-lg'
                     onClick={handleFiltros}>
                     Filtros
-
                 </Button>
             </div>
             {filtrosMenu && (
@@ -191,74 +269,61 @@ const Product = () => {
                 </div>
 
                 {/* Contenido principal con los productos */}
-                <div className="w-full mx-auto flex flex-col items-center md:w-2/3">
+                <div ref={searchRef} className="w-full mx-auto flex flex-col items-center md:w-2/3">
+                    <h1 className='w-full text-3xl my-4'>Catálogo</h1>
+                    <div className='w-full flex items-center justify-between my-4'>
+                        <div className='w-2/3 relative'>
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                placeholder="Buscar productos por nombre..."
+                                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none"
+                                onChange={handleInputChange}
+                            />
+                            <button
+                                type="button"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                onClick={() => clearSearchQuery()}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <div className='flex items-center'>
+                            <h1 className='pr-2'>Ordenar por:</h1>
+                            <select className='border py-2 px-2 rounded-lg border-gray-300 focus:outline-none'>
+                                <option value="">Seleccione</option>
+                                <option value="price-asc">Precio: Menor a Mayor</option>
+                                <option value="price-desc">Precio: Mayor a Menor</option>
+                                <option value="name-asc">Nombre: A-Z</option>
+                                <option value="name-desc">Nombre: Z-A</option>
+                            </select>
+                        </div>
+                    </div>
+
                     {loading ? (
                         <div className="flex justify-center items-center h-full">
                             <h1>Cargando productos...</h1>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product) => (
-                                    <div
+                        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {filteredProducts.length > 0
+                                ? filteredProducts.map((product) => (
+                                    <ProductCard
                                         key={product._id}
-                                        className="product-card w-full sm:w-auto border rounded-lg p-4 flex flex-col items-center bg-white shadow-md hover:shadow-lg transition-shadow"
-                                    >
-                                        {/* Contenedor para la imagen */}
-                                        <div className="relative w-full pb-[100%] overflow-hidden rounded-lg mb-4">
-                                            <img
-                                                src={product.imageUrl}
-                                                alt={product.name}
-                                                className="absolute top-0 left-0 w-full h-full object-cover"
-                                            />
-                                        </div>
-
-                                        {/* Información del producto */}
-                                        <div className="w-full text-center">
-                                            <div className="text-sm text-gray-500 mb-2">
-                                                {product.brand ? product.brand.name : 'Sin marca'}
-                                            </div>
-
-                                            <Link
-                                                to={`/products/${product._id}`}
-                                                className="text-lg font-bold mb-2 block hover:text-indigo-600"
-                                            >
-                                                {product.name}
-                                            </Link>
-                                            <p className="text-gray-600 mb-2">{product.description}</p>
-                                            <p className="font-bold mb-4">$ {product.price}</p>
-
-                                            {/* Mostrar las categorías */}
-                                            <div className="text-sm text-gray-500 mb-4">
-                                                <strong>Categorías: </strong>
-                                                {product.categories.length === 0
-                                                    ? 'Sin categorizar'
-                                                    : product.categories.map((category) => category.name).join(', ')}
-                                            </div>
-
-                                            {/* Botón de agregar */}
-                                            <div className="w-full">
-                                                <Button
-                                                    className={`bg-indigo-600 text-white font-bold w-full py-2 rounded-xl hover:bg-indigo-700 transition ${product.countInStock === 0 ? 'bg-gray-300 cursor-not-allowed hover:bg-gray-300' : ''}`}
-                                                    onClick={() => handleAddToCart(product)}
-                                                    disabled={product.countInStock === 0}
-                                                >
-                                                    {product.countInStock === 0 ? 'Sin stock' : 'Agregar'}
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        product={product}
+                                        onAddToCart={handleAddToCart}
+                                        onRemoveFromCart={() => removeFromCart(product)}
+                                        cartItems={cartItems} // Pasa el carrito actual
+                                    />
                                 ))
-                            ) : (
-                                <div className="col-span-3 text-center">
-                                    <h2>No hay productos disponibles.</h2>
-                                </div>
-                            )}
+                                : (
+                                    <div className="col-span-3 text-center">
+                                        <h2>No hay productos disponibles.</h2>
+                                    </div>
+                                )}
                         </div>
                     )}
                 </div>
-
-
             </div>
         </div>
     );

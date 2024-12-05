@@ -15,31 +15,46 @@ export const updateLocalStorage = (state) => {
 
 const UPDATE_STATE_BY_ACTION = {
     [CART_ACTION_TYPES.ADD_TO_CART]: (state, action) => {
-        const { _id } = action.payload;
+        const { _id, maxItems } = action.payload;
         const productInCartIndex = state.findIndex((item) => item._id === _id);
-
+    
+        // Si el producto ya existe en el carrito
         if (productInCartIndex >= 0) {
+            const existingProduct = state[productInCartIndex];
+
+            if(existingProduct){
+                return state
+            }
+    
+            // Verificar si se alcanzó la cantidad máxima permitida
+            if (existingProduct.quantity >= maxItems) {
+                console.warn("Cantidad máxima alcanzada para este producto.");
+                return state; // No modificar el estado si ya alcanzó el límite
+            }
+    
+            // Incrementar la cantidad si no se ha alcanzado el límite
             const newState = [
                 ...state.slice(0, productInCartIndex),
                 {
-                    ...state[productInCartIndex],
-                    quantity: state[productInCartIndex].quantity + 1,
+                    ...existingProduct,
+                    quantity: existingProduct.quantity + 1,
                 },
                 ...state.slice(productInCartIndex + 1),
             ];
-
+    
             updateLocalStorage(newState);
             return newState;
         }
-
+    
+        // Si el producto no existe en el carrito, agregarlo
         const newState = [
             ...state,
             {
-                ...action.payload, // product
+                ...action.payload, // Datos del producto
                 quantity: 1,
             },
         ];
-
+    
         updateLocalStorage(newState);
         return newState;
     },

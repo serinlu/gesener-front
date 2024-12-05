@@ -32,17 +32,26 @@ function useCartReducer() {
         });
     };
 
+    const isProductInCart = (productId) => {
+        return state.some(item => item._id === productId);
+    };
+
+    const getProductQuantityInCart = (productId) => {
+        const product = state.find(item => item._id === productId);
+        return product ? product.quantity : 0;
+    };
+
     const clearCart = () => dispatch({ type: 'CLEAR_CART' })
 
     // const toggleCart = () => setIsCartOpen(prev => !prev)
 
-    return { state, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, clearCart }
+    return { state, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, clearCart, isProductInCart, getProductQuantityInCart}
 }
 
 // la dependencia de usar React Context
 // es MÍNIMA
 export function CartProvider({ children }) {
-    const { state, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, clearCart } = useCartReducer()
+    const { state, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity, clearCart, isProductInCart, getProductQuantityInCart } = useCartReducer()
 
     return (
         <CartContext.Provider value={{
@@ -51,7 +60,9 @@ export function CartProvider({ children }) {
             removeFromCart,
             removeItemUnitFromCart,
             setItemQuantity,
-            clearCart
+            clearCart,
+            isProductInCart,
+            getProductQuantityInCart
         }}
         >
             {children}

@@ -7,40 +7,41 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
 	const [auth, setAuth] = useState(null);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true); // Inicializa en `true` para mostrar el estado de carga inicial
 	const navigate = useNavigate();
-	console.log(auth)
 
 	useEffect(() => {
 		const autenticarUsuario = async () => {
 			try {
+				setLoading(true); // Asegúrate de activar el estado de carga
 				const user = await getProfile();
 				setAuth(user.data);
-				console.log(auth)
+				console.log("Usuario autenticado:", user.data);
 			} catch (error) {
-				console.error(error);
+				console.error("Error al autenticar usuario:", error);
 				setAuth(null);
 			} finally {
-				setLoading(false);
+				setLoading(false); // Finaliza el estado de carga
 			}
-		}
+		};
 		autenticarUsuario();
-	}, [auth]);
+	}, []); // El array vacío evita el ciclo infinito
 
 	const logout = () => {
 		logoutUser();
 		setAuth(null);
-		// navigate('/');
-		// setTimeout(() => {
-		// 	window.location.reload();
-		// }, 200); // Le das un pequeño retraso para asegurar que el logout se complete
+		// Opcional: redirige y recarga la página
+		navigate('/');
+		setTimeout(() => {
+			window.location.reload();
+		}, 200);
 	};
 
 	return (
-		<AuthContext.Provider value={{ auth, setAuth, logout }}>
+		<AuthContext.Provider value={{ auth, setAuth, logout, loading }}>
 			{children}
 		</AuthContext.Provider>
 	);
-}
+};
 
 export { AuthContext, AuthProvider };
