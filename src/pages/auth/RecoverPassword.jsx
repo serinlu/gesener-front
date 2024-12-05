@@ -8,9 +8,11 @@ const RecoverPassword = () => {
   const [message, setMessage] = useState(''); // Mensaje de respuesta
   const [error, setError] = useState(''); // Mensaje de error
   const [emailSent, setEmailSent] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       // Enviamos la solicitud de recuperación de contraseña
@@ -20,10 +22,13 @@ const RecoverPassword = () => {
       setMessage(response.data.message);
       setError('');
       setEmailSent(true)
+      setLoading(false)
     } catch (err) {
       // Manejo de errores
       setError(err.response?.data?.message || 'Error al enviar el correo de recuperación');
       setMessage('');
+      setEmailSent(false)
+      setLoading(false)
     }
   };
 
@@ -47,9 +52,9 @@ const RecoverPassword = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-base font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className={`w-full bg-indigo-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-base font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${loading && 'bg-indigo-400 hover:bg-indigo-400'}`}
           >
-            Enviar enlace de recuperación
+            {loading ? 'Procesando' : 'Enviar enlace de recuperación'}
           </button>
 
           {/* Mostrar mensaje de éxito o error */}
