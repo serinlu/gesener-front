@@ -43,7 +43,7 @@ const Checkout = () => {
     //     notes: ''
     // });
 
-    useEffect(() => {
+    const getData = () => {
         // Verificamos que `auth` esté disponible antes de actualizar `formData`
         if (auth) {
             const departmentName = auth.department ? departamentos.find(d => d.id_ubigeo === auth.department)?.nombre_ubigeo : '';
@@ -69,6 +69,7 @@ const Checkout = () => {
                 cart: cart,
                 userId: auth._id,
             });
+            console.log(auth);
             setProvinces(auth.department ? provincias[auth.department] : []);
             setDistricts(auth.province ? distritos[auth.province] : []);
             setLoading(false); // Datos cargados
@@ -77,6 +78,10 @@ const Checkout = () => {
             setSubtotal(parseFloat(localStorage.getItem('subtotal')).toFixed(2));
             setEnvio(parseFloat(localStorage.getItem('envio')).toFixed(2));
         }
+    }
+
+    useEffect(() => {
+        getData();
     }, [auth]); // Se ejecuta cuando `auth` cambia
 
     const handleChange = (e) => {

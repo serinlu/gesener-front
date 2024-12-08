@@ -11,7 +11,7 @@ const Login = () => {
     email: '',
     password: ''
   });
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const { setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      // setLoading(true);
       const response = await loginUser(form);
       if (!response) {
         console.log("error al iniciar sesión");
@@ -40,8 +40,6 @@ const Login = () => {
     }
     catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -80,8 +78,8 @@ const Login = () => {
             type="submit"
             className="w-full bg-indigo-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-base font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            {loading ? 'Cargando...' : 'Iniciar sesión'}
-            {/* Iniciar sesión */}
+            {/* {loading ? 'Cargando...' : 'Iniciar sesión'} */}
+            Iniciar sesión
           </Button>
           <div className="flex justify-between mx-2">
             <Link to="/register" className="text-indigo-600 hover:underline">

@@ -14,7 +14,7 @@ import { useCart } from "@/hooks/useCart";
 const Navbar = () => {
     const { cart } = useCart()
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
-    const { auth, logout } = useContext(AuthContext);
+    const { auth, logout, loading, setLoading } = useContext(AuthContext);
     const [results, setResults] = useState({
         products: [],
         news: [],
@@ -22,7 +22,7 @@ const Navbar = () => {
     })
     const [isScrollingUp, setIsScrollingUp] = useState(true)
     const [searchQuery, setSearchQuery] = useState('');
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [lastScrollY, setLastScrollY] = useState(0)
     const [isOpen, setIsOpen] = useState(false); // Controla la visibilidad del menú lateral
@@ -330,7 +330,7 @@ const Navbar = () => {
                                     className="flex items-center text-lg p-2 rounded-md bg-white hover:bg-gray-100 transition-all"
                                 >
                                     <FaUserCircle className="text-2xl sm:mr-2" />
-                                    <h1 className="hidden sm:block">{auth ? auth.name : 'Ingresar'}</h1>
+                                    <h1 className="hidden sm:block">{auth ? (loading ? "cargando..." : auth.name) : 'Ingresar'}</h1>
                                 </button>
 
                                 {/* Dropdown */}
