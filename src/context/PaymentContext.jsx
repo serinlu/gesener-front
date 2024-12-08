@@ -3,7 +3,8 @@ import React, { createContext, useState, useContext } from 'react';
 const PaymentContext = createContext();
 
 export const PaymentProvider = ({ children }) => {
-    // const [formData, setFormData] = useState(null);
+    const [orderData, setOrderData] = useState(null);
+    const [loadingOrder, setLoadingOrder] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         lastname: '',
@@ -21,11 +22,11 @@ export const PaymentProvider = ({ children }) => {
         postalCode: '',
         phone: '',
         email: '',
-        notes: ''
+        notes: '',
     });
 
     return (
-        <PaymentContext.Provider value={{ formData, setFormData }}>
+        <PaymentContext.Provider value={{ formData, setFormData, orderData, setOrderData, loadingOrder, setLoadingOrder }}>
             {children}
         </PaymentContext.Provider>
     );
