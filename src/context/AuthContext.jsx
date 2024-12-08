@@ -13,19 +13,19 @@ const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		const autenticarUsuario = async () => {
 			try {
-				setLoading(true); // Asegúrate de activar el estado de carga
+				setLoading(true); // Activar la carga
 				const user = await getProfile();
 				setAuth(user.data);
-				setLoading(false);
 			} catch (error) {
 				console.error("Error al autenticar usuario:", error);
 				setAuth(null);
 			} finally {
-				setLoading(false); // Finaliza el estado de carga
+				setLoading(false); // Finalizar carga
 			}
 		};
 		autenticarUsuario();
 	}, []);
+
 
 	const logout = () => {
 		logoutUser();
