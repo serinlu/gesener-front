@@ -45,6 +45,7 @@ import { PaymentProvider } from "@/context/PaymentContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 import NotFoundPage from "@/pages/notFound/NotFound";
+import ResetPassword from "@/pages/auth/ResetPassword";
 
 function App() {
   return (
@@ -83,6 +84,7 @@ function App() {
                   <Route path="login" element={<Login />} />
                   <Route path="register" element={<Register />} />
                   <Route path="recover-password" element={<RecoverPassword />} />
+                  <Route path="reset-password/:token" element={<ResetPassword />} />
                 </Route>
                 <Route path="/dashboard" element={
                   <ProtectedRoute allowedRoles={['admin']}>

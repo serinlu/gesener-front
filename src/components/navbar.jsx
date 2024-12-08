@@ -55,7 +55,6 @@ const Navbar = () => {
     const handleResultSelect = () => {
         setSearchQuery(null);
         toggleSearch()
-        // setOpenSearch(!openSearch);
     }
 
     const handleInputChange = (e) => {

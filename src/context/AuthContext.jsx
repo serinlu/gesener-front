@@ -13,16 +13,17 @@ const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		const autenticarUsuario = async () => {
 			try {
+				setLoading(true); // Asegúrate de activar el estado de carga
 				const user = await getProfile();
 				setAuth(user.data);
 				setLoading(false);
 			} catch (error) {
-				console.error(error);
+				console.error("Error al autenticar usuario:", error);
 				setAuth(null);
 			} finally {
-				setLoading(false);
+				setLoading(false); // Finaliza el estado de carga
 			}
-		}
+		};
 		autenticarUsuario();
 	}, []);
 
@@ -47,6 +48,6 @@ const AuthProvider = ({ children }) => {
 			{children}
 		</AuthContext.Provider>
 	);
-}
+};
 
 export { AuthContext, AuthProvider };
