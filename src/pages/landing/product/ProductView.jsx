@@ -10,10 +10,33 @@ const ProductView = () => {
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isAddedToCart, setIsAddedToCart] = useState(false)
 
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
   };
+
+  const getCart = () => {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    console.log(cart);
+
+    // Comprobar si el producto actual ya está en el carrito
+    const productExists = cart.some((item) => item._id === product._id);
+    setIsAddedToCart(productExists);
+  }
+
+  useEffect(() => {
+    getCart();
+
+    const handleStorageChange = () => {
+      getCart();
+    }
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [])
 
   useEffect(() => {
     const getProduct = async () => {

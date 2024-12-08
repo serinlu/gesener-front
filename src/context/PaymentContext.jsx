@@ -17,7 +17,6 @@ export const PaymentProvider = ({ children }) => {
         department: '',
         province: '',
         district: '',
-        // city: '',
         postalCode: '',
         phone: '',
         email: '',
