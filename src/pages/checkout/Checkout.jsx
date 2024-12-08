@@ -9,11 +9,12 @@ import distritos from '@/utils/distritos.json';
 import { updateUser } from '@/services/AuthService';
 import { Helmet } from 'react-helmet-async';
 import { usePayment } from '@/context/PaymentContext';
+import { createOrder } from '@/services/OrderService';
 
 const Checkout = () => {
     const { auth } = useContext(AuthContext);
     const { cart } = useCart();
-    const { formData, setFormData } = usePayment();
+    const { formData, setFormData, setOrderData, setLoadingOrder } = usePayment();
     const navigate = useNavigate();
     const [saveData, setSaveData] = useState(false);
     const [subTotal, setSubtotal] = useState(null);
@@ -45,29 +46,25 @@ const Checkout = () => {
     const getData = () => {
         // Verificamos que `auth` esté disponible antes de actualizar `formData`
         if (auth) {
-            const departmentName = auth.department ? departamentos.find(d => d.id_ubigeo === auth.department)?.nombre_ubigeo : '';
-            const provinceName = auth.province ? provincias[auth.department]?.find(p => p.id_ubigeo === auth.province)?.nombre_ubigeo : '';
-            const districtName = auth.district ? distritos[auth.province]?.find(d => d.id_ubigeo === auth.district)?.nombre_ubigeo : '';
-
             setFormData({
-                name: auth.name || '',
-                lastname: auth.lastname || '',
-                companyName: auth.companyName || '',
-                socialReason: auth.socialReason || '',
-                ruc: auth.ruc || '',
-                tipoDocumento: auth.tipoDocumento || '',
-                numDoc: auth.numDoc || '',
-                address: auth.address || '',
-                department: auth.department || '',
-                province: auth.province || '',
-                district: auth.district || '',
-                postalCode: auth.postalCode || '',
-                phone: auth.phone || '',
-                email: auth.email || '',
+                name: auth.name,
+                lastname: auth.lastname,
+                companyName: auth.companyName,
+                socialReason: auth.socialReason,
+                ruc: auth.ruc,
+                tipoDocumento: auth.tipoDocumento,
+                numDoc: auth.numDoc,
+                address: auth.address,
+                department: auth.department,
+                province: auth.province,
+                district: auth.district,
+                city: auth.city,
+                postalCode: auth.postalCode,
+                phone: auth.phone,
+                email: auth.email,
                 cart: cart,
                 userId: auth._id,
             });
-            console.log(auth);
             setProvinces(auth.department ? provincias[auth.department] : []);
             setDistricts(auth.province ? distritos[auth.province] : []);
             setLoading(false); // Datos cargados
@@ -81,6 +78,29 @@ const Checkout = () => {
     useEffect(() => {
         getData();
     }, [auth]); // Se ejecuta cuando `auth` cambia
+
+    // Crear la orden
+    const generateOrder = async () => {
+        setLoadingOrder(true);
+        const transformData = {
+            ...formData,
+            products: formData.cart.map((product) => product._id),
+            payer: auth._id,
+        };
+        const response = await createOrder(transformData);
+
+        if (response) {
+            // console.log(response.data);
+            // setOrderData(response.data)
+
+            // Guardar la orden en el contexto
+            setOrderData(response.data);
+            setLoadingOrder(false);
+        } else {
+            console.error("Error al crear la orden");
+            setLoadingOrder(false);
+        }
+    }
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -111,6 +131,8 @@ const Checkout = () => {
                 console.error("Error al actualizar los datos");
             }
         }
+
+        generateOrder();
 
         navigate('/checkout/payment');
     };

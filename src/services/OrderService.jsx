@@ -1,6 +1,6 @@
 import clientAxios from "@/config/axios";
 
-export const createOrder = async (order) => {
+export const createOrder = async (data) => {
     try {
         const config = {
             headers: {
@@ -8,7 +8,7 @@ export const createOrder = async (order) => {
             },
         };
 
-        const response = await clientAxios.post('/order/create-order', order, config);
+        const response = await clientAxios.post('/order/create-order', data, config);
 
         return response;
     } catch (error) {

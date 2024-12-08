@@ -34,15 +34,6 @@ const AuthProvider = ({ children }) => {
 		navigate('/login');
 	};
 
-	// const logout = () => {
-	// 	logoutUser();
-	// 	setAuth(null);
-	// 	// navigate('/');
-	// 	// setTimeout(() => {
-	// 	// 	window.location.reload();
-	// 	// }, 200); // Le das un pequeño retraso para asegurar que el logout se complete
-	// };
-
 	return (
 		<AuthContext.Provider value={{ auth, setAuth, logout, loading, setLoading }}>
 			{children}

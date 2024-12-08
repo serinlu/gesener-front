@@ -1,6 +1,6 @@
 import clientAxios from "@/config/axios"
 
-export const generatePayment = async (orderId) => {
+export const generatePreference = async (orderId) => {
     try {
         const config = {
             headers: {
@@ -8,7 +8,7 @@ export const generatePayment = async (orderId) => {
             },
         };
 
-        const response = await clientAxios.post(`/order/generate-payment/${orderId}`, config);
+        const response = await clientAxios.post(`/order/generate-preference/${orderId}`, config);
 
         return response;
     } catch (error) {
