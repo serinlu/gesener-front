@@ -322,7 +322,6 @@ const Navbar = () => {
                         </div>
 
                         <div className="flex items-center justify-between sm:gap-2 xl:gap-4">
-                            {/* Dropdown de usuario */}
                             <div className="relative">
                                 <button
                                     onClick={() => setShowUserDropdown(!showUserDropdown)}
@@ -342,12 +341,11 @@ const Navbar = () => {
                                             auth.role === 'admin' ? (
                                                 itemsAuthUser.map((item) => (
                                                     <li key={item.key}>
-                                                        {/* Verifica si el item tiene una acción, de ser así, ejecuta la acción */}
                                                         {item.action ? (
                                                             <button
                                                                 onClick={() => {
-                                                                    item.action(); // Ejecuta la acción (logout en este caso)
-                                                                    setShowUserDropdown(false); // Cierra el dropdown
+                                                                    item.action();
+                                                                    setShowUserDropdown(false);
                                                                 }}
                                                                 className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500 w-full text-left"
                                                             >
@@ -356,7 +354,7 @@ const Navbar = () => {
                                                         ) : (
                                                             <NavLink
                                                                 to={item.path}
-                                                                onClick={() => setShowUserDropdown(false)} // Cierra el dropdown al hacer clic
+                                                                onClick={() => setShowUserDropdown(false)}
                                                                 className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500"
                                                             >
                                                                 {item.label}
@@ -367,12 +365,11 @@ const Navbar = () => {
                                             ) : (
                                                 itemsClient.map((item) => (
                                                     <li key={item.key}>
-                                                        {/* Verifica si el item tiene una acción, de ser así, ejecuta la acción */}
                                                         {item.action ? (
                                                             <button
                                                                 onClick={() => {
-                                                                    item.action(); // Ejecuta la acción (logout en este caso)
-                                                                    setShowUserDropdown(false); // Cierra el dropdown
+                                                                    item.action();
+                                                                    setShowUserDropdown(false);
                                                                 }}
                                                                 className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500 w-full text-left"
                                                             >
@@ -381,7 +378,7 @@ const Navbar = () => {
                                                         ) : (
                                                             <NavLink
                                                                 to={item.path}
-                                                                onClick={() => setShowUserDropdown(false)} // Cierra el dropdown al hacer clic
+                                                                onClick={() => setShowUserDropdown(false)}
                                                                 className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500"
                                                             >
                                                                 {item.label}
@@ -393,12 +390,11 @@ const Navbar = () => {
                                         ) : (
                                             ItemsUser.map((item) => (
                                                 <li key={item.key}>
-                                                    {/* Verifica si el item tiene una acción, de ser así, ejecuta la acción */}
                                                     {item.action ? (
                                                         <button
                                                             onClick={() => {
-                                                                item.action(); // Ejecuta la acción (logout en este caso)
-                                                                setShowUserDropdown(false); // Cierra el dropdown
+                                                                item.action();
+                                                                setShowUserDropdown(false);
                                                             }}
                                                             className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500 w-full text-left"
                                                         >
@@ -407,7 +403,7 @@ const Navbar = () => {
                                                     ) : (
                                                         <NavLink
                                                             to={item.path}
-                                                            onClick={() => setShowUserDropdown(false)} // Cierra el dropdown al hacer clic
+                                                            onClick={() => setShowUserDropdown(false)}
                                                             className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500"
                                                         >
                                                             {item.label}
