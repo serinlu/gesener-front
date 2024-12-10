@@ -47,6 +47,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import NotFoundPage from "@/pages/notFound/NotFound";
 import ResetPassword from "@/pages/auth/ResetPassword";
 import EmailVerification from "@/pages/auth/EmailVerification";
+import PurchaseComplete from "@/pages/purchaseComplete/PurchaseComplete";
 
 function App() {
   return (
