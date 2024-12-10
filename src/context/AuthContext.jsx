@@ -15,8 +15,10 @@ const AuthProvider = ({ children }) => {
 			setLoading(true); // Activar la carga
 			try {
 				const user = await getProfile();
-				setAuth(user.data);
-				setLoading(false);
+				if (user) {
+					setAuth(user.data);
+					setLoading(false);
+				}
 			} catch (error) {
 				console.error("Error al autenticar usuario:", error);
 				setAuth(null);
