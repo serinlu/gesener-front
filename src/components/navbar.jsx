@@ -328,13 +328,7 @@ const Navbar = () => {
                                     className="flex items-center text-lg p-2 rounded-md bg-white hover:bg-gray-100 transition-all"
                                 >
                                     <FaUserCircle className="text-2xl sm:mr-2" />
-                                    <h1 className="hidden sm:block">
-                                        {loading
-                                            ? "Cargando..."
-                                            : auth
-                                                ? auth.name
-                                                : "Ingresar"}
-                                    </h1>
+                                    <h1 className="hidden sm:block">{auth ? (loading ? "cargando..." : auth.name) : 'Ingresar'}</h1>
                                 </button>
 
                                 {/* Dropdown */}

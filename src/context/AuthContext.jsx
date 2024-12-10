@@ -12,7 +12,6 @@ const AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		const autenticarUsuario = async () => {
-			setLoading(true); // Activar la carga
 			try {
 				const user = await getProfile();
 				if (user) {
@@ -25,6 +24,7 @@ const AuthProvider = ({ children }) => {
 			} finally {
 				setLoading(false); // Finalizar carga
 			}
+			setLoading(false)
 		};
 		autenticarUsuario();
 	}, []);
