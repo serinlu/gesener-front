@@ -37,7 +37,6 @@ const Checkout = () => {
     //     department: '',
     //     province: '',
     //     district: '',
-    //     city: '',
     //     postalCode: '',
     //     phone: '',
     //     email: '',

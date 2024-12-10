@@ -18,7 +18,7 @@ const UsersMenu = () => {
     const [form, setForm] = useState({
         name: '', lastname: '', companyNmae: '', socialReason: '', ruc: '',
         tipoDocumento: '', numDoc: '', department: '', address: '', province: '',
-        district: '', city: '', postalCode: '', phone: '', email: '', role: ''
+        district: '', postalCode: '', phone: '', email: '', role: ''
     })
     const [authForm, setAuthForm] = useState({ email: '', password: '' })
     const [provinces, setProvinces] = useState([])
@@ -37,7 +37,7 @@ const UsersMenu = () => {
                 name: response.name, lastname: response.lastname, companyNmae: response.companyNmae || '-',
                 socialReason: response.socialReason || '-', ruc: response.ruc || '-', tipoDocumento: response.tipoDocumento || '-',
                 numDoc: response.numDoc || '-', department: response.department || '-', address: response.address || '-',
-                province: response.province || '-', district: response.district || '-', city: response.city || '-',
+                province: response.province || '-', district: response.district || '-',
                 postalCode: response.postalCode || '-', phone: response.phone || '-', email: response.email, role: response.role
             });
         }
@@ -84,7 +84,7 @@ const UsersMenu = () => {
             name: user.name, lastname: user.lastname, companyNmae: user.companyNmae || '-',
             socialReason: user.socialReason || '-', ruc: user.ruc || '-', tipoDocumento: user.tipoDocumento || '-',
             numDoc: user.numDoc || '-', department: user.department || '-', address: user.address || '-',
-            province: user.province || '-', district: user.district || '-', city: user.city || '-',
+            province: user.province || '-', district: user.district || '-',
             postalCode: user.postalCode || '-', phone: user.phone || '-', email: user.email, role: user.role
         });
         setProvinces([]); // Reiniciar provincias al abrir el modal

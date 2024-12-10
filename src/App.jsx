@@ -46,7 +46,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 import NotFoundPage from "@/pages/notFound/NotFound";
 import ResetPassword from "@/pages/auth/ResetPassword";
-import PurchaseComplete from "./pages/purchaseComplete/PurchaseComplete";
+import EmailVerification from "@/pages/auth/EmailVerification";
 
 function App() {
   return (
@@ -86,6 +86,7 @@ function App() {
                   <Route path="register" element={<Register />} />
                   <Route path="recover-password" element={<RecoverPassword />} />
                   <Route path="reset-password/:token" element={<ResetPassword />} />
+                  <Route path="verify-email/:token" element={<EmailVerification />} />
                 </Route>
                 <Route path="/dashboard" element={
                   <ProtectedRoute allowedRoles={['admin']}>
