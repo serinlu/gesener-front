@@ -19,6 +19,21 @@ const loginUser = async (form) => {
     }
 };
 
+const checkEmailExists = async (email) => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+        }
+        const response = await clientAxios.post(`/auth/checkEmail`, email, config);
+        return response.data;
+    } catch (error) {
+        console.error('Error en la verificación de correo electrónico:', error.response.data)
+        return null
+    }
+}
 
 const registerUser = async (form) => {
     try {
@@ -68,4 +83,4 @@ const logoutUser = async () => {
     }
 }
 
-export { loginUser, registerUser, getUserById, updateUser, logoutUser };
+export { loginUser, registerUser, getUserById, updateUser, logoutUser, checkEmailExists };
