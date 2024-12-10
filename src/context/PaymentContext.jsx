@@ -3,7 +3,12 @@ import React, { createContext, useState, useContext } from 'react';
 const PaymentContext = createContext();
 
 export const PaymentProvider = ({ children }) => {
-    const [orderData, setOrderData] = useState(null);
+    const [orderData, setOrderData] = useState({
+        products: [""],
+        payer: "",
+        total: 0,
+    });
+    const [paymentData, setPaymentData] = useState(null);
     const [loadingOrder, setLoadingOrder] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
@@ -26,7 +31,7 @@ export const PaymentProvider = ({ children }) => {
     });
 
     return (
-        <PaymentContext.Provider value={{ formData, setFormData, orderData, setOrderData, loadingOrder, setLoadingOrder }}>
+        <PaymentContext.Provider value={{ formData, setFormData, orderData, setOrderData, loadingOrder, setLoadingOrder, paymentData, setPaymentData }}>
             {children}
         </PaymentContext.Provider>
     );

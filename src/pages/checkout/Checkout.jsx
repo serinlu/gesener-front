@@ -84,10 +84,31 @@ const Checkout = () => {
     const generateOrder = async () => {
         setLoadingOrder(true);
         const transformData = {
-            ...formData,
-            products: formData.cart.map((product) => product._id),
-            payer: auth._id,
+            products: cart.map((product) => {
+                return {
+                    title: product.name,
+                    description: product.description,
+                    // category_id: product.categories.map((category) => category.name),
+                    unit_price: product.price,
+                    quantity: product.quantity,
+                };
+            }),
+            payer: {
+                name: formData.name,
+                surname: formData.lastname,
+                email: formData.email,
+                identification: {
+                    type: formData.tipoDocumento,
+                    number: formData.numDoc,
+                },
+                address: {
+                    street_name: formData.address,
+                    // street_number: formData.city,
+                    zip_code: formData.postalCode,
+                },
+            },
         };
+        console.log(transformData)
         const response = await createOrder(transformData);
 
         if (response) {

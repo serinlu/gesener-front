@@ -46,6 +46,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 import NotFoundPage from "@/pages/notFound/NotFound";
 import ResetPassword from "@/pages/auth/ResetPassword";
+import PurchaseComplete from "./pages/purchaseComplete/PurchaseComplete";
 
 function App() {
   return (
@@ -106,6 +107,7 @@ function App() {
                   <Route path="cart" element={<Cart />} />
                   <Route path="user-info" element={<Checkout />} />
                   <Route path='payment' element={<Payment />} />
+                  <Route path='confirmation' element={<PurchaseComplete />} />
                 </Route>
               </Routes>
             </PaymentProvider>

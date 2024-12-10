@@ -8,10 +8,19 @@ export const generatePreference = async (orderId) => {
             },
         };
 
-        const response = await clientAxios.post(`/order/generate-preference/${orderId}`, config);
+        const response = await clientAxios.post(`/orders/generate-preference/${orderId}`, config);
 
         return response;
     } catch (error) {
 
     }
 }
+
+export const verifyPayment = async (paymentId) => {
+    try {
+        const response = await clientAxios.post(`/orders/success/${paymentId}`);
+        return response;
+    } catch (error) {
+        console.error(error);
+    }
+};

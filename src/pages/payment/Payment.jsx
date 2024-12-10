@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 import { usePayment } from '@/context/PaymentContext';
-import { generatePreference } from '../../services/PaymentService';
+import { generatePreference, verifyPayment } from '../../services/PaymentService';
 
 const Payment = () => {
-    const { formData, orderData, loadingOrder } = usePayment();
+    const { formData, orderData, loadingOrder, setPaymentData } = usePayment();
     const [preferenceId, setPreferenceId] = useState(null);
 
     useEffect(() => {
@@ -14,23 +14,23 @@ const Payment = () => {
                 console.error("orderData no está inicializado.");
                 return;
             }
-    
+
             try {
-                console.log(orderData._id); // Verificar que _id esté disponible
+                // console.log(orderData._id); // Verificar que _id esté disponible
                 // const orderByUserId = await getOrderById(orderData._id?.toString());
                 // console.log(orderByUserId);
-    
+
                 const response = await generatePreference(orderData._id);
-                console.log(response);
-    
-                setPreferenceId(response.data.id);
-    
+                // console.log(response);
+
+                setPreferenceId(response.data.paymentUrl.id);
+
                 initMercadoPago('TEST-8166d9c2-d8dd-4273-afa6-77b668c4864b', { locale: 'es-PE' });
             } catch (error) {
                 console.error("Error al crear la preferencia:", error);
             }
         };
-    
+
         if (!loadingOrder) {
             createPreferenceId();
         }
@@ -40,7 +40,15 @@ const Payment = () => {
         <>
             <p>Pagar con Mercado Pago</p>
             <div className='w-72'>
-                    <Wallet initialization={{ preferenceId: preferenceId, redirectMode: 'modal' }} customization={{ texts: { valueProp: 'smart_option' } }} locale='es-PE' />
+                {preferenceId && (
+                    <Wallet
+                        initialization={{ preferenceId: preferenceId, redirectMode: 'modal' }}
+                        customization={{ texts: { valueProp: 'smart_option' } }}
+                        onReady={() => console.log('Wallet is ready')}
+                        onSubmit={(paymentData) => setPaymentData(paymentData)}
+                        locale='es-PE'
+                    />
+                )}
             </div>
         </>
     )

@@ -8,7 +8,7 @@ export const createOrder = async (data) => {
             },
         };
 
-        const response = await clientAxios.post('/order/create-order', data, config);
+        const response = await clientAxios.post('/orders/create-order', data, config);
 
         return response;
     } catch (error) {
