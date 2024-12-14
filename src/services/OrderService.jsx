@@ -15,3 +15,21 @@ export const createOrder = async (data) => {
         console.error(error);
     }
 }
+
+export const getOrderByUser = async (userId) => {
+    try {
+        const response = await clientAxios.get(`/orders/getOrderByUser/${userId}`);
+        return response;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const getLastOrderByUser = async (userId) => {
+    try {
+        const response = await clientAxios.get(`/orders/getLastOrderByUser/${userId}`);
+        return response;
+    } catch (error) {
+        console.error(error);
+    }
+}

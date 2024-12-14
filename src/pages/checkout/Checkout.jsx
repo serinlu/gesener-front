@@ -45,28 +45,28 @@ const Checkout = () => {
 
     const getData = () => {
         // Verificamos que `auth` esté disponible antes de actualizar `formData`
-        if (auth) {
+        if (auth.isAuthenticated) {
             setFormData({
-                name: auth.name,
-                lastname: auth.lastname,
-                companyName: auth.companyName,
-                socialReason: auth.socialReason,
-                ruc: auth.ruc,
-                tipoDocumento: auth.tipoDocumento,
-                numDoc: auth.numDoc,
-                address: auth.address,
-                department: auth.department,
-                province: auth.province,
-                district: auth.district,
-                city: auth.city,
-                postalCode: auth.postalCode,
-                phone: auth.phone,
-                email: auth.email,
+                name: auth.user.user.name,
+                lastname: auth.user.user.lastname,
+                companyName: auth.user.user.companyName,
+                socialReason: auth.user.user.socialReason,
+                ruc: auth.user.user.ruc,
+                tipoDocumento: auth.user.user.tipoDocumento,
+                numDoc: auth.user.user.numDoc,
+                address: auth.user.user.address,
+                department: auth.user.user.department,
+                province: auth.user.user.province,
+                district: auth.user.user.district,
+                city: auth.user.user.city,
+                postalCode: auth.user.user.postalCode,
+                phone: auth.user.user.phone,
+                email: auth.user.user.email,
                 cart: cart,
-                userId: auth._id,
+                userId: auth.user.user._id,
             });
-            setProvinces(auth.department ? provincias[auth.department] : []);
-            setDistricts(auth.province ? distritos[auth.province] : []);
+            setProvinces(auth.user.user.department ? provincias[auth.user.user.department] : []);
+            setDistricts(auth.user.user.province ? distritos[auth.user.user.province] : []);
             setLoading(false); // Datos cargados
 
             setTotal(parseFloat(localStorage.getItem('total')).toFixed(2));
@@ -85,14 +85,17 @@ const Checkout = () => {
         const transformData = {
             products: cart.map((product) => {
                 return {
+                    image_url: product.imageUrl,
                     title: product.name,
                     description: product.description,
+                    category_id: product.category_id[0].name,
                     // category_id: product.categories.map((category) => category.name),
                     unit_price: product.price,
                     quantity: product.quantity,
                 };
             }),
             payer: {
+                id: auth.user.user._id,
                 name: formData.name,
                 surname: formData.lastname,
                 email: formData.email,
@@ -143,9 +146,9 @@ const Checkout = () => {
             delete formData.ruc;
         }
 
-        if (saveData && auth?._id) {
+        if (saveData && auth?.user.user._id) {
             // Guardar los datos en el backend si saveData está marcado
-            const updatedData = await updateUser(auth._id, formData);
+            const updatedData = await updateUser(auth.user.user._id, formData);
             if (updatedData) {
                 console.log("Datos actualizados correctamente");
             } else {

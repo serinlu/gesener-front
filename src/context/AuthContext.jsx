@@ -6,40 +6,49 @@ import { logoutUser } from '../services/AuthService';
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-	const [auth, setAuth] = useState(null);
+	const [auth, setAuth] = useState({ isAuthenticated: false, user: null });
 	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null); // Estado para manejar errores
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		const autenticarUsuario = async () => {
-			setLoading(true); // Activar la carga
+			setLoading(true);
 			try {
 				const user = await getProfile();
 				if (user) {
-					setAuth(user.data);
-					setLoading(false);
+					setAuth({ isAuthenticated: true, user: user.data });
+				} else {
+					setAuth({ isAuthenticated: false, user: null });
 				}
-			} catch (error) {
-				console.error("Error al autenticar usuario:", error);
-				setAuth(null);
+			} catch (err) {
+				console.error("Error al autenticar usuario:", err);
+				setError("No se pudo autenticar al usuario. Por favor, intenta nuevamente.");
+				setAuth({ isAuthenticated: false, user: null });
 			} finally {
-				setLoading(false); // Finalizar carga
+				setLoading(false);
 			}
 		};
+
 		autenticarUsuario();
 	}, []);
 
-
 	const logout = () => {
 		logoutUser();
-		setAuth(null);
+		setAuth({ isAuthenticated: false, user: null });
 		setLoading(false);
 		navigate('/login');
 	};
 
 	return (
 		<AuthContext.Provider value={{ auth, setAuth, logout, loading, setLoading }}>
-			{children}
+			{loading ? (
+				<div className="loading-container">Cargando...</div> // Indicador de carga personalizable
+			) : error ? (
+				<div className="error-container">{error}</div> // Muestra el error si existe
+			) : (
+				children
+			)}
 		</AuthContext.Provider>
 	);
 };

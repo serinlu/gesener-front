@@ -9,7 +9,7 @@ const AuthLayout = () => {
     console.log(auth)
     return (
         <>
-            {auth ? (
+            {auth.isAuthenticated ? (
                 <Navigate to="/" />
             ) : (
                 <div className="min-h-screen flex">
