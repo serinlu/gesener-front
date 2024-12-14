@@ -43,7 +43,7 @@ const CheckoutLayout = () => {
                             className="flex items-center text-lg p-2 rounded-md bg-white hover:bg-gray-100 transition-all"
                         >
                             <FaUserCircle className="text-2xl sm:mr-2" />
-                            <h1 className="hidden sm:block">{auth ? auth.name : 'Ingresar'}</h1>
+                            <h1 className="hidden sm:block">{auth.isAuthenticated ? auth.user.user.name : 'Ingresar'}</h1>
                         </button>
 
                         {/* Dropdown */}
@@ -52,8 +52,8 @@ const CheckoutLayout = () => {
                                 } overflow-hidden`}
                         >
                             <ul className="py-2">
-                                {auth ? (
-                                    auth.role === 'admin' ? (
+                                {auth.isAuthenticated ? (
+                                    auth.user.user.role === 'admin' ? (
                                         itemsAuthUser.map((item) => (
                                             <li key={item.key}>
                                                 {/* Verifica si el item tiene una acción, de ser así, ejecuta la acción */}

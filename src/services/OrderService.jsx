@@ -33,3 +33,12 @@ export const getLastOrderByUser = async (userId) => {
         console.error(error);
     }
 }
+
+export const getAllOrdersByUser = async (userId) => {
+    try {
+        const response = await clientAxios.get(`/orders/getAllOrdersByUser/${userId}`);
+        return response;
+    } catch (error) {
+        console.error(error);
+    }
+}

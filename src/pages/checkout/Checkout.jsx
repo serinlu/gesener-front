@@ -88,8 +88,7 @@ const Checkout = () => {
                     image_url: product.imageUrl,
                     title: product.name,
                     description: product.description,
-                    category_id: product.category_id[0].name,
-                    // category_id: product.categories.map((category) => category.name),
+                    category_id: product.categories[0]?._id?.toString(),
                     unit_price: product.price,
                     quantity: product.quantity,
                 };
@@ -138,7 +137,6 @@ const Checkout = () => {
         e.preventDefault();
         const total = parseFloat(localStorage.getItem('total'))
         formData.total = total;
-        console.log(formData);
         // Aquí puedes manejar el envío de los datos
         if (!factureChecked) {
             delete formData.companyName;

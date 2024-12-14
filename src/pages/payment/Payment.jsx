@@ -21,7 +21,7 @@ const Payment = () => {
                 // console.log(orderByUserId);
 
                 const response = await generatePreference(orderData._id);
-                // console.log(response);
+                console.log(response);
 
                 setPreferenceId(response.data.paymentUrl.id);
 
