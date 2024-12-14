@@ -28,6 +28,7 @@ const AuthProvider = ({ children }) => {
 			} finally {
 				setLoading(false);
 			}
+			setLoading(false)
 		};
 
 		autenticarUsuario();

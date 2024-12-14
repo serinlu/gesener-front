@@ -59,6 +59,7 @@ const Profile = () => {
 
     useEffect(() => {
         if (auth) {
+            console.log(auth)
             // Verifica si hay datos corporativos
             const corporateDataExists = auth.companyName || auth.socialReason || auth.ruc;
 
@@ -291,6 +292,7 @@ const Profile = () => {
                                                 }
                                                 className={`w-full p-2 border rounded ${errors.currentPassword ? 'border-red-500' : ''}`}
                                                 required
+                                                autoComplete='off'
                                             />
                                             {errors.currentPassword && <span className="text-red-500">{errors.currentPassword}</span>}
                                         </div>
@@ -307,6 +309,7 @@ const Profile = () => {
                                                 }
                                                 className={`w-full p-2 border rounded ${errors.newPassword ? 'border-red-500' : ''}`}
                                                 required
+                                                autoComplete='off'
                                             />
                                             {errors.newPassword && <span className="text-red-500">{errors.newPassword}</span>}
                                         </div>
@@ -323,6 +326,7 @@ const Profile = () => {
                                                 }
                                                 className={`w-full p-2 border rounded ${errors.confirmPassword ? 'border-red-500' : ''}`}
                                                 required
+                                                autoComplete='off'
                                             />
                                             {errors.confirmPassword && <span className="text-red-500">{errors.confirmPassword}</span>}
                                         </div>
