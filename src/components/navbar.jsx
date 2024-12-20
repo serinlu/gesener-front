@@ -15,6 +15,7 @@ const Navbar = () => {
     const { cart } = useCart()
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
     const { auth, logout, loading, setLoading } = useContext(AuthContext);
+    console.log("Navbar: ", auth)
     const [results, setResults] = useState({
         products: [],
         news: [],
@@ -328,7 +329,7 @@ const Navbar = () => {
                                     className="flex items-center text-lg p-2 rounded-md bg-white hover:bg-gray-100 transition-all"
                                 >
                                     <FaUserCircle className="text-2xl sm:mr-2" />
-                                    <h1 className="hidden sm:block">{auth.isAuthenticated ? auth.user.user.name : 'Ingresar'}</h1>
+                                    <h1 className="hidden sm:block">{auth.isAuthenticated ? auth.user.name : 'Ingresar'}</h1>
                                 </button>
 
                                 {/* Dropdown */}
@@ -338,7 +339,7 @@ const Navbar = () => {
                                 >
                                     <ul className="py-2">
                                         {auth.isAuthenticated ? (
-                                            auth.user.user.role === 'admin' ? (
+                                            auth.user.role === 'admin' ? (
                                                 itemsAuthUser.map((item) => (
                                                     <li key={item.key}>
                                                         {item.action ? (

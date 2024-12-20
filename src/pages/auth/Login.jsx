@@ -27,8 +27,8 @@ const Login = () => {
       }
       // const user = await getProfile();
       // console.log("Respuesta de Profile", user)
-      console.log("Respuesta de Login", response.user)
-      setAuth(response.user);
+      console.log("Respuesta de Login", {isAuthenticated: true, user: response.user})
+      setAuth({isAuthenticated: true, user: response.user});
 
       const lastVisited = localStorage.getItem('lastVisited');
       if (lastVisited) {
