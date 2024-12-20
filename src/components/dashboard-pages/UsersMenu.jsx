@@ -118,7 +118,7 @@ const UsersMenu = () => {
                 setShowEditRoleModal(false);
                 fetchUsers(); // Volver a cargar los usuarios después del cambio
             } else {
-                console.error("Error al cambiar el rol del usuario.");
+                throw new Error("Error al cambiar el rol del usuario.");
             }
         } catch (error) {
             console.error("Error al cambiar el rol:", error);
