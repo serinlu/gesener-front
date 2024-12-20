@@ -12,7 +12,7 @@ const Orders = () => {
         if (!auth.isAuthenticated) return;
         const fetchOrders = async () => {
             try {
-                const response = await getAllOrdersByUser(auth.user.user._id);
+                const response = await getAllOrdersByUser(auth.user._id);
                 console.log(response.data);
                 setOrders(response.data);
                 // setOrders(orders);

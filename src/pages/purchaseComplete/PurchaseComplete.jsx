@@ -47,7 +47,7 @@ const PurchaseComplete = () => {
     useEffect(() => {
         const fetchOrderData = async () => {
             try {
-                const response = await getLastOrderByUser(auth.user.user._id);
+                const response = await getLastOrderByUser(auth.user._id);
                 const orderProducts = response.data.products
                 setProducts(orderProducts);
                 const newSubTotal = orderProducts.map(product => product.unit_price * product.quantity).reduce((acc, curr) => acc + curr, 0);
