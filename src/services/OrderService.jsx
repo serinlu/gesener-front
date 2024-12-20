@@ -60,3 +60,12 @@ export const sendEmailOrderByIdSuccessfully = async (orderId) => {
         console.error(error);
     }
 }
+
+export const updateShippingStatusOrderById = async (orderId, data) => {
+    try {
+        const response = await clientAxios.patch(`/orders/updateShippingStatusOrderById/${orderId}`, data);
+        return response;
+    } catch (error) {
+        console.error(error);
+    }
+}

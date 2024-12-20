@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { getAllOrders } from "../../services/OrderService";
+import { useEffect, useState } from "react";
+import { getAllOrders, updateShippingStatusOrderById } from "../../services/OrderService";
 import { FaEdit, FaEye } from "react-icons/fa";
 import { Button } from "@nextui-org/react";
+import Alert, {showSuccessAlert, showErrorAlert} from "@/components/alert";
 
 const OrdersMenu = () => {
     const [formOrder, setFormOrder] = useState({});
     const [orders, setOrders] = useState({});
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [showViewModal, setShowViewModal] = useState(false);
+    const [showEditStatusModal, setShowEditStatusModal] = useState(false);
 
     const fetchOrders = async () => {
         try {
@@ -20,6 +24,7 @@ const OrdersMenu = () => {
                 setFormOrder({
                     order_number: order.order_number,
                     status: order.status,
+                    shipping_status: order.shipping_status,
                     total_amount: order.total_amount,
                     createdAt: order.createdAt,
                 });
@@ -49,37 +54,42 @@ const OrdersMenu = () => {
         return `${formattedDate}, ${formattedTime}`;
     };
 
-    const [showViewModal, setShowViewModal] = useState(false);
-
     const handleOpenModal = () => {
         setShowViewModal(true);
     };
 
     const orderData = [
         { title: "# Orden", value: formOrder.order_number },
-        { title: "Estado", value: formOrder.status },
+        { title: "Estado de Pago", value: formOrder.status },
+        { title: "Estado de Pedido", value: formOrder.shipping_status },
         { title: "Monto total", value: formOrder.total_amount },
         { title: "Fecha", value: formOrder.createdAt },
     ];
-
-    const [showEditStatusModal, setShowEditStatusModal] = useState(false);
-    const [selectedOrder, setSelectedOrder] = useState({});
 
     const handleOpenEditStatusModal = (order) => {
         setSelectedOrder(order);
         setShowEditStatusModal(true);
     };
 
-    const handleEditStatus = () => {
-        console.log("Cambiando estado de la orden");
+    const handleEditStatus = async () => {
+        try {
+            await updateShippingStatusOrderById(selectedOrder._id, { shipping_status: "ENTREGADO" });
+            fetchOrders();
+            setShowEditStatusModal(false);
+            showSuccessAlert("Estado de la orden actualizado correctamente");
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
         <div className="bg-white p-3 rounded-lg">
+            <Alert />
             <div className="overflow-x-auto">
-                <div className="p-2 h-auto grid grid-cols-5 min-w-[768px] text-gray-400 border-b-1 border-gray-200">
+                <div className="p-2 h-auto grid grid-cols-6 min-w-[768px] text-gray-400 border-b-1 border-gray-200">
                     <h1>Orden Id</h1>
-                    <h1>Estado</h1>
+                    <h1>Estado de Pago</h1>
+                    <h1>Estado de Pedido</h1>
                     <h1>Total</h1>
                     <h1>Fecha</h1>
                     <h1>Acciones</h1>
@@ -89,13 +99,16 @@ const OrdersMenu = () => {
                         orders.map((order) => (
                             <div
                                 key={order._id}
-                                className="grid grid-cols-5 gap-4 p-4 min-w-[768px] items-center"
+                                className="grid grid-cols-6 gap-4 p-4 min-w-[768px] items-center"
                             >
                                 <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">
                                     {order.order_number}
                                 </h1>
                                 <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">
                                     {order.status}
+                                </h1>
+                                <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">
+                                    {order.shipping_status}
                                 </h1>
                                 <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">
                                     ${order.total_amount}
@@ -112,7 +125,9 @@ const OrdersMenu = () => {
                                     </button>
                                     <button
                                         className="bg-blue-500 rounded-md w-12 h-12 flex items-center justify-center"
-                                        onClick={() => handleOpenEditStatusModal(order)}
+                                        onClick={() =>
+                                            handleOpenEditStatusModal(order)
+                                        }
                                     >
                                         <FaEdit className="text-white text-xl" />
                                     </button>
@@ -155,30 +170,28 @@ const OrdersMenu = () => {
                 </div>
             )}
 
-            {showEditStatusModal && (
+            {showEditStatusModal && selectedOrder && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-                        <h2 className="text-xl font-bold mb-4">Cambiar estado de la orden '{selectedOrder}'</h2>
-                        <label className="block mb-2 text-sm font-medium">Nuevo estado</label>
-                        <select
-                            className="border rounded p-2 w-full"
-                            
-                        >
-                            <option value="admin">En camino</option>
-                            <option value="user">Entregado</option>
-                        </select>
-
-                        
-
+                        <h2 className="text-xl font-bold mb-4">
+                            Cambiar estado de la orden #{selectedOrder.order_number}
+                        </h2>
+                        <label className="block mb-2 text-sm font-medium">
+                            Nuevo estado
+                        </label>
+                        <h2 className="font-bold text-green-500">{selectedOrder.shipping_status}</h2>
                         <div className="mt-4 flex justify-end space-x-4">
-                            <Button className="bg-gray-400" onClick={() => setShowEditStatusModal(false)}>
+                            <Button
+                                className="bg-gray-400"
+                                onClick={() => setShowEditStatusModal(false)}
+                            >
                                 Cancelar
                             </Button>
                             <Button
                                 className="bg-green-500 text-white"
                                 onClick={() => handleEditStatus()}
                             >
-                                Confirmar Cambio
+                                Cambiar estado
                             </Button>
                         </div>
                     </div>
