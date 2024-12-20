@@ -43,6 +43,15 @@ export const getAllOrdersByUser = async (userId) => {
     }
 }
 
+export const getAllOrders = async () => {
+    try {
+        const response = await clientAxios.get(`/orders/getAllOrders`);
+        return response;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 export const sendEmailOrderByIdSuccessfully = async (orderId) => {
     try {
         const response = await clientAxios.post(`/orders/sendEmailOrderByIdSuccessfully/${orderId}`);
