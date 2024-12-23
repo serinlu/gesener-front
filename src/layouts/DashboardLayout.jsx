@@ -19,6 +19,7 @@ const DashboardLayout = () => {
     role: ''
   });
   const [loading, setLoading] = useState(true); // Para manejar el estado de carga
+  console.log(auth);
 
   const menuItems = [
     { name: 'Menú principal', icon: <FaHome />, path: '/dashboard' },
@@ -123,8 +124,8 @@ const DashboardLayout = () => {
             <div className="flex items-center space-x-2">
               <FaUserCircle className='text-4xl' />
               <div>
-                <h1>{authForm.name} {authForm.lastname}</h1>
-                <h1 className='text-red-500 uppercase'>{auth.role}</h1>
+                <h1>{auth.user.name} {auth.user.lastname}</h1>
+                <h1 className='text-red-500 uppercase'>{auth.user.role}</h1>
               </div>
             </div>
             <div className='text-md'>
@@ -188,7 +189,7 @@ const DashboardLayout = () => {
             <div className="flex items-center space-x-2">
               <FaUserCircle className='text-4xl' />
               <div>
-                <h1>{authForm.name} {authForm.lastname}</h1>
+                <h1>{auth.user.name} {auth.user.lastname}</h1>
                 <h1 className='text-red-500 uppercase'>{auth.role}</h1>
               </div>
             </div>
