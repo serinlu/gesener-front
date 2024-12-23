@@ -1,7 +1,5 @@
 import clientAxios from "@/config/axios";
 
-import axios from 'axios';
-
 const loginUser = async (form) => {
     try {
         const config = {

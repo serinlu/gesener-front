@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
-import { getAllOrders, updateShippingStatusOrderById } from "../../services/OrderService";
-import { FaEdit, FaEye } from "react-icons/fa";
+import Alert, { showErrorAlert, showSuccessAlert } from "@/components/alert";
 import { Button } from "@nextui-org/react";
-import Alert, {showSuccessAlert, showErrorAlert} from "@/components/alert";
+import { useEffect, useState } from "react";
+import { FaEdit, FaEye } from "react-icons/fa";
+import {
+    getAllOrders,
+    updateShippingStatusOrderById,
+} from "../../services/OrderService";
+import { checkPassword } from "../../services/UserService";
 
 const OrdersMenu = () => {
     const [formOrder, setFormOrder] = useState({});
@@ -10,17 +14,19 @@ const OrdersMenu = () => {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [showViewModal, setShowViewModal] = useState(false);
     const [showEditStatusModal, setShowEditStatusModal] = useState(false);
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [password, setPassword] = useState("");
 
     const fetchOrders = async () => {
         try {
             const response = await getAllOrders();
-            // console.log(response.data);
-            const successfulOrders = response.data.filter(
-                (order) => order.status === "SUCCESS"
+            const successfullOrders = response.data.filter(
+                (order) =>
+                    order.status === "SUCCESS" &&
+                    order.shipping_status === "EN CAMINO"
             );
-            console.log(successfulOrders);
-            setOrders(successfulOrders);
-            successfulOrders.map((order) => {
+            setOrders(successfullOrders);
+            successfullOrders.map((order) => {
                 setFormOrder({
                     order_number: order.order_number,
                     status: order.status,
@@ -73,9 +79,27 @@ const OrdersMenu = () => {
 
     const handleEditStatus = async () => {
         try {
-            await updateShippingStatusOrderById(selectedOrder._id, { shipping_status: "ENTREGADO" });
+            const response = await checkPassword(password);
+            console.log(response);
+
+            if (!password) {
+                showErrorAlert("Por favor, ingrese su contraseña.");
+                return;
+            }
+
+            if (response == null) {
+                showErrorAlert("Contraseña incorrecta.");
+                return;
+            }
+
+            await updateShippingStatusOrderById(selectedOrder._id, {
+                shipping_status: "ENTREGADO",
+            });
+
             fetchOrders();
             setShowEditStatusModal(false);
+            setShowPasswordModal(false);
+            setPassword("");
             showSuccessAlert("Estado de la orden actualizado correctamente");
         } catch (error) {
             console.log(error);
@@ -86,7 +110,7 @@ const OrdersMenu = () => {
         <div className="bg-white p-3 rounded-lg">
             <Alert />
             <div className="overflow-x-auto">
-                <div className="p-2 h-auto grid grid-cols-6 min-w-[768px] text-gray-400 border-b-1 border-gray-200">
+                <div className="h-auto grid grid-cols-6 gap-4 p-4 min-w-[768px] text-gray-400 border-b-1 border-gray-200">
                     <h1>Orden Id</h1>
                     <h1>Estado de Pago</h1>
                     <h1>Estado de Pedido</h1>
@@ -94,7 +118,7 @@ const OrdersMenu = () => {
                     <h1>Fecha</h1>
                     <h1>Acciones</h1>
                 </div>
-                <div className="p-2 text-black">
+                <div className="text-black">
                     {orders.length > 0 ? (
                         orders.map((order) => (
                             <div
@@ -174,12 +198,15 @@ const OrdersMenu = () => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
                         <h2 className="text-xl font-bold mb-4">
-                            Cambiar estado de la orden #{selectedOrder.order_number}
+                            Cambiar estado de la orden #
+                            {selectedOrder.order_number}
                         </h2>
                         <label className="block mb-2 text-sm font-medium">
                             Nuevo estado
                         </label>
-                        <h2 className="font-bold text-green-500">{selectedOrder.shipping_status}</h2>
+                        <h2 className="font-bold text-green-500">
+                            {selectedOrder.shipping_status}
+                        </h2>
                         <div className="mt-4 flex justify-end space-x-4">
                             <Button
                                 className="bg-gray-400"
@@ -189,9 +216,49 @@ const OrdersMenu = () => {
                             </Button>
                             <Button
                                 className="bg-green-500 text-white"
-                                onClick={() => handleEditStatus()}
+                                onClick={() => {
+                                    setShowEditStatusModal(false);
+                                    setShowPasswordModal(true);
+                                }}
                             >
                                 Cambiar estado
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal Contraseña */}
+            {showPasswordModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                        <h2 className="text-xl font-bold mb-4">
+                            Verificar contraseña
+                        </h2>
+                        <label className="block mb-2 text-sm font-medium">
+                            Contraseña
+                        </label>
+                        <input
+                            type="password"
+                            className="border p-2 w-full rounded"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <div className="mt-4 flex justify-end space-x-4">
+                            <Button
+                                className="bg-gray-400"
+                                onClick={() => {
+                                    setShowPasswordModal(false);
+                                    setPassword("");
+                                }}
+                            >
+                                Cancelar
+                            </Button>
+                            <Button
+                                className="bg-green-500 text-white"
+                                onClick={handleEditStatus}
+                            >
+                                Confirmar
                             </Button>
                         </div>
                     </div>
