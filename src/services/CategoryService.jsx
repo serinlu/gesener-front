@@ -2,7 +2,7 @@ import clientAxios from "@/config/axios";
 
 const getCategories = async () => {
     try {
-        const response = await fetch('http://localhost:3000/api/categories');
+        const response = await clientAxios.get('/categories');
 
         if (!response.ok) {
             throw new Error(`Error: ${response.status}`);
@@ -16,7 +16,7 @@ const getCategories = async () => {
 
 const getCategoryById = async (categoryId) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/categories/${categoryId}`);
+        const response = await clientAxios.get(`/categories/${categoryId}`);
 
         if (!response.ok) {
             throw new Error('Error al obtener la categoría');

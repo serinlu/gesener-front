@@ -17,7 +17,7 @@ const createBrand = async (form) => {
 
 const getBrands = async () => {
     try {
-        const response = await fetch('http://localhost:3000/api/brands');
+        const response = await clientAxios.get('/brands');
 
         if (!response.ok) {
             throw new Error(`Error: ${response.status}`);
@@ -31,7 +31,7 @@ const getBrands = async () => {
 
 const getBrand = async (brandId) => {
     try {
-        const response = await fetch(`http://localhost/3000/api/brands/${brandId}`);
+        const response = await clientAxios.get(`/brands/${brandId}`);
         return await response.json();
     } catch (error) {
         console.error('Error al obtener la marca:', error);

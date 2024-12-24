@@ -15,7 +15,6 @@ const Navbar = () => {
     const { cart } = useCart()
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
     const { auth, logout, loading, setLoading } = useContext(AuthContext);
-    console.log("Navbar: ", auth)
     const [results, setResults] = useState({
         products: [],
         news: [],

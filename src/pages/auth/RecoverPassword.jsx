@@ -16,7 +16,7 @@ const RecoverPassword = () => {
 
     try {
       // Enviamos la solicitud de recuperación de contraseña
-      const response = await clientAxios.post('http://localhost:3000/api/recover-password/send-reset-email', { email });
+      const response = await clientAxios.post('/recover-password/send-reset-email', { email });
 
       // Si el email es encontrado y el correo se envía correctamente
       setMessage(response.data.message);
