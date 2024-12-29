@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaAngleRight } from 'react-icons/fa6';
 import clsx from 'clsx';
@@ -14,6 +14,7 @@ const arrowVariants = {
     closed: { rotate: 90 }
 };
 
+
 const ProductFilters = ({
     categories,
     brands,
@@ -27,6 +28,7 @@ const ProductFilters = ({
     onPriceRangeChange,
     onClearFilters
 }) => {
+
     const [categoryAccordionOpen, setCategoryAccordionOpen] = useState(false);
     const [brandAccordionOpen, setBrandAccordionOpen] = useState(false);
     const [priceAccordionOpen, setPriceAccordionOpen] = useState(false);
@@ -68,7 +70,7 @@ const ProductFilters = ({
                 className="overflow-hidden w-[75%] mx-auto"
             >
                 <div className="p-4 border bg-gray-50">
-                    {categories.map((category) => (
+                    {categories?.map((category) => (
                         <div key={category._id} className="flex items-center gap-2 mb-2">
                             <input
                                 type="checkbox"
@@ -110,8 +112,8 @@ const ProductFilters = ({
                 className="overflow-hidden w-[75%] mx-auto"
             >
                 <div className="p-4 border bg-gray-50">
-                    {brands.map((brand) => (
-                        <div key={brand._id} className="flex items-center gap-2 mb-2">
+                    {brands?.map((brand) => (
+                        <div key={brand?._id} className="flex items-center gap-2 mb-2">
                             <input
                                 type="checkbox"
                                 id={brand._id}

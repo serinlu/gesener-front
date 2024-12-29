@@ -16,17 +16,18 @@ const createBrand = async (form) => {
 }
 
 const getBrands = async () => {
-    try {
-        const response = await clientAxios.get('/brands');
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
+    const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
         }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Error al obtener las marcas:', error);
-    }
+        try {
+            const response = await clientAxios.get('/brands', config)
+            return response.data; // Retorna la lista de productos obtenidos del backend
+        } catch (error) {
+            console.error('Error al obtener las marcas:', error);
+            return []; // Retorna un array vacío en caso de error para evitar errores en el frontend
+        }
 }
 
 const getBrand = async (brandId) => {

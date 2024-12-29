@@ -30,14 +30,9 @@ const getProducts = async () => {
 };
 
 const getProductById = async (id) => {
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }
     try {
-        const response = await clientAxios.get(`/products/${id}`, config);
-        return response.json
+        const response = await clientAxios.get(`/products/${id}`);
+        return response.data
     } catch (error) {
         console.error('Error al obtener el producto:', error);
     }

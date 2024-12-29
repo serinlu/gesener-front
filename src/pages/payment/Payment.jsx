@@ -2,24 +2,26 @@ import React, { useEffect, useState } from 'react'
 
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 import { usePayment } from '@/context/PaymentContext';
-import { generatePreference, verifyPayment } from '../../services/PaymentService';
+import { generatePreference, verifyPayment } from '@/services/PaymentService';
 
 const Payment = () => {
     const { formData, orderData, loadingOrder, setPaymentData } = usePayment();
     const [preferenceId, setPreferenceId] = useState(null);
 
+    
     useEffect(() => {
         const createPreferenceId = async () => {
             if (!orderData) {
                 console.error("orderData no está inicializado.");
                 return;
             }
-
+            
             try {
                 // console.log(orderData._id); // Verificar que _id esté disponible
                 // const orderByUserId = await getOrderById(orderData._id?.toString());
                 // console.log(orderByUserId);
-
+                
+                console.log(orderData._id);
                 const response = await generatePreference(orderData._id);
                 console.log(response);
 

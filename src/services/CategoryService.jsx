@@ -1,16 +1,17 @@
 import clientAxios from "@/config/axios";
 
 const getCategories = async () => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }
     try {
-        const response = await clientAxios.get('/categories');
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
-
-        return await response.json();
+        const response = await clientAxios.get('/categories', config)
+        return response.data; // Retorna la lista de productos obtenidos del backend
     } catch (error) {
-        console.error('Error al obtener las categorías:', error);
+        console.error('Error al obtener las categorias:', error);
+        return []; // Retorna un array vacío en caso de error para evitar errores en el frontend
     }
 }
 
@@ -65,7 +66,7 @@ const deleteCategory = async (id) => {
             'Content-Type': 'application/json',
         },
     };
-    
+
     try {
         const response = await clientAxios.delete(`/categories/${id}`, config);
         return response.data;

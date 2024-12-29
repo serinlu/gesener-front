@@ -63,7 +63,13 @@ const Product = () => {
 
     const fetchData = async () => {
         setLoading(true);
-        const [productsRes, categoriesRes, brandsRes] = await Promise.all([getProducts(), getCategories(), getBrands()]);
+        // const [productsRes, categoriesRes, brandsRes] = await Promise.all([getProducts(), getCategories(), getBrands()]);
+        const productsRes = await getProducts();
+        console.log(productsRes)
+        const categoriesRes = await getCategories();
+        console.log(categoriesRes)
+        const brandsRes = await getBrands();
+        console.log(brandsRes)
         setProducts(productsRes);
         setCategories(categoriesRes);
         setBrands(brandsRes);

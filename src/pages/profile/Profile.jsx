@@ -72,20 +72,20 @@ const Profile = () => {
 
             // Establece los valores del formulario, utilizando valores vacíos si no hay datos
             setForm({
-                name: auth.name || '',
-                lastname: auth.lastname || '',
-                companyName: auth.companyName || '',
-                socialReason: auth.socialReason || '',
-                ruc: auth.ruc || '',
-                tipoDocumento: auth.tipoDocumento || '',
-                numDoc: auth.numDoc || '',
-                address: auth.address || '',
-                province: auth.province || '',
-                district: auth.district || '',
-                department: auth.department || '',
-                postalCode: auth.postalCode || '',
-                phone: auth.phone || '',
-                email: auth.email || '',
+                name: auth.user.name || '',
+                lastname: auth.user.lastname || '',
+                companyName: auth.user.companyName || '',
+                socialReason: auth.user.socialReason || '',
+                ruc: auth.user.ruc || '',
+                tipoDocumento: auth.user.tipoDocumento || '',
+                numDoc: auth.user.numDoc || '',
+                address: auth.user.address || '',
+                province: auth.user.province || '',
+                district: auth.user.district || '',
+                department: auth.user.department || '',
+                postalCode: auth.user.postalCode || '',
+                phone: auth.user.phone || '',
+                email: auth.user.email || '',
             });
             setProvincias(auth.department ? Provincias[auth.department] : []);
             setDistritos(auth.province ? Distritos[auth.province] : []);
@@ -121,7 +121,7 @@ const Profile = () => {
 
         try {
             // Pasar el ID de usuario junto con los datos
-            const response = await updateUser(auth._id, form);
+            const response = await updateUser(auth.user._id, form);
             if (response) {
                 showSuccessAlert('Datos actualizados correctamente');
                 setErrors({
@@ -270,7 +270,7 @@ const Profile = () => {
                         <h1 className="text-3xl font-bold mb-6">Datos del perfil</h1>
                         <h1 className="text-xl mb-6">Tus datos serán utilizados para agilizar tus compras</h1>
                         <h1 className='font-bold'>Usuario:</h1>
-                        <h1 className='text-xl'>{auth.email}</h1>
+                        <h1 className='text-xl'>{auth.user.email}</h1>
                         <Button className='my-2 bg-gray-400 rounded-lg text-white font-bold' onClick={togglePasswordModal}>
                             <h1>Cambiar contraseña</h1>
                         </Button>

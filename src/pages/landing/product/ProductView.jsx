@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useCart } from '@/hooks/useCart';
 import Cart from '@/components/Cart';
 import { Helmet } from 'react-helmet-async';
+import { getProductById } from '@/services/ProductService';
 import clientAxios from '@/config/axios';
 
 const ProductView = () => {
@@ -41,9 +42,10 @@ const ProductView = () => {
 
   useEffect(() => {
     const getProduct = async () => {
-      const response = await clientAxios.get(`/products/${id}`);
-      const data = await response.json();
-      setProduct(data);
+      const response = await getProductById(id)
+      console.log(response);
+      setProduct(response);
+      console.log(product);
     };
     getProduct();
   }, [id]);

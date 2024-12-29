@@ -111,6 +111,7 @@ const Checkout = () => {
         };
         console.log(transformData)
         const response = await createOrder(transformData);
+        console.log(response)
 
         if (response) {
             // console.log(response.data);
