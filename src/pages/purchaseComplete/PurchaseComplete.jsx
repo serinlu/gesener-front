@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getLastOrderByUser, sendEmailOrderByIdSuccessfully } from '../../services/OrderService';
 import { verifyPayment } from '../../services/PaymentService';
 import AnimatedCheckIcon from './AnimatedCheckIcon';
+import { useCart } from '@/hooks/useCart';
 
 const PurchaseComplete = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -14,6 +15,11 @@ const PurchaseComplete = () => {
     const [subTotal, setSubTotal] = useState(0);
     const [envio, setEnvio] = useState(10);
     const [total, setTotal] = useState(0);
+    const { clearCart } = useCart()
+
+    useEffect(() => {
+        clearCart();
+    }, [])
 
     useEffect(() => {
         const handlePaymentSuccess = async () => {
