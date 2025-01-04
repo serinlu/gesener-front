@@ -24,24 +24,6 @@ const Checkout = () => {
     const [loading, setLoading] = useState(true);
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
-    // const [formData, setFormData] = useState({
-    //     name: '',
-    //     lastname: '',
-    //     companyName: '',
-    //     socialReason: '',
-    //     ruc: '',
-    //     tipoDocumento: '',
-    //     numDoc: '',
-    //     address: '',
-    //     optionalAddress: '',
-    //     department: '',
-    //     province: '',
-    //     district: '',
-    //     postalCode: '',
-    //     phone: '',
-    //     email: '',
-    //     notes: ''
-    // });
 
     const getData = () => {
         // Verificamos que `auth` esté disponible antes de actualizar `formData`
@@ -85,6 +67,7 @@ const Checkout = () => {
         const transformData = {
             products: cart.map((product) => {
                 return {
+                    id: product._id,
                     image_url: product.imageUrl,
                     title: product.name,
                     description: product.description,
@@ -109,15 +92,10 @@ const Checkout = () => {
                 },
             },
         };
-        console.log(transformData)
+
         const response = await createOrder(transformData);
-        console.log(response)
 
         if (response) {
-            // console.log(response.data);
-            // setOrderData(response.data)
-
-            // Guardar la orden en el contexto
             setOrderData(response.data);
             setLoadingOrder(false);
         } else {
