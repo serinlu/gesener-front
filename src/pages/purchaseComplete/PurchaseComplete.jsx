@@ -18,31 +18,34 @@ const PurchaseComplete = () => {
     const { clearCart } = useCart()
 
     useEffect(() => {
-        clearCart();
-    }, [])
-
-    useEffect(() => {
         const handlePaymentSuccess = async () => {
             try {
                 // Verifica si ya se procesó el pago para evitar reenvíos
-                const paymentProcessed = sessionStorage.getItem(`payment_${paymentId}`);
-                if (paymentProcessed) {
-                    console.log('El pago ya fue procesado anteriormente.');
-                    return;
-                }
+                // const paymentProcessed = sessionStorage.getItem(`payment_${paymentId}`);
+                // if (paymentProcessed) {
+                //     console.log('El pago ya fue procesado anteriormente.');
+                //     return;
+                // }
+                
+                console.log('PaymentId: ', paymentId);
 
                 const verificationResponse = await verifyPayment(paymentId);
-                console.log(verificationResponse);
 
                 // Envía el correo solo si la verificación fue exitosa
                 if (verificationResponse.data && verificationResponse.data.order) {
                     await sendEmailOrderByIdSuccessfully(verificationResponse.data.order._id);
+                    clearCart();
+                } else {
+                    console.error('No se pudo verificar el pago.');
+                    navigate('/checkout/user-info');
+                    return;
                 }
 
                 // Marca el pago como procesado en `sessionStorage`
-                sessionStorage.setItem(`payment_${paymentId}`, 'processed');
+                // sessionStorage.setItem(`payment_${paymentId}`, 'processed');
             } catch (error) {
                 console.error('Error al verificar el pago:', error);
+                navigate('/checkout/user-info');
             }
         };
 
