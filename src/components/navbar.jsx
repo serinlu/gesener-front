@@ -1,4 +1,4 @@
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FaBars, FaSearch, FaUser, FaUserCircle } from 'react-icons/fa';
 import { FaCartShopping } from 'react-icons/fa6';
@@ -15,19 +15,14 @@ const Navbar = () => {
     const { cart } = useCart()
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
     const { auth, logout, loading, setLoading } = useContext(AuthContext);
-    const [results, setResults] = useState({
-        products: [],
-        news: [],
-        successCases: [],
-    })
+    const [results, setResults] = useState({ products: [], news: [], successCases: [], })
     const [isScrollingUp, setIsScrollingUp] = useState(true)
     const [searchQuery, setSearchQuery] = useState('');
-    // const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [lastScrollY, setLastScrollY] = useState(0)
-    const [isOpen, setIsOpen] = useState(false); // Controla la visibilidad del menú lateral
+    const [isOpen, setIsOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const [showSolutionsDropdown, setShowSolutionsDropdown] = useState(false); // Controla el submenú de soluciones
+    const [showSolutionsDropdown, setShowSolutionsDropdown] = useState(false);
     const [showUserDropdown, setShowUserDropdown] = useState(false);
     const [openSearch, setOpenSearch] = useState(false);
     const searchRef = useRef(null);
@@ -35,10 +30,9 @@ const Navbar = () => {
     const fetchSearchResults = debounce(async (query) => {
         if (!query) {
             setResults({ products: [], news: [], successCases: [] });
-            return;
+            return
         }
-
-        setLoading(true);
+        
         setError(null);
 
         try {
@@ -89,10 +83,6 @@ const Navbar = () => {
         }
     };
 
-    const toggleUserDropdown = () => {
-        setShowUserDropdown(!showUserDropdown);
-    }
-
     const toggleSearch = () => {
         setOpenSearch(!openSearch);
         setSearchQuery('');
@@ -134,13 +124,10 @@ const Navbar = () => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
 
-            // Solo esconder/mostrar el Navbar si el menú lateral no está abierto
             if (!isOpen) {
                 if (currentScrollY > lastScrollY && !openSearch && !isCartOpen && !showSolutionsDropdown && !showUserDropdown) {
-                    // Usuario está bajando y la barra de búsqueda no está abierta
                     setIsScrollingUp(false);
                 } else {
-                    // Usuario está subiendo
                     setIsScrollingUp(true);
                 }
             }
@@ -163,7 +150,6 @@ const Navbar = () => {
                 >
                     <nav className="w-[90%] mx-auto flex justify-between items-center z-10 relative">
                         <div className="flex items-center">
-                            {/* Botón de menú hamburguesa - Oculto en pantallas lg o más grandes */}
                             <button onClick={toggleMenu} className="text-2xl p-2 lg:hidden">
                                 <FaBars />
                             </button>
@@ -171,8 +157,6 @@ const Navbar = () => {
                                 <img src={logo} alt="logo" className="h-[2rem] ml-3" />
                             </NavLink>
                         </div>
-
-                        {/* Menú Completo / Hamburguesa */}
                         <div
                             className="hidden lg:flex items-center space-x-1"
                         >
@@ -193,7 +177,6 @@ const Navbar = () => {
                                         Productos
                                     </NavLink>
                                 </li>
-                                {/* Soluciones en Navbar */}
                                 <li className="relative">
                                     <button
                                         onClick={() => setShowSolutionsDropdown(!showSolutionsDropdown)}
@@ -251,7 +234,6 @@ const Navbar = () => {
                             </ul>
                         </div>
 
-                        {/* Menú lateral: aparece solo cuando se abre el menú en pantallas pequeñas */}
                         {isOpen && (
                             <div
                                 className="fixed inset-0 bg-black bg-opacity-50 z-20"
@@ -285,8 +267,6 @@ const Navbar = () => {
                                                 }`}
                                         />
                                     </button>
-
-                                    {/* Dropdown con animación de altura */}
                                     <div
                                         className={`overflow-hidden transition-[max-height] duration-500 ease-in-out ${showSolutionsDropdown ? 'max-h-96' : 'max-h-0'
                                             }`}
@@ -320,7 +300,6 @@ const Navbar = () => {
                                 </NavLink>
                             </div>
                         </div>
-
                         <div className="flex items-center justify-between sm:gap-2 xl:gap-4">
                             <div className="relative">
                                 <button
@@ -330,8 +309,6 @@ const Navbar = () => {
                                     <FaUserCircle className="text-2xl sm:mr-2" />
                                     <h1 className="hidden sm:block">{auth.isAuthenticated ? auth.user.name : 'Ingresar'}</h1>
                                 </button>
-
-                                {/* Dropdown */}
                                 <div
                                     className={`absolute -right-12 mt-2 w-48 bg-white rounded-md shadow-lg transition-[max-height,opacity] duration-500 ease-in-out ${showUserDropdown ? 'opacity-100 max-h-96' : 'opacity-0 max-h-0'
                                         } overflow-hidden`}
@@ -415,8 +392,6 @@ const Navbar = () => {
                                     </ul>
                                 </div>
                             </div>
-
-                            {/* Botón del carrito */}
                             <Button
                                 variant="bordered"
                                 className="relative text-2xl p-2 hover:text-indigo-500 duration-300 rounded-lg flex items-center justify-center"
@@ -429,8 +404,6 @@ const Navbar = () => {
                                 </span>
                             </Button>
                             <Cart isCartOpen={isCartOpen} toggleCart={toggleCart} handleExplore={handleExplore} />
-
-                            {/* Botón de búsqueda */}
                             <Button
                                 className="text-2xl px-1 hover:text-indigo-500 duration-300 rounded-lg flex items-center justify-center"
                                 style={{ outline: 'none', boxShadow: 'none' }}
@@ -439,7 +412,6 @@ const Navbar = () => {
                                 <FaSearch />
                             </Button>
                         </div>
-
                     </nav>
                 </div>
             </div>
@@ -464,28 +436,29 @@ const Navbar = () => {
                 className={`fixed top-[0rem] left-0 w-full bg-white transition-transform duration-300 ease-in-out -z-10 ${openSearch ? 'translate-y-16' : '-translate-y-full'
                     }`}
             >
-                <div className="relative w-[80%] mx-auto py-4">
-                    <input
-                        type="text"
-                        className="w-full px-4 py-2 text-sm bg-gray-200 rounded-md focus:outline-none shadow-sm focus:ring-2 focus:ring-indigo-500"
-                        value={searchQuery}
-                        onChange={handleInputChange}
-                        placeholder="Buscar productos, noticias, casos de éxito..."
-                    />
-                    <button
-                        type="button"
-                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                        onClick={() => clearSearchQuery()}
-                    >
-                        ✕
-                    </button>
-                </div>
+                <form onSubmit={(e) => e.preventDefault()}>
+                    <div className="relative w-[80%] mx-auto py-4">
+                        <input
+                            type="text"
+                            className="w-full px-4 py-2 text-sm bg-gray-200 rounded-md focus:outline-none shadow-sm focus:ring-2 focus:ring-indigo-500"
+                            value={searchQuery}
+                            onChange={handleInputChange}
+                            placeholder="Buscar productos, noticias, casos de éxito..."
+                        />
+                        <button
+                            type="button"
+                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                            onClick={() => clearSearchQuery()}
+                        >
+                            ✕
+                        </button>
+                    </div>
+                </form>
                 <div className="w-[80%] mx-auto bg-white shadow-md rounded-md">
                     {loading && <p className="text-center py-2">Cargando resultados...</p>}
                     {error ? <p className="text-red-500 text-center py-2">{error}</p> : ''}
                     {!loading && !error && (
                         <div className="py-4 space-y-4">
-                            {/* Renderizar productos */}
                             {results.products?.length > 0 && (
                                 <div>
                                     <div className="flex justify-between">
@@ -520,7 +493,6 @@ const Navbar = () => {
                                     </div>
                                 </div>
                             )}
-                            {/* Renderizar noticias */}
                             {results.news?.length > 0 && (
                                 <div>
                                     <div className="flex justify-between">
@@ -547,7 +519,6 @@ const Navbar = () => {
                                     </div>
                                 </div>
                             )}
-                            {/* Renderizar casos de éxito */}
                             {results.successCases?.length > 0 && (
                                 <div>
                                     <div className="flex justify-between">
@@ -577,10 +548,8 @@ const Navbar = () => {
                         </div>
                     )}
                 </div>
-
             </div>
         </div>
-
     );
 };
 

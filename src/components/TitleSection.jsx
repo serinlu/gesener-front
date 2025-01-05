@@ -68,8 +68,6 @@ const TitleSection = () => {
         }
     }, [isLoaded]);
 
-    if (!isLoaded) return <div className="loading-screen">Cargando contenido...</div>;
-
     return (
         <div>
             <Helmet>
@@ -79,10 +77,9 @@ const TitleSection = () => {
                     content={`Explora más sobre ${title.toLowerCase()}. ${title}.`}
                 />
             </Helmet>
-            <div className="relative w-full object-cover h-[70vh]">
+            <div className="relative w-full object-cover h-[70vh]" style={{ aspectRatio: '16/9' }}>
                 <motion.img
                     src={imgs[currentPath]}
-                    alt={title}
                     className="w-full h-full object-cover"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

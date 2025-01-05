@@ -18,7 +18,7 @@ const Home = () => {
 
     useEffect(() => {
         const mainImage = async () => {
-            const image = await getImage('home-page.png');
+            const image = await getImage('home.png');
             console.log(image);
             if (image) {
                 setLogoImage(image)
@@ -62,28 +62,33 @@ const Home = () => {
                     animate={homeInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
                     transition={{ duration: 0.7, delay: 1 }}
                 >
-                    <h1 className="text-4xl lg:text-5xl font-bold mb-6 lg:mb-8">
-                        Innovación y eficiencia energética para un futuro sostenible
-                    </h1>
-                    <p className="text-xl lg:text-lg">
-                        En Gestión Energética estamos comprometidos con el uso eficiente de la energía y el cuidado del medio ambiente mediante el aprovechamiento responsable de las energías renovables.
+                    <p className="text-4xl lg:text-5xl font-bold lg:leading-tight">
+                        Soluciones en energía eléctrica a su medida
                     </p>
+
+                    <h1 className='text-xl my-4'>
+                        Soluciones para condominios, edificios y departamentos
+                    </h1>
                 </motion.div>
 
                 {/* Imagen - Derecha en lg, abajo en pantallas pequeñas */}
                 <motion.div
-                    className="relative w-full flex justify-center items-center mx-auto"
+                    className="relative w-full flex justify-center items-center mx-auto lg:max-w-[80%] lg:my-32"
+                    style={{ aspectRatio: "16/9" }}
                     initial={{ scale: 1, opacity: 0 }}
                     animate={homeInView ? { scale: 1, opacity: 1 } : { scale: 1, opacity: 0 }}
                     transition={{ duration: 1.5, delay: 0.5, ease: "easeInOut" }}
                 >
-                    <img
-                        src={logoImage?.url}
-                        alt="Portada"
-                        className="w-full h-auto object-contain lg:max-w-[80%] lg:max-h-[90%]"
-                    />
+                    <div className="relative w-full h-0" style={{ paddingBottom: "56.25%" }}>
+                        <img
+                            src={logoImage?.url}
+                            alt="Portada"
+                            className="absolute top-0 left-0 w-full h-full object-contain scale-100 lg:scale-125" // Escalado mayor en pantallas lg y superiores
+                        />
+                    </div>
                 </motion.div>
             </motion.div>
+
 
             <div className='w-[90%] flex flex-col gap-y-12 mx-auto py-10'>
                 <NuestraEmpresa />

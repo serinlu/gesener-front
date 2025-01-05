@@ -26,7 +26,7 @@ const Cart = () => {
     };
 
     const handleFinishPurchase = () => {
-        if (!auth) {
+        if (!auth.isAuthenticated) {
             setIsModalOpen(true); // Si no está logueado, abrir el modal
             localStorage.setItem('lastVisited', window.location.pathname); // Guardar la URL actual
         } else {
