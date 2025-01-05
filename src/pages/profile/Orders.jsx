@@ -47,9 +47,9 @@ const Orders = () => {
             </Helmet>
             <ProfileSidebar />
             <div className="container mx-auto px-4 py-8">
-                <h1 className="text-2xl font-bold mb-6">Mis Órdenes</h1>
+                <h1 className="text-2xl font-bold mb-6">Mis Pedidos</h1>
                 {orders.length === 0 ? (
-                    <p className="text-lg">No tienes órdenes registradas.</p>
+                    <p className="text-lg">No tienes pedidos registrados.</p>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">

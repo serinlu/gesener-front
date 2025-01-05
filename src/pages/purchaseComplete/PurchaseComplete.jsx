@@ -40,15 +40,20 @@ const PurchaseComplete = () => {
                 }
 
                 const verificationResponse = await verifyPayment(paymentId);
-                console.log(verificationResponse);
 
                 if (verificationResponse.data && verificationResponse.data.order) {
                     await sendEmailOrderByIdSuccessfully(verificationResponse.data.order._id);
+                    clearCart();
+                } else {
+                    console.error('No se pudo verificar el pago.');
+                    navigate('/checkout/user-info');
+                    return;
                 }
 
                 sessionStorage.setItem(`payment_${paymentId}`, 'processed');
             } catch (error) {
                 console.error('Error al verificar el pago:', error);
+                navigate('/checkout/user-info');
             }
         };
 

@@ -9,10 +9,9 @@ export const generatePreference = async (orderId) => {
         };
 
         const response = await clientAxios.post(`/orders/generate-preference/${orderId}`, config);
-        console.log(response)
         return response;
     } catch (error) {
-
+        console.error(error);
     }
 }
 
