@@ -21,20 +21,9 @@ const OrdersMenu = () => {
         try {
             const response = await getAllOrders();
             const successfullOrders = response.data.filter(
-                (order) =>
-                    order.status === "SUCCESS" &&
-                    order.shipping_status === "EN CAMINO"
+                (order) => order.status === "SUCCESS"
             );
             setOrders(successfullOrders);
-            successfullOrders.map((order) => {
-                setFormOrder({
-                    order_number: order.order_number,
-                    status: order.status,
-                    shipping_status: order.shipping_status,
-                    total_amount: order.total_amount,
-                    createdAt: order.createdAt,
-                });
-            });
         } catch (error) {
             console.log(error);
         }
@@ -60,17 +49,10 @@ const OrdersMenu = () => {
         return `${formattedDate}, ${formattedTime}`;
     };
 
-    const handleOpenModal = () => {
+    const handleOpenModal = (order) => {
+        setFormOrder(order);
         setShowViewModal(true);
     };
-
-    const orderData = [
-        { title: "# Orden", value: formOrder.order_number },
-        { title: "Estado de Pago", value: formOrder.status },
-        { title: "Estado de Pedido", value: formOrder.shipping_status },
-        { title: "Monto total", value: formOrder.total_amount },
-        { title: "Fecha", value: formOrder.createdAt },
-    ];
 
     const handleOpenEditStatusModal = (order) => {
         setSelectedOrder(order);
@@ -92,8 +74,55 @@ const OrdersMenu = () => {
                 return;
             }
 
+            //-----------
+
+            // Definir el próximo estado basado en el método de envío
+            let nextStatus;
+            if (selectedOrder.shipping_method === "DELIVERY") {
+                // Flujo de estados para entrega a domicilio
+                switch (selectedOrder.shipping_status) {
+                    case "RECIBIDO":
+                        nextStatus = "EN PREPARACIÓN";
+                        break;
+                    case "EN PREPARACIÓN":
+                        nextStatus = "EN CAMINO";
+                        break;
+                    case "EN CAMINO":
+                        nextStatus = "ENTREGADO";
+                        break;
+                    default:
+                        showErrorAlert(
+                            "El pedido ya se encuentra en el último estado."
+                        );
+                        return;
+                }
+            } else if (selectedOrder.shipping_method === "PICKUP") {
+                // Flujo de estados para entrega presencial
+                switch (selectedOrder.shipping_status) {
+                    case "RECIBIDO":
+                        nextStatus = "EN PREPARACIÓN";
+                        break;
+                    case "EN PREPARACIÓN":
+                        nextStatus = "LISTO PARA RETIRAR";
+                        break;
+                    case "LISTO PARA RETIRAR":
+                        nextStatus = "ENTREGADO";
+                        break;
+                    default:
+                        showErrorAlert(
+                            "El pedido ya se encuentra en el último estado."
+                        );
+                        return;
+                }
+            } else {
+                showErrorAlert("Método de envío no reconocido.");
+                return;
+            }
+
+            //-----------
+
             await updateShippingStatusOrderById(selectedOrder._id, {
-                shipping_status: "ENTREGADO",
+                shipping_status: nextStatus,
             });
 
             fetchOrders();
@@ -103,6 +132,7 @@ const OrdersMenu = () => {
             showSuccessAlert("Estado de la orden actualizado correctamente");
         } catch (error) {
             console.log(error);
+            showErrorAlert("Ocurrió un error al actualizar el estado del pedido.");
         }
     };
 
@@ -112,7 +142,6 @@ const OrdersMenu = () => {
             <div className="overflow-x-auto">
                 <div className="h-auto grid grid-cols-6 gap-4 p-4 min-w-[768px] text-gray-400 border-b-1 border-gray-200">
                     <h1>Orden Id</h1>
-                    <h1>Estado de Pago</h1>
                     <h1>Estado de Pedido</h1>
                     <h1>Total</h1>
                     <h1>Fecha</h1>
@@ -125,14 +154,29 @@ const OrdersMenu = () => {
                                 key={order._id}
                                 className="grid grid-cols-6 gap-4 p-4 min-w-[768px] items-center"
                             >
+                                {console.log(order)}
                                 <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">
                                     {order.order_number}
                                 </h1>
                                 <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">
-                                    {order.status}
-                                </h1>
-                                <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">
-                                    {order.shipping_status}
+                                    <span
+                                        className={`px-2 py-1 rounded text-xs font-medium ${
+                                            order.shipping_status === "RECIBIDO"
+                                                ? "bg-yellow-100 text-yellow-600"
+                                                : order.shipping_status ===
+                                                  "EN PREPARACIÓN"
+                                                ? "bg-orange-100 text-orange-600"
+                                                : order.shipping_status ===
+                                                  "EN CAMINO"
+                                                ? "bg-blue-100 text-blue-600"
+                                                : order.shipping_status ===
+                                                  "LISTO PARA RETIRAR"
+                                                ? "bg-blue-100 text-blue-600"
+                                                : "bg-green-100 text-green-600"
+                                        }`}
+                                    >
+                                        {order.shipping_status}
+                                    </span>
                                 </h1>
                                 <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">
                                     ${order.total_amount}
@@ -173,14 +217,36 @@ const OrdersMenu = () => {
                             Detalles del usuario
                         </h2>
                         <div className="grid sm:grid-cols-2 gap-4">
-                            {orderData.map((item, index) => (
-                                <div key={index} className="mb-4">
-                                    <h1 className="text-sm font-medium">
-                                        {item.title}:
-                                    </h1>
-                                    <p>{item.value}</p>
-                                </div>
-                            ))}
+                            <div className="mb-4">
+                                <h1 className="text-sm font-medium">
+                                    Orden ID:
+                                </h1>
+                                <p>{formOrder.order_number}</p>
+                            </div>
+
+                            <div className="mb-4">
+                                <h1 className="text-sm font-medium">
+                                    Estado de Pedido:
+                                </h1>
+                                <p>{formOrder.shipping_status}</p>
+                            </div>
+
+                            <div className="mb-4">
+                                <h1 className="text-sm font-medium">
+                                    Monto total:
+                                </h1>
+                                <p>{formOrder.total_amount}</p>
+                            </div>
+                            <div className="mb-4">
+                                <h1 className="text-sm font-medium">Fecha:</h1>
+                                <p>{formOrder.createdAt}</p>
+                            </div>
+                            <div className="mb-4">
+                                <h1 className="text-sm font-medium">
+                                    Comprador:
+                                </h1>
+                                <p>{formOrder.payer.name}</p>
+                            </div>
                         </div>
                         <div className="flex justify-end mt-4">
                             <Button

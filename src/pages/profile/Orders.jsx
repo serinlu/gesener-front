@@ -1,6 +1,6 @@
 import ProfileSidebar from "@/components/ProfileSidebar";
 import { AuthContext } from "@/context/AuthContext";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { getAllOrdersByUser } from "../../services/OrderService";
 
@@ -14,7 +14,10 @@ const Orders = () => {
             try {
                 const response = await getAllOrdersByUser(auth.user._id);
                 console.log(response.data);
-                setOrders(response.data);
+                const orderList = response.data.filter(
+                    (order) => order.status === "SUCCESS"
+                );
+                setOrders(orderList);
                 // setOrders(orders);
             } catch (error) {
                 console.error("Error al obtener las órdenes:", error);
@@ -62,6 +65,9 @@ const Orders = () => {
                                         Estado
                                     </th>
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">
+                                        Tipo de entrega
+                                    </th>
+                                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">
                                         Total
                                     </th>
                                     <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">
@@ -78,23 +84,35 @@ const Orders = () => {
                                         key={order._id}
                                         className="border-b hover:bg-gray-50"
                                     >
+                                        {console.log(order)}
                                         <td className="py-3 px-4 text-sm text-gray-700">
                                             {order.order_number}
                                         </td>
                                         <td className="py-3 px-4 text-sm text-gray-700">
                                             <span
                                                 className={`px-2 py-1 rounded text-xs font-medium ${
-                                                    order.status === "SUCCESS"
-                                                        ? "bg-green-100 text-green-600"
-                                                        : order.status ===
-                                                          "Pending"
-                                                        ? "bg-yellow-100 text-yellow-600"
-                                                        : "bg-red-100 text-red-600"
+                                                    order.status ===
+                                                        "SUCCESS" &&
+                                                    "bg-green-100 text-green-600"
                                                 }`}
                                             >
                                                 {order.status === "SUCCESS"
                                                     ? "Recibido"
                                                     : null}
+                                            </span>
+                                        </td>
+                                        <td className="py-3 px-4 text-sm text-gray-700">
+                                            <span
+                                                className={`px-2 py-1 rounded text-xs font-medium ${
+                                                    order.shipping_method ===
+                                                        "DELIVERY" &&
+                                                    "bg-yellow-100 text-yellow-600"
+                                                }`}
+                                            >
+                                                {order.shipping_method ===
+                                                "DELIVERY"
+                                                    ? "Despacho a domicilio"
+                                                    : "Retiro en tienda"}
                                             </span>
                                         </td>
                                         <td className="py-3 px-4 text-sm text-gray-700">
