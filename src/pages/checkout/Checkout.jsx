@@ -10,6 +10,7 @@ import { Button } from "@nextui-org/react";
 import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
+import { FaStore, FaTruck } from "react-icons/fa";
 
 const Checkout = () => {
     const { auth } = useContext(AuthContext);
@@ -195,6 +196,10 @@ const Checkout = () => {
         }));
     };
 
+    const toggleShipping = (isDelivery) => {
+        setDelivery(isDelivery)
+    }
+
     return (
         <div>
             <Helmet>
@@ -354,19 +359,19 @@ const Checkout = () => {
                             />
                         </div>
                     </div>
-                    <div className="flex justify-around text-white">
-                        <span
-                            className="bg-blue-500 hover:bg-blue-400 duration-300 flex justify-center items-center w-60 h-10 rounded-full cursor-pointer"
-                            onClick={() => setDelivery(false)}
+                    <div className="flex justify-around text-white font-bold gap-x-2">
+                        <Button
+                            className={`bg-blue-500 hover:bg-blue-500 duration-300 flex justify-center items-center h-10 rounded-full cursor-pointer w-1/2 ${delivery ? 'bg-gray-200 text-black hover:bg-gray-300' : ''}`}
+                            onClick={() => toggleShipping(false)}
                         >
-                            Retiro en tienda
-                        </span>
-                        <span
-                            className="bg-blue-500 hover:bg-blue-400 duration-300 flex justify-center items-center w-60 h-10 rounded-full cursor-pointer"
-                            onClick={() => setDelivery(true)}
+                            <FaStore className="text-lg" /> Recojo en tienda
+                        </Button>
+                        <Button
+                            className={`bg-blue-500 hover:bg-blue-500 duration-300 flex justify-center items-center h-10 rounded-full cursor-pointer w-1/2 ${!delivery ? 'bg-gray-200 text-black hover:bg-gray-300' : ''}`}
+                            onClick={() => toggleShipping(true)}
                         >
-                            Delivery
-                        </span>
+                            <FaTruck className="text-lg" /> Delivery
+                        </Button>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700">
