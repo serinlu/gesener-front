@@ -6,6 +6,7 @@ import { AuthContext } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { Helmet } from 'react-helmet-async';
+import Cookies from 'js-cookie';
 
 const Cart = () => {
     const { cart, clearCart, addToCart, removeFromCart, removeItemUnitFromCart, setItemQuantity } = useCart();
@@ -15,11 +16,12 @@ const Cart = () => {
 
     const calculateSubtotal = () => {
         const subTotal = cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
+        Cookies.set('subtotal', subTotal.toFixed(2), { expires: 7 });
         return subTotal
     };
 
-    const envio = cart.length === 0 ? 0 : 7;
-    const total = calculateSubtotal() + envio;
+    // const envio = cart.length === 0 ? 0 : 7;
+    // const total = calculateSubtotal() + envio;
 
     const handleExplore = () => {
         navigate('/products');
@@ -31,12 +33,12 @@ const Cart = () => {
             localStorage.setItem('lastVisited', window.location.pathname); // Guardar la URL actual
         } else {
             // Si el usuario está autenticado
-            const totalPedido = total;
+            // const totalPedido = total;
 
             // Guardar el objeto en el localStorage
-            localStorage.setItem('total', totalPedido);
-            localStorage.setItem('envio', envio);
-            localStorage.setItem('subtotal', calculateSubtotal());
+            // localStorage.setItem('total', totalPedido);
+            // localStorage.setItem('envio', envio);
+            // localStorage.setItem('subtotal', calculateSubtotal());
 
             // Redirigir a la página de checkout
             navigate('/checkout/user-info');
@@ -107,9 +109,9 @@ const Cart = () => {
                         <h1>Subtotal</h1>
                         <h1 className='font-bold'>${calculateSubtotal().toFixed(2)}</h1>
                         <h1>Envío</h1>
-                        <h1 className='font-bold'>${envio.toFixed(2)}</h1>
+                        <h1 className='font-bold'>Por definir</h1>
                         <h1>Total</h1>
-                        <h1 className='font-bold'>${total.toFixed(2)}</h1>
+                        <h1 className='font-bold'>${calculateSubtotal().toFixed(2)}</h1>
                     </div>
                     <Button
                         className={clsx(`text-xl font-bold text-white rounded-3xl items-center w-full ${cart.length > 0 ? 'bg-blue-600' : 'bg-blue-300'}`)}
