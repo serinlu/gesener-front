@@ -27,14 +27,14 @@ const TitleSection = () => {
     useEffect(() => {
         const fetchImages = async () => {
             const imgsNames = [
-                'energy-efficiency.jpg',
-                'equipment-rental.jpeg',
-                'infrared-thermography.jpg',
-                'renewable-energy.jpg',
-                'training.jpg',
+                'eficiencia-energetica.png',
+                'alquiler.jpg',
+                'termografia-infrarroja.jpg',
+                'energias-renovables.jpg',
+                'capacitacion.jpg',
                 'nosotros.jpg',
                 'news.jpeg',
-                'success.jpg'
+                'casos-exito.jpg'
             ];
 
             try {
