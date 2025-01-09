@@ -215,7 +215,7 @@ const Contact = () => {
                 </div>
                 <div className="text-center py-16">
                     <h2 className="text-4xl text-blue-600 font-bold">
-                        Nuestro personal
+                        Nuestro equipo
                     </h2>
                 </div>
                 <div className="grid grid-cols-2 gap-12">
