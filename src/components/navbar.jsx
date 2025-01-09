@@ -171,6 +171,14 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <NavLink
+                                        to="/us"
+                                        className="block px-2 py-2 text-gray-700 hover:text-indigo-500"
+                                    >
+                                        Nosotros
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink
                                         to="/products"
                                         className="block px-2 py-2 text-gray-700 hover:text-indigo-500"
                                     >

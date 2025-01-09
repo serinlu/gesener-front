@@ -16,8 +16,7 @@ const Payment = () => {
     const navigate = useNavigate();
     const { cart } = useCart();
     const { auth } = useContext(AuthContext);
-    const { formData, setFormData, setOrderData, setLoadingOrder } =
-    usePayment();
+    const { setFormData } = usePayment();
 
     const [subTotal, setSubtotal] = useState(null);
     const [envio, setEnvio] = useState(null);
