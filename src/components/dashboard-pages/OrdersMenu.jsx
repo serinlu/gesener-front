@@ -132,7 +132,9 @@ const OrdersMenu = () => {
             showSuccessAlert("Estado de la orden actualizado correctamente");
         } catch (error) {
             console.log(error);
-            showErrorAlert("Ocurrió un error al actualizar el estado del pedido.");
+            showErrorAlert(
+                "Ocurrió un error al actualizar el estado del pedido."
+            );
         }
     };
 
@@ -192,7 +194,12 @@ const OrdersMenu = () => {
                                         <FaEye className="text-white text-xl" />
                                     </button>
                                     <button
-                                        className="bg-blue-500 rounded-md w-12 h-12 flex items-center justify-center"
+                                        className={`${
+                                            order.shipping_status ===
+                                            "ENTREGADO"
+                                                ? "hidden"
+                                                : "block"
+                                        } bg-blue-500 rounded-md w-12 h-12 flex items-center justify-center`}
                                         onClick={() =>
                                             handleOpenEditStatusModal(order)
                                         }
