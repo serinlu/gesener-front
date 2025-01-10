@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FaAward, FaBox, FaDollarSign, FaHandshake, FaHome, FaList, FaNewspaper, FaTag, FaUser, FaUserCircle, FaEllipsisV, FaBars } from 'react-icons/fa';
+import { FaAward, FaBox, FaDollarSign, FaHandshake, FaHome, FaList, FaNewspaper, FaTag, FaUser, FaUserCircle, FaEllipsisV, FaBars, FaHouseUser, FaBook, FaFile } from 'react-icons/fa';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import logo from "@/uploads/logo.png";
 import { AuthContext } from '@/context/AuthContext';
@@ -32,6 +32,9 @@ const DashboardLayout = () => {
     { name: 'Ventas', icon: <FaDollarSign />, path: '/dashboard/sales' },
     { name: 'Casos de éxito', icon: <FaHandshake />, path: '/dashboard/success-cases' },
     { name: 'Noticias', icon: <FaNewspaper />, path: '/dashboard/news' },
+    { name: 'Arrendamientos', icon: <FaHouseUser />, path: '/dashboard/leasings' },
+    { name: 'Manuales de equipo', icon: <FaBook />, path: '/dashboard/manuals' },
+    { name: 'Fichas técnicas', icon: <FaFile />, path: '/dashboard/sheets' },
   ];
 
   // Efecto para establecer la opción seleccionada según la ruta actual
@@ -100,7 +103,7 @@ const DashboardLayout = () => {
       </Helmet>
       {/* Sidebar */}
       <div className="hidden lg:flex bg-white text-black w-64 flex-col justify-between h-full sticky top-0">
-        <div>
+        <div className='max-h-screen overflow-y-auto'>
           <Link to="/">
             <img src={logo} alt="logo" className="w-[70%] mx-auto mt-10 mb-10" />
           </Link>
@@ -108,7 +111,7 @@ const DashboardLayout = () => {
             {menuItems.map((item) => (
               <div
                 key={item.name}
-                className={`flex items-center p-4 cursor-pointer transition-colors hover:text-blue-700 ${selectedOption === item.name ? 'text-blue-700 border-blue-700 border-r-3' : ''}`}
+                className={`flex items-center p-4 cursor-pointer transition-colors hover:text-blue-700 ${selectedOption === item.name ? 'text-white bg-blue-500 hover:text-white' : ''}`}
                 onClick={() => handleMenuClick(item.name, item.path)} // Llamar a handleMenuClick
               >
                 <span className="mr-4">{item.icon}</span>

@@ -205,7 +205,6 @@ const ProductsMenu = () => {
             .then((response) => {
                 console.log('Producto actualizado:', response);
                 fetchProducts();
-                setShowEditModal(false);
             })
             .catch((error) => {
                 console.error('Error al actualizar el producto:', error);

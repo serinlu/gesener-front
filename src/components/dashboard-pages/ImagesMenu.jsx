@@ -11,6 +11,8 @@ const ImagesMenu = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(true); // Estado de carga
+    const [page, setPage] = useState(1);        // Página actual
+    const [totalPages, setTotalPages] = useState(1); // Total de páginas
 
     // Función para formatear el tamaño
     const formatSize = (bytes) => {
@@ -20,19 +22,20 @@ const ImagesMenu = () => {
     };
 
     useEffect(() => {
-        fetchImages();
-    }, []);
+        fetchImages(page);
+    }, [page]);
 
-    const fetchImages = () => {
-        setLoading(true); // Establecer el estado de carga a true
-        getImages()
+    const fetchImages = (page) => {
+        setLoading(true);
+        getImages(page)
             .then(data => {
-                setImages(data);
-                setLoading(false); // Establecer el estado de carga a false cuando se completen las imágenes
+                setImages(data.data); // Aseguramos que estamos usando 'data' para las imágenes
+                setTotalPages(data.totalPages); // Aseguramos que usamos 'totalPages' del backend
+                setLoading(false);
             })
             .catch(error => {
                 console.error('Error al obtener imágenes:', error);
-                setLoading(false); // Asegúrate de detener la carga incluso si hay un error
+                setLoading(false);
             });
     };
 
@@ -50,7 +53,7 @@ const ImagesMenu = () => {
         try {
             const response = await uploadImage(file); // Aquí pasamos solo el archivo
             if (response) {
-                fetchImages();
+                fetchImages(page); // Volver a cargar las imágenes en la misma página
                 setShowUploadImageModal(false);
             }
         } catch (error) {
@@ -62,7 +65,7 @@ const ImagesMenu = () => {
         if (selectedImage) {
             try {
                 await deleteImage(selectedImage.name); // Asegúrate de que tienes la función deleteImage implementada
-                fetchImages();
+                fetchImages(page);
                 setShowDeleteImageModal(false);
             } catch (error) {
                 console.error('Error al eliminar la imagen:', error);
@@ -88,7 +91,7 @@ const ImagesMenu = () => {
                     <h1>ACCIONES</h1>
                 </div>
                 <div className='p-2 text-black space-y-2'>
-                    {loading ? ( // Mostrar indicador de carga
+                    {loading ? (
                         <div className='flex justify-center items-center'>
                             <h1>Cargando imágenes...</h1>
                         </div>
@@ -106,7 +109,7 @@ const ImagesMenu = () => {
                                             setShowViewImageModal(true);
                                         }}
                                     >
-                                        <FaEye className='text-white'></FaEye>
+                                        <FaEye />
                                     </Button>
                                     <Button
                                         className='bg-red-500 rounded-md w-1/8 flex items-center justify-start py-2'
@@ -115,7 +118,7 @@ const ImagesMenu = () => {
                                             setShowDeleteImageModal(true);
                                         }}
                                     >
-                                        <FaTrash className="text-white text-sm" />
+                                        <FaTrash />
                                     </Button>
                                 </div>
                             </div>
@@ -123,6 +126,22 @@ const ImagesMenu = () => {
                     ) : (
                         <h1>No hay imágenes</h1>
                     )}
+                </div>
+                {/* Paginación */}
+                <div className='flex justify-between items-center mt-4'>
+                    <Button
+                        disabled={page <= 1}
+                        onPress={() => setPage(page - 1)}
+                    >
+                        Anterior
+                    </Button>
+                    <span>Página {page} de {totalPages}</span>
+                    <Button
+                        disabled={page >= totalPages} // Aquí bloqueamos el botón cuando estamos en la última página
+                        onPress={() => setPage(page + 1)}
+                    >
+                        Siguiente
+                    </Button>
                 </div>
                 {showViewImageModal && (
                     <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10' style={{ marginTop: 0 }}>

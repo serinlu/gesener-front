@@ -33,6 +33,10 @@ import OrdersMenu from "@/components/dashboard-pages/OrdersMenu";
 import SalesMenu from "@/components/dashboard-pages/SalesMenu";
 import SuccessCasesMenu from "@/components/dashboard-pages/SuccessCasesMenu";
 import NewsMenu from "@/components/dashboard-pages/NewsMenu";
+import LeasingsMenu from "@/components/dashboard-pages/LeasingsMenu";
+import ManualsMenu from "@/components/dashboard-pages/ManualsMenu";
+import SheetsMenu from "@/components/dashboard-pages/SheetsMenu";
+
 import ProductView from "@/pages/landing/product/ProductView";
 import Cart from "@/pages/cart/Cart";
 import Checkout from "@/pages/checkout/Checkout";
@@ -61,9 +65,8 @@ function App() {
                   <Route index element={<Home />} />
                   {/* Solutions Page */}
                   <Route path="solutions/energy-efficiency" element={<EnergyEfficiency />} />
-                  <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
                   <Route path="solutions/infrared-thermography" element={<InfraredThermography />} />
-                  <Route path="solutions/equipment-rental" element={<EquipmentRental />} />
+                  <Route path="solutions/leasing" element={<EquipmentRental />} />
                   <Route path="solutions/renewable-energy" element={<RenewableEnergy />} />
                   <Route path="solutions/training" element={<Training />} />
                   {/* other pages */}
@@ -103,6 +106,9 @@ function App() {
                   <Route path="sales" element={<SalesMenu />} />
                   <Route path="success-cases" element={<SuccessCasesMenu />} />
                   <Route path="news" element={<NewsMenu />} />
+                  <Route path="leasings" element={<LeasingsMenu />} />
+                  <Route path="manuals" element={<ManualsMenu />} />
+                  <Route path="sheets" element={<SheetsMenu />} />
                 </Route>
 
                 <Route path='/checkout' element={<CheckoutLayout />}>

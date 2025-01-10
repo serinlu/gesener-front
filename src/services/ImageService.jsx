@@ -18,19 +18,23 @@ const uploadImage = async (file) => {
     }
 }
 
-const getImages = async () => {
+const getImages = async (page = 1, pageSize = 12) => {
     const config = {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
-    }
-    try {
-        const response = await clientAxios.get('/images', config)
-        return response.data
+        params: {
+            page,      // Número de la página
+            pageSize   // Número de elementos por página
+        }
+    };
+    try {   
+        const response = await clientAxios.get('/images', config);
+        return response.data; // Asegúrate de que el backend devuelva los datos en el formato correcto
     } catch (error) {
         console.error('Error al obtener las imágenes:', error);
     }
-}
+};
 
 const getImage = async (imageNames) => {
     const config = {

@@ -114,7 +114,7 @@ const Navbar = () => {
 
     const ItemsSolutions = [
         { key: "energy-efficiency", label: "Eficiencia energética", path: "/solutions/energy-efficiency" },
-        { key: "equipment-rental", label: "Alquiler de equipos", path: "/solutions/equipment-rental" },
+        { key: "leasing", label: "Arrendamiento", path: "/solutions/leasing" },
         { key: "infrared-thermography", label: "Termografía infrarroja", path: "/solutions/infrared-thermography" },
         { key: "renewable-energy", label: "Energía renovable", path: "/solutions/renewable-energy" },
         { key: "training", label: "Capacitación", path: "/solutions/training" }

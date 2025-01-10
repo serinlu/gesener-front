@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet-async';
 
 const titles = {
     '/solutions/energy-efficiency': 'Eficiencia energética',
-    '/solutions/equipment-rental': 'Alquiler de equipos',
+    '/solutions/leasing': 'Arrendamiento',
     '/solutions/infrared-thermography': 'Termografía infrarroja',
     '/solutions/renewable-energy': 'Energía renovable',
     '/solutions/training': 'Capacitaciones',
@@ -42,7 +42,7 @@ const TitleSection = () => {
 
                 const imagesMap = {
                     '/solutions/energy-efficiency': imageUrls[0].url,
-                    '/solutions/equipment-rental': imageUrls[1].url,
+                    '/solutions/leasing': imageUrls[1].url,
                     '/solutions/infrared-thermography': imageUrls[2].url,
                     '/solutions/renewable-energy': imageUrls[3].url,
                     '/solutions/training': imageUrls[4].url,

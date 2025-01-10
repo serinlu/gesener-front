@@ -59,7 +59,6 @@ const deleteBrand = async (id) => {
             'Content-Type': 'application/json',
         },
     };
-
     try {
         const response = await clientAxios.delete(`/brands/${id}`, config);
         return response.data

@@ -1,38 +1,47 @@
 import { Accordion, AccordionItem } from "@nextui-org/react";
-
-
-const Item = ({ imagen, modelo, marca }) => {
-    return (
-        <div className="flex items-center justify-center w-full">
-            <div className="w-[50%]">
-                <img src={imagen} alt="" className="w-96 h-96 object-cover" />
-            </div>
-            <div className="w-[50%] space-y-4">
-                {/* Modelo */}
-                <section>
-                    <h3>Modelo</h3>
-                    <p>{modelo}</p>
-                </section>
-                {/* Marca */}
-                <section>
-                    <h3 className="text-blue-500 text-xl">Marca</h3>
-                    <p className="text-gray-500 text-md">{marca}</p>
-                </section>
-            </div>
-        </div>
-    )
-}
+import { getLeasings } from "@/services/LeasingService";
+import { getBrands } from "@/services/BrandService";
+import { useEffect, useState } from "react";
 
 const Equipo = () => {
+    const [leasings, setLeasings] = useState([])
+    const [brands, setBrands] = useState([])
+    const [leasingForm, setLeasingForm] = useState({
+        name: '',
+        model: '',
+        brand: '',
+        description: '',
+        manual: '',
+        sheet: '',
+        image: '',
+    })
+    useEffect(() => {
+        const fetchLeasings = () => {
+            getLeasings()
+            .then((data) => setLeasings(data))
+            .catch((error) => console.error('Error al obtener los equipos:', error));
+        }
+        const fetchBrands = () => {
+            
+        }
+        fetchLeasings();
+        console.log(leasings)
+    }, [])
+
     return (
-        <Accordion>
-            <AccordionItem key="1" aria-label="Accordion 1" title="Cámara Termográfica HD​">
-                <Item imagen={"https://www.gesener.pe/wp-content/uploads/2022/04/unnamed-300x240-1.jpeg"} modelo={"Camara"} marca={"Canon"} />
-            </AccordionItem>
-            <AccordionItem key="2" aria-label="Accordion 2" title="Drone Termográfico Flir Matrice 210">
-                <Item imagen={"https://www.gesener.pe/wp-content/uploads/2024/04/dronedji.png"} modelo={"M210V2XT2"} marca={"Drone"} />
-            </AccordionItem>
-        </Accordion>
+        <div>
+            {leasings.length > 0 ? (
+                leasings.map((leasing) => (
+                    <div key={leasing._id} className="border-b border-gray-200 py-4">
+                        <td className="p-2">
+                            <li>{leasing.name}</li>
+                        </td>
+                    </div>
+                ))
+            ) : (
+                <div>No hay arrendamientos disponibles.</div>
+            )}
+        </div>
     )
 }
 
