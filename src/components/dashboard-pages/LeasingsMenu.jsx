@@ -11,6 +11,8 @@ const LeasingsMenu = () => {
     const [leasings, setLeasings] = useState([])
     const [brands, setBrands] = useState([])
     const [images, setImages] = useState([])
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 12;
     const [form, setForm] = useState({
         name: '',
         model: '',
@@ -54,10 +56,11 @@ const LeasingsMenu = () => {
     }
 
     const fetchImages = () => {
-        getImages()
-            .then((data) => setImages(data))
+        getImages(currentPage, pageSize)
+            .then((data) => setImages(data?.images || [])) // data.images debe ser un arreglo
             .catch((error) => console.error('Error al obtener las imágenes:', error));
-    }
+        console.log(images)
+    };
 
     const handleDeleteClick = (leasing) => {
         setSelectedLeasing(leasing)
@@ -303,18 +306,6 @@ const LeasingsMenu = () => {
                                     className={`w-full p-2 border rounded ${errors?.sheet ? 'border-red-500' : ''}`}
                                 />
                                 {errors?.sheet && <p className="text-xs text-red-400">{errors.sheet}</p>}
-                            </div>
-                            <div>
-                                <label className='block mb-1'>Imagen</label>
-                                <input
-                                    type="text"
-                                    value={form.image}
-                                    onChange={(e) => {
-                                        setForm({ ...form, image: e.target.value });
-                                        setErrors({ ...errors, image: '' }); // Limpiar el error mientras el usuario escribe
-                                    }}
-                                    className={`w-full p-2 border rounded ${errors?.image ? 'border-red-500' : ''}`}
-                                />
                             </div>
                             <div>
                                 <div className='flex items-center pb-2 space-x-3'>

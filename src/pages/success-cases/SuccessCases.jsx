@@ -35,7 +35,7 @@ const SuccessCases = () => {
                     {Array.isArray(successCases) && successCases.length > 0 ? (
                         successCases.map((successItem) => (
                             <div key={successItem._id} className='bg-white p-4 rounded-lg shadow-lg'>
-                                <img src={successItem.image} alt={successItem.title} className='w-full h-48 object-cover rounded-t-lg' />
+                                <img src={successItem.image} alt={successItem.title} className='w-full h-48 object-cover rounded-t-lg' loading='lazy'/>
                                 <div className='mt-4'>
                                     <Link to={`/success-cases/${successItem._id}`}>
                                         <h2 className='text-xl font-bold'>{successItem.title}</h2>

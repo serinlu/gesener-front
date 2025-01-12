@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { getImage } from '@/services/ImageService';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import casosexitoopt from '@/uploads/casos-exito-opt.webp';
 
 const titles = {
     '/solutions/energy-efficiency': 'Eficiencia energética',
@@ -79,7 +80,7 @@ const TitleSection = () => {
             </Helmet>
             <div className="relative w-full object-cover h-[70vh]" style={{ aspectRatio: '16/9' }}>
                 <motion.img
-                    src={imgs[currentPath]}
+                    src={casosexitoopt}
                     className="w-full h-full object-cover"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
