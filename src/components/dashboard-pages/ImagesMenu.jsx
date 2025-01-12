@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { uploadImage, getImages, deleteImage } from '@/services/ImageService';
 import { Button } from '@nextui-org/react';
 import { FaEye, FaPlus, FaTrash } from 'react-icons/fa';
+import Pagination from '@/components/dashboard-pages/Pagination';
+import Spinner from '../Spinner';
 
 const ImagesMenu = () => {
     const [showUploadImageModal, setShowUploadImageModal] = useState(false);
@@ -13,6 +15,7 @@ const ImagesMenu = () => {
     const [loading, setLoading] = useState(true); // Estado de carga
     const [page, setPage] = useState(1);        // Página actual
     const [totalPages, setTotalPages] = useState(1); // Total de páginas
+    const [createLoading, setCreateLoading] = useState(false); 
 
     // Función para formatear el tamaño
     const formatSize = (bytes) => {
@@ -45,12 +48,14 @@ const ImagesMenu = () => {
     };
 
     const handleCreate = async () => {
+
         if (!file) {
             console.error('No se ha seleccionado ningún archivo');
             return;
         }
 
         try {
+            setCreateLoading(true)
             const response = await uploadImage(file); // Aquí pasamos solo el archivo
             if (response) {
                 fetchImages(page); // Volver a cargar las imágenes en la misma página
@@ -58,13 +63,15 @@ const ImagesMenu = () => {
             }
         } catch (error) {
             console.error('Error al subir la imagen:', error);
+        } finally {
+            setCreateLoading(false);
         }
     };
 
     const handleDelete = async () => {
         if (selectedImage) {
             try {
-                await deleteImage(selectedImage.name); // Asegúrate de que tienes la función deleteImage implementada
+                await deleteImage(selectedImage.name); 
                 fetchImages(page);
                 setShowDeleteImageModal(false);
             } catch (error) {
@@ -103,7 +110,7 @@ const ImagesMenu = () => {
                                 <h1>{formatSize(image.size)}</h1>
                                 <div className='col-span-1 flex space-x-2 text-base items-left'>
                                     <Button
-                                        className='bg-yellow-500 rounded-md w-1/8 flex items-center justify-start py-2'
+                                        className='bg-yellow-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-yellow-600'
                                         onPress={() => {
                                             setSelectedImage(image);
                                             setShowViewImageModal(true);
@@ -112,7 +119,7 @@ const ImagesMenu = () => {
                                         <FaEye />
                                     </Button>
                                     <Button
-                                        className='bg-red-500 rounded-md w-1/8 flex items-center justify-start py-2'
+                                        className='bg-red-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-red-600'
                                         onPress={() => {
                                             setSelectedImage(image);
                                             setShowDeleteImageModal(true);
@@ -128,20 +135,12 @@ const ImagesMenu = () => {
                     )}
                 </div>
                 {/* Paginación */}
-                <div className='flex justify-between items-center mt-4'>
-                    <Button
-                        disabled={page <= 1}
-                        onPress={() => setPage(page - 1)}
-                    >
-                        Anterior
-                    </Button>
-                    <span>Página {page} de {totalPages}</span>
-                    <Button
-                        disabled={page >= totalPages} // Aquí bloqueamos el botón cuando estamos en la última página
-                        onPress={() => setPage(page + 1)}
-                    >
-                        Siguiente
-                    </Button>
+                <div className='w-full m-auto'>
+                    <Pagination
+                        currentPage={page}
+                        totalPages={totalPages}
+                        onPageChange={(newPage) => setPage(newPage)}
+                    />
                 </div>
                 {showViewImageModal && (
                     <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10' style={{ marginTop: 0 }}>
@@ -180,10 +179,11 @@ const ImagesMenu = () => {
                                         CANCELAR
                                     </Button>
                                     <Button
-                                        className='bg-blue-500 text-white px-4 py-2 rounded'
+                                        className='bg-blue-500 text-white px-8 py-2 rounded'
                                         onClick={handleCreate}
+                                        isDisabled={createLoading}
                                     >
-                                        CARGAR
+                                        {createLoading ? <Spinner /> : 'CARGAR'}
                                     </Button>
                                 </div>
                             </div>
