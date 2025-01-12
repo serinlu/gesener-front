@@ -1,8 +1,12 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 import App from '@/App.jsx'
+import { SnackbarProvider } from 'notistack'
+import { createRoot } from 'react-dom/client'
+
 import '@/index.css'
 
 createRoot(document.getElementById('root')).render(
-  <App />
+  <>
+    <SnackbarProvider />
+    <App />
+  </>
 )
