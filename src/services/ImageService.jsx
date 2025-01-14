@@ -36,6 +36,20 @@ const getImages = async (page = 1, pageSize = 12) => {
     }
 };
 
+export const listAllImages = async () => {
+    const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    }
+    try {
+        const response = await clientAxios.get('/images/list/all', config);
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener las imágenes:', error);
+    }
+}
+
 const getImage = async (imageNames) => {
     const config = {
         headers: {

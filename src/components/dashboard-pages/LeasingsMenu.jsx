@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { getLeasings, createLeasing, updateLeasing, deleteLeasing } from '@/services/LeasingService'
-import { getBrands } from '@/services/BrandService'
-import { getImages } from '@/services/ImageService'
+import { getBrands, getPaginatedBrands } from '@/services/BrandService'
+import { getImages, listAllImages } from '@/services/ImageService'
 import { Button } from '@nextui-org/react'
-import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa'
+import { FaEdit, FaEye, FaPlus, FaTrash } from 'react-icons/fa'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+import { listManuals, listAllManuals } from '@/services/ManualService'
+import { listSheets, listAllSheets } from '@/services/SheetService'
+import Pagination from '@/components/dashboard-pages/Pagination'
+import FileListModal from '@/components/dashboard-pages/FileModal'
 
 const LeasingsMenu = () => {
     const [leasings, setLeasings] = useState([])
     const [brands, setBrands] = useState([])
     const [images, setImages] = useState([])
-    const [currentPage, setCurrentPage] = useState(1);
+    const [manuals, setManuals] = useState([])
+    const [sheets, setSheets] = useState([])
     const pageSize = 12;
     const [form, setForm] = useState({
         name: '',
@@ -36,31 +41,79 @@ const LeasingsMenu = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
     const [showImagesListModal, setShowImagesListModal] = useState(false)
+    const [showManualsListModal, setShowManualsListModal] = useState(false)
+    const [showSheetsListModal, setShowSheetsListModal] = useState(false)
+
+    //estados de las paginas
+    const [page, setPage] = useState(1); // Página actual
+    const [brandsPage, setBrandsPage] = useState(1)
+    const [imagesPage, setImagesPage] = useState(1)
+    const [manualsPage, setManualsPage] = useState(1)
+    const [sheetsPage, setSheetsPage] = useState(1)
+
+    //estados para el total de paginas
+    const [totalPages, setTotalPages] = useState(1); // Total de páginas
+    const [totalBrandsPages, setTotalBrandsPages] = useState(1);
+    const [totalImagesPages, setTotalImagesPages] = useState(1);
+    const [totalManualsPages, setTotalManualsPages] = useState(1);
+    const [totalSheetsPages, setTotalSheetsPages] = useState(1);
+
+    const [loading, setLoading] = useState(true)
+    const [showManualsModal, setShowManualsModal] = useState(false);
+    const [showSheetsModal, setShowSheetsModal] = useState(false);
+    const [selectedManual, setSelectedManual] = useState(null);
+    const [selectedSheet, setSelectedSheet] = useState(null);
 
     useEffect(() => {
-        fetchLeasings()
+        fetchLeasings(page)
+    }, [page])
+
+    useEffect(() => {
         fetchBrands()
         fetchImages()
+        fetchManuals()
+        fetchSheets()
     }, [])
 
-    const fetchLeasings = () => {
-        getLeasings()
-            .then((data) => setLeasings(data))
-            .catch((error) => console.error('Error al obtener los equipos:', error));
+    const fetchLeasings = (page) => {
+        setLoading(true)
+        getLeasings(page)
+            .then((data) => {
+                console.log(data)
+                setLeasings(data.leasings)
+                setTotalPages(data.totalPages)
+                setLoading(false)
+                console.log(leasings)
+            })
+            .catch((error) => {
+                console.error('Error al obtener los equipos:', error)
+                return
+            });
     }
 
     const fetchBrands = () => {
         getBrands()
-            .then((data) => setBrands(data))
-            .catch((error) => console.error('Error al obtener las marcas:', error));
+            .then(data => setBrands(data))
+            .catch((error) => console.error('Error al obtener las marcas:', error))
     }
 
     const fetchImages = () => {
-        getImages(currentPage, pageSize)
-            .then((data) => setImages(data?.images || [])) // data.images debe ser un arreglo
-            .catch((error) => console.error('Error al obtener las imágenes:', error));
-        console.log(images)
+        listAllImages()
+            .then(data => setImages(data.data))
+            .catch((error) => console.error('Error al obtener las imágenes:', error))
     };
+
+    const fetchManuals = () => {
+        listAllManuals()
+            .then((data) => setManuals(data))
+            .catch((error) => console.error('Error al obtener los manuales:', error));
+    }
+
+    const fetchSheets = () => {
+        listAllSheets()
+            .then((data) => setSheets(data))
+            .catch((error) => console.error('Error al obtener las fichas:', error));
+    }
 
     const handleDeleteClick = (leasing) => {
         setSelectedLeasing(leasing)
@@ -177,6 +230,35 @@ const LeasingsMenu = () => {
         setShowImagesListModal(false)
     }
 
+    const handleSelectManual = (manual) => {
+        setSelectedManual(manual);
+        setForm((prevForm) => ({
+            ...prevForm,
+            manual: manual.url || ''  // Asegúrate de guardar el enlace (url) del manual
+        }));
+        setShowManualsModal(false);
+    };
+
+    const handleSelectSheet = (sheet) => {
+        setSelectedSheet(sheet);
+        setForm((prevForm) => ({
+            ...prevForm,
+            sheet: sheet.url || ''  // Asegúrate de guardar el enlace (url) de la ficha
+        }));
+        setShowSheetsModal(false);
+    };
+
+    const handleCancel = () => {
+        setShowDeleteModal(false)
+        setShowImagesListModal(false)
+        setShowManualsModal(false)
+        setShowSheetsModal(false)
+        setSelectedManual(null)
+        setSelectedSheet(null)
+        setOpenModal(false)
+        setErrors(null)
+    }
+
     return (
         <div>
             <div className='mb-3 flex justify-end'>
@@ -194,18 +276,18 @@ const LeasingsMenu = () => {
                     <h1>MARCA</h1>
                     <h1>ACCIONES</h1>
                 </div>
-                <div className='p-2 text-black'>
+                <div className="p-2 text-black">
                     {leasings.length > 0 ? (
                         leasings.map((leasing) => (
                             <div key={leasing._id} className="grid grid-cols-4 items-center gap-4 p-2">
-                                <td>
-                                    <img src={leasing.image} alt={leasing.name} className='w-20 h-20' />
-                                </td>
-                                <h1 className='col-span-1 text-left'>{leasing.name}</h1 >
-                                <h1 className="col-span-1 text-left">{leasing.brand.name}</h1>
-                                <div className="col-span-1 flex space-x-2 text-base items-center text-white">
-                                    <Button className="bg-orange-500 rounded-md w-1/3 flex items-center justify-center px-4 py-2" onClick={() => openFormModal(leasing)}><FaEdit /></Button>
-                                    <Button className="bg-red-500 rounded-md w-1/3 flex items-center justify-center px-4 py-2" onClick={() => handleDeleteClick(leasing)}><FaTrash /></Button>
+                                <div>
+                                    <img src={leasing.image || '/placeholder.png'} alt={leasing.name} className="w-20 h-20" />
+                                </div>
+                                <h1 className="col-span-1 text-left">{leasing.name || "Sin nombre"}</h1>
+                                <h1 className="col-span-1 text-left">{leasing.brand?.name || "Sin marca"}</h1>
+                                <div className="col-span-1 flex space-x-2 items-center">
+                                    <Button className="bg-yellow-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-yellow-600" onClick={() => openFormModal(leasing)}><FaEdit /></Button>
+                                    <Button className="bg-red-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-red-600" onClick={() => handleDeleteClick(leasing)}><FaTrash /></Button>
                                 </div>
                             </div>
                         ))
@@ -213,6 +295,13 @@ const LeasingsMenu = () => {
                         <div className="text-center">No hay arrendamientos disponibles</div>
                     )}
                 </div>
+            </div>
+            <div className="w-full m-auto">
+                <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={(newPage) => setPage(newPage)}
+                />
             </div>
             {openModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style={{ marginTop: 0 }}>
@@ -282,30 +371,54 @@ const LeasingsMenu = () => {
                                     placeholder="Descripción"
                                 />
                             </div>
-                            <div>
-                                <label className='block mb-1'>Manual<span className="pl-1 text-red-400 font-bold">*</span></label>
-                                <input
-                                    type="text"
-                                    value={form.manual}
-                                    onChange={(e) => {
-                                        setForm({ ...form, manual: e.target.value });
-                                        setErrors({ ...errors, manual: '' }); // Limpiar el error mientras el usuario escribe
-                                    }}
-                                    className={`w-full p-2 border rounded ${errors?.manual ? 'border-red-500' : ''}`}
+                            <div className="space-y-4">
+                                {/* Botón para seleccionar manual */}
+                                <div className="flex items-center space-x-4">
+                                    <button
+                                        onClick={() => setShowManualsModal(true)}
+                                        className="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600"
+                                    >
+                                        Seleccionar Manual
+                                    </button>
+                                    {selectedManual && (
+                                        <span className="text-gray-700 text-sm truncate">
+                                            {selectedManual.name || 'Sin nombre'}
+                                        </span>
+                                    )}
+                                </div>
+
+                                {/* Modal para manuales */}
+                                <FileListModal
+                                    isOpen={showManualsModal}
+                                    onClose={() => setShowManualsModal(false)}
+                                    data={manuals}
+                                    onSelect={handleSelectManual}
+                                    title="Seleccionar Manual"
                                 />
-                            </div>
-                            <div>
-                                <label className='block mb-1'>Ficha técnica<span className="pl-1 text-red-400 font-bold">*</span></label>
-                                <input
-                                    type="text"
-                                    value={form.sheet}
-                                    onChange={(e) => {
-                                        setForm({ ...form, sheet: e.target.value });
-                                        setErrors({ ...errors, sheet: '' }); // Limpiar el error mientras el usuario escribe
-                                    }}
-                                    className={`w-full p-2 border rounded ${errors?.sheet ? 'border-red-500' : ''}`}
+
+                                {/* Botón para seleccionar ficha técnica */}
+                                <div className="flex items-center space-x-4">
+                                    <button
+                                        onClick={() => setShowSheetsModal(true)}
+                                        className="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600"
+                                    >
+                                        Seleccionar Ficha Técnica
+                                    </button>
+                                    {selectedSheet && (
+                                        <span className="text-gray-700 text-sm truncate">
+                                            {selectedSheet.name || 'Sin nombre'}
+                                        </span>
+                                    )}
+                                </div>
+
+                                {/* Modal para fichas técnicas */}
+                                <FileListModal
+                                    isOpen={showSheetsModal}
+                                    onClose={() => setShowSheetsModal(false)}
+                                    data={sheets}
+                                    onSelect={handleSelectSheet}
+                                    title="Seleccionar Ficha Técnica"
                                 />
-                                {errors?.sheet && <p className="text-xs text-red-400">{errors.sheet}</p>}
                             </div>
                             <div>
                                 <div className='flex items-center pb-2 space-x-3'>
@@ -330,7 +443,7 @@ const LeasingsMenu = () => {
                             </div>
                         </div>
                         <div className="flex justify-end space-x-2 mt-4">
-                            <Button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => [setOpenModal(false), setErrors(false)]}>Cancelar</Button>
+                            <Button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => handleCancel()}>Cancelar</Button>
                             <Button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleSave}>{isEditing ? 'Guardar cambios' : 'Crear'}</Button>
                         </div>
                     </div>
@@ -364,6 +477,13 @@ const LeasingsMenu = () => {
                                     onClick={() => handleImageSelect(image.url)} // Asegúrate de pasar 'image.url' aquí
                                 />
                             ))}
+                            <div className="w-full m-auto">
+                                <Pagination
+                                    currentPage={imagesPage}
+                                    totalPages={totalImagesPages}
+                                    onPageChange={(newPage) => setImagesPage(newPage)}
+                                />
+                            </div>
                         </div>
                         <div className="flex justify-end space-x-2">
                             <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowImagesListModal(false)}>Cerrar</button>

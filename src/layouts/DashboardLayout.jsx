@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FaAward, FaBox, FaDollarSign, FaHandshake, FaHome, FaList, FaNewspaper, FaTag, FaUser, FaUserCircle, FaEllipsisV, FaBars, FaHouseUser, FaBook, FaFile } from 'react-icons/fa';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import logo from "@/uploads/logo.png";
+import logo from "@/assets/logo.svg";
 import { AuthContext } from '@/context/AuthContext';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, toggle } from '@nextui-org/react';
 import { FaImage } from 'react-icons/fa6';
@@ -103,11 +103,13 @@ const DashboardLayout = () => {
       </Helmet>
       {/* Sidebar */}
       <div className="hidden lg:flex bg-white text-black w-64 flex-col justify-between h-full sticky top-0">
-        <div className='max-h-screen overflow-y-auto'>
+        <div>
           <Link to="/">
             <img src={logo} alt="logo" className="w-[70%] mx-auto mt-10 mb-10" />
           </Link>
-          <nav className="mt-10">
+        </div>
+        <div className='max-h-screen overflow-y-auto border-t border-gray-300'>
+          <nav>
             {menuItems.map((item) => (
               <div
                 key={item.name}

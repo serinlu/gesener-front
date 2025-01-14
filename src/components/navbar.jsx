@@ -5,7 +5,7 @@ import { FaCartShopping } from 'react-icons/fa6';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '@/context/AuthContext';
-import logo from '@/uploads/logo.png';
+import logo from '@/assets/logo.svg';
 import Cart from '@/components/Cart';
 import debounce from "lodash.debounce";
 import clientAxios from "@/config/axios";

@@ -14,17 +14,36 @@ export const createLeasing = async (form) => {
     }
 }
 
-export const getLeasings = async () => {
+export const getLeasings = async (page = 1, pageSize = 12) => {
     const config = {
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
         },
+        params: {
+            page,
+            pageSize,
+        }
     }
     try {
         const response = await clientAxios.get('/leasings', config)
         return response.data;
     } catch (error) {
         console.error('Error al obtener los leasing:', error);
+        return [];
+    }
+}
+
+export const getAllLeasings = async () => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+    try {
+        const response = await clientAxios.get('/leasings/all/get', config)
+        return response.data
+    } catch (error) {
+        console.error('Error al obtener los Grupo:', error);
         return [];
     }
 }

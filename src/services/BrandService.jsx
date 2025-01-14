@@ -30,6 +30,25 @@ const getBrands = async () => {
         }
 }
 
+export const getPaginatedBrands = async (page = 1, pageSize = 12) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        params: {
+            page,
+            pageSize,
+        }
+    };
+    try {
+        const response = await clientAxios.get('/brands/paginated', config);
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener las marcas:', error);
+        return [];
+    }
+}
+
 const getBrand = async (brandId) => {
     try {
         const response = await clientAxios.get(`/brands/${brandId}`);

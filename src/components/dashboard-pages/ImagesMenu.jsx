@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/react";
 import { enqueueSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaPlus, FaTrash } from "react-icons/fa";
-import Spinner from "../Spinner";
+import Spinner from "@/components/Spinner";
 
 const ImagesMenu = () => {
   const [showUploadImageModal, setShowUploadImageModal] = useState(false);
@@ -36,6 +36,7 @@ const ImagesMenu = () => {
         setImages(data.data); // Aseguramos que estamos usando 'data' para las imágenes
         setTotalPages(data.totalPages); // Aseguramos que usamos 'totalPages' del backend
         setLoading(false);
+        console.log(images)
       })
       .catch((error) => {
         console.error("Error al obtener imágenes:", error);

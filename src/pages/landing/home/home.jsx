@@ -7,6 +7,7 @@ import { getImage } from '@/services/ImageService';
 import { Helmet } from 'react-helmet-async';
 import SuccessCasesSlider from '../../../components/home/success-cases';
 import NewsSlider from '../../../components/home/news';
+import portada from '@/uploads/portada.webp'
 
 const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -81,7 +82,7 @@ const Home = () => {
                 >
                     <div className="relative w-full h-0" style={{ paddingBottom: "56.25%" }}>
                         <img
-                            src={logoImage?.url}
+                            src={portada}
                             alt="Portada"
                             className="absolute top-0 left-0 w-full h-full object-contain scale-100 lg:scale-125" // Escalado mayor en pantallas lg y superiores
                         />
