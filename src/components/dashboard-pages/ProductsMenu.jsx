@@ -1,11 +1,12 @@
-import { Button } from '@nextui-org/react';
+import { Button, Spinner } from '@nextui-org/react';
 import React, { useEffect, useState } from 'react';
-import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaFileExcel, FaPlus, FaTrash } from 'react-icons/fa';
 import { getBrands } from '@/services/BrandService';
 import { getCategories } from '@/services/CategoryService';
-import { createProduct, deleteProduct, getProducts, updateProduct } from '@/services/ProductService';
+import { createProduct, deleteProduct, getProducts, updateProduct, createProductsFromExcel } from '@/services/ProductService';
 import { getImages } from '@/services/ImageService.jsx';
 import { validateProduct } from '@/components/dashboard-pages/validations/productValidations.js';
+import { showSuccessAlert, showErrorAlert } from '@/components/alert';
 
 const ProductsMenu = () => {
     const [products, setProducts] = useState([]);
@@ -13,10 +14,13 @@ const ProductsMenu = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showImagesListModal, setShowImagesListModal] = useState(false);
+    const [showUploadExcelModal, setShowUploadExcelModal] = useState(false)
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [categories, setCategories] = useState([]);
     const [brands, setBrands] = useState([]);
     const [images, setImages] = useState([]);
+    const [file, setFile] = useState([]);
+    const [createLoading, setCreateLoading] = useState(false);
     const [form, setForm] = useState({
         sku: '',
         name: '',
@@ -240,15 +244,82 @@ const ProductsMenu = () => {
         setShowCategoryList((prev) => !prev);
     };
 
+    const handleExcel = () => {
+        setShowUploadExcelModal(true)
+    }
+
+    const uploadProductsFromExcel = async () => {
+        if (!file) {
+            alert("Por favor, selecciona un archivo Excel.");
+            return;
+        }
+
+        setCreateLoading(true);  // Activar el spinner de carga
+
+        try {
+            const response = await createProductsFromExcel(file);  // Llamar al servicio 
+            // para cargar los productos
+            if (response) {
+                setShowUploadExcelModal(false);  // Cerrar el modal
+                showSuccessAlert("Productos creados exitosamente");
+                fetchProducts();  // Actualiza la lista de productos después de la carga
+            }
+        } catch (error) {
+            showErrorAlert("Hubo un error al cargar los productos.");
+            console.error("Error al cargar productos desde Excel:", error);
+        } finally {
+            setCreateLoading(false);  // Desactivar el spinner de carga
+        }
+    };
+
     return (
         <>
-            <div className='mb-3 flex justify-end'>
+            <div className='mb-3 flex justify-end space-x-2'>
+                <Button className='p-3 text-sm w-[5%] flex text-white font-bold rounded-xl bg-green-400' onPress={() => handleExcel()}>
+                    <FaFileExcel />
+                </Button>
                 <Button
                     className='p-3 text-sm w-[5%] flex text-white font-bold rounded-xl bg-blue-600'
                     onPress={() => openFormModal()}
                 >
                     <FaPlus />
                 </Button>
+                {showUploadExcelModal && (
+                    <div
+                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
+                        style={{ margin: 0 }}
+                    >
+                        <div className="w-full h-full flex items-center justify-center">
+                            <div className="bg-white p-4 rounded-lg w-[30%]">
+                                <h1 className="text-center mb-4 font-bold">Crear productos desde archivo Excel</h1>
+                                <h1 className='my-2'>IMPORTANTE: El archivo excel debe tener un formato de tabla con los atributos del producto: <strong>sku, name, brand, model, categories, description, price, contInStock, maxItems.</strong> En caso no se respete el formato no se crearán los productos</h1>
+                                <input
+                                    type="file"
+                                    accept=".xlsx, .xls"
+                                    onChange={(e) => setFile(e.target.files[0])}
+                                    className="w-full p-2 rounded-md border border-gray-300"
+                                />
+                                <div className="flex justify-end mt-4 space-x-2">
+                                    <Button
+                                        className="border border-red-500 px-4 py-2 rounded-lg"
+                                        onClick={() => setShowUploadExcelModal(false)}
+                                    >
+                                        Cancelar
+                                    </Button>
+                                    <Button
+                                        color="success"
+                                        variant="bordered"
+                                        className="border bg-blue-100 rounded-lg border-blue-500 hover:bg-blue-200 transition-colors font-normal"
+                                        onClick={uploadProductsFromExcel}
+                                        isDisabled={createLoading}
+                                    >
+                                        {createLoading ? <Spinner color="blue" /> : "Cargar"}
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
             <div className='bg-white w-full p-4 rounded-lg h-auto space-y-2'>
                 <div className='p-2 h-auto grid grid-cols-8 text-gray-400 border-b-1 border-gray-200'>
@@ -285,18 +356,18 @@ const ProductsMenu = () => {
                                 </h1>
                                 <h1 className="col-span-1 text-left">{product.price}</h1>
                                 <h1 className="col-span-1 text-left">{product.countInStock ?? '0'}</h1>
-                                <div className="col-span-1 flex space-x-2 text-base items-center">
+                                <div className="col-span-1 flex space-x-2 text-base items-left">
                                     <Button
-                                        className="bg-green-500 rounded-md w-1/3 flex items-center justify-center px-4 py-2"
-                                        onClick={() => openFormModal(product)}
+                                        className="bg-yellow-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-yellow-600"
+                                        onPress={() => openFormModal(product)}
                                     >
-                                        <FaEdit className="text-white text-sm" />
+                                        <FaEdit />
                                     </Button>
                                     <Button
-                                        className="bg-red-500 rounded-md w-1/3 flex items-center justify-center px-4 py-2"
-                                        onClick={() => handleDeleteClick(product)}
+                                        className="bg-red-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-red-600"
+                                        onPress={() => showDeleteModal(product)}
                                     >
-                                        <FaTrash className="text-white text-sm" />
+                                        <FaTrash />
                                     </Button>
                                 </div>
 

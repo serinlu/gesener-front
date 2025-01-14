@@ -14,6 +14,24 @@ const createProduct = async (form) => {
     }
 }
 
+export const createProductsFromExcel = async (file) => {
+    const formData = new FormData()
+    formData.append('file', file);
+
+    const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    }
+    try {
+        const response = await clientAxios.post('/products/upload/excel', formData, config);
+        return response.data;
+    } catch (error) {
+        console.error('Error al cargar productos desde el archivo Excel:', error);
+        throw error; // Opcional: Lanzar el error para manejarlo en el componente
+    }
+}
+
 const getProducts = async () => {
     const config = {
         headers: {
