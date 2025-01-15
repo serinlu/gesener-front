@@ -62,7 +62,6 @@ const OrdersMenu = () => {
     const handleEditStatus = async () => {
         try {
             const response = await checkPassword(password);
-            console.log(response);
 
             if (!password) {
                 showErrorAlert("Por favor, ingrese su contraseña.");
@@ -156,7 +155,6 @@ const OrdersMenu = () => {
                                 key={order._id}
                                 className="grid grid-cols-6 gap-4 p-4 min-w-[768px] items-center"
                             >
-                                {console.log(order)}
                                 <h1 className="col-span-1 text-left overflow-hidden text-ellipsis whitespace-nowrap">
                                     {order.order_number}
                                 </h1>
@@ -278,7 +276,33 @@ const OrdersMenu = () => {
                             Nuevo estado
                         </label>
                         <h2 className="font-bold text-green-500">
-                            {selectedOrder.shipping_status}
+                            De {selectedOrder.shipping_status} a {""}
+
+                            {selectedOrder.shipping_method === "DELIVERY" &&
+                                selectedOrder.shipping_status === "RECIBIDO" && (
+                                    <span>EN PREPARACIÓN</span>
+                                )}
+                            {selectedOrder.shipping_method === "DELIVERY" &&
+                                selectedOrder.shipping_status ===
+                                    "EN PREPARACIÓN" && <span>EN CAMINO</span>}
+                            {selectedOrder.shipping_method === "DELIVERY" &&
+                                selectedOrder.shipping_status === "EN CAMINO" && (
+                                    <span>ENTREGADO</span>
+                                )}
+                            {selectedOrder.shipping_method === "PICKUP" &&
+                                selectedOrder.shipping_status === "RECIBIDO" && (
+                                    <span>EN PREPARACIÓN</span>
+                                )}
+                            {selectedOrder.shipping_method === "PICKUP" &&
+                                selectedOrder.shipping_status ===
+                                    "EN PREPARACIÓN" && (
+                                    <span>LISTO PARA RETIRAR</span>
+                                )}
+                            {selectedOrder.shipping_method === "PICKUP" &&
+                                selectedOrder.shipping_status ===
+                                    "LISTO PARA RETIRAR" && (
+                                    <span>ENTREGADO</span>
+                                )}
                         </h2>
                         <div className="mt-4 flex justify-end space-x-4">
                             <Button

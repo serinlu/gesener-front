@@ -7,6 +7,7 @@ import { createProduct, deleteProduct, getProducts, updateProduct, createProduct
 import { getImages } from '@/services/ImageService.jsx';
 import { validateProduct } from '@/components/dashboard-pages/validations/productValidations.js';
 import { showSuccessAlert, showErrorAlert } from '@/components/alert';
+import Pagination from './Pagination';
 
 const ProductsMenu = () => {
     const [products, setProducts] = useState([]);
@@ -34,6 +35,9 @@ const ProductsMenu = () => {
         imageUrl: '',
     });
     const [showCategoryList, setShowCategoryList] = useState(false);
+    const [loading, setLoading] = useState(true); // Estado de carga
+    const [totalImagesPages, setTotalImagesPages] = useState(1); // Total de páginas
+    const [imagesPage, setImagesPage] = useState(1); // Página actual
     const [errors, setErrors] = useState({
         sku: false,
         name: false,
@@ -49,8 +53,11 @@ const ProductsMenu = () => {
         fetchProducts();
         fetchCategories();
         fetchBrands();
-        fetchImages()
     }, []);
+
+    useEffect(() => {
+        fetchImages(imagesPage);
+    }, [imagesPage]);
 
     const fetchProducts = () => {
         getProducts()
@@ -69,11 +76,20 @@ const ProductsMenu = () => {
             .then((data) => setBrands(data))
             .catch((error) => console.error(error));
     };
-
-    const fetchImages = () => {
-        getImages()
-            .then((data) => setImages(data))
-            .catch((error) => console.error(error));
+    
+    const fetchImages = (page) => {
+        setLoading(true);
+        getImages(page)
+            .then((data) => {
+                setImages(data.data); // Aseguramos que estamos usando 'data' para las imágenes
+                setTotalImagesPages(data.totalPages); // Aseguramos que usamos 'totalPages' del backend
+                setLoading(false);
+                console.log(images)
+            })
+            .catch((error) => {
+                console.error("Error al obtener imágenes:", error);
+                setLoading(false);
+            });
     };
 
     const handleImageSelect = (imageUrl) => {
@@ -607,19 +623,27 @@ const ProductsMenu = () => {
 
                 {showImagesListModal && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style={{ marginTop: 0 }}>
-                        <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-[50%] h-[80%]">
+                        <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-[50%] h-[90%]">
                             <h2 className="text-xl font-bold">Imágenes del Producto</h2>
-                            <div className="grid grid-cols-3 gap-4 overflow-y-auto h-[85%]">
-                                {images.map((image, index) => (
-                                    <img
-                                        key={index}
-                                        src={image.url}
-                                        alt={image?.name}
-                                        className="w-full h-full object-cover border-2 cursor-pointer"
-                                        onClick={() => handleImageSelect(image.url)} // Asegúrate de pasar 'image.url' aquí
-                                    />
-                                ))}
+                            <div className="grid grid-cols-3 gap-4 overflow-y-auto h-[80%]">
+                                {loading ? (
+                                    <div className="flex items-center justify-center col-span-3">
+                                        {/* <Spinner color="blue" /> */}
+                                        <p>Cargando imágenes...</p>
+                                    </div>
+                                ) : (
+                                    images.map((image, index) => (
+                                        <img
+                                            key={index}
+                                            src={image.url}
+                                            alt={image?.name}
+                                            className="w-full h-full object-cover border-2 cursor-pointer"
+                                            onClick={() => handleImageSelect(image.url)} // Asegúrate de pasar 'image.url' aquí
+                                        />
+                                    ))
+                                )}
                             </div>
+                            <Pagination currentPage={imagesPage} totalPages={totalImagesPages} onPageChange={(newPage) => setImagesPage(newPage)} />
                             <div className="flex justify-end space-x-2">
                                 <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowImagesListModal(false)}>Cerrar</button>
                             </div>
