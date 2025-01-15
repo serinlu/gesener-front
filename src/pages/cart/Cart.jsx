@@ -16,8 +16,9 @@ const Cart = () => {
 
     const calculateSubtotal = () => {
         const subTotal = cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
-        Cookies.set('subtotal', subTotal.toFixed(2), { expires: 7 });
-        return subTotal
+        // Guardar subtotal en localStorage en lugar de Cookies
+        localStorage.setItem('subtotal', subTotal.toFixed(2));
+        return subTotal;
     };
 
     // const envio = cart.length === 0 ? 0 : 7;
