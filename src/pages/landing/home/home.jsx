@@ -18,19 +18,7 @@ const fadeInUp = {
 };
 
 const Home = () => {
-    const [logoImage, setLogoImage] = useState(null);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const mainImage = async () => {
-            const image = await getImage('home.png');
-            console.log(image);
-            if (image) {
-                setLogoImage(image)
-            }
-        }
-        mainImage()
-    }, [])
 
     const { ref: homeRef, inView: homeInView } = useInView({
         triggerOnce: true,
@@ -53,7 +41,7 @@ const Home = () => {
 
     return (
         <div className='w-full mx-auto'>
-            <div className="relative w-full h-screen">
+            <div className="relative w-full h-screen z-0">
                 {/* Video */}
                 <video
                     src={portadaVid}
@@ -61,6 +49,7 @@ const Home = () => {
                     loop
                     muted
                     className="absolute top-0 left-0 w-full h-full object-cover"
+                    loading="lazy"
                 ></video>
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent z-10"></div>
@@ -70,7 +59,7 @@ const Home = () => {
                         Optimizamos recursos energéticos para un futuro eficiente y sostenible en tu organización
                     </h1>
                     <Button
-                        className="px-4 py-2 text-sm sm:text-lg font-bold text-white bg-blue-500 rounded-lg shadow-lg hover:bg-blue-600 flex items-center justify-center"
+                        className="px-4 py-2 text-sm sm:text-lg font-bold text-white bg-blue-500 rounded-lg shadow-lg hover:bg-blue-600 flex items-center justify-center sm:mx-auto"
                         onClick={handleUs}
                     >
                         Descubre más
