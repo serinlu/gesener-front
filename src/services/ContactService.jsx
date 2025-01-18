@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_URL = 'https://api.mailjet.com/v3.1/send';
-const AUTH_KEY = import.meta.env.REACT_APP_EMAIL_AUTH_KEY
+const AUTH_KEY = import.meta.env.EMAIL_AUTH_KEY
 
 export const sendEmail = async ({ fromEmail, fromName, subject, text }) => {
     try {

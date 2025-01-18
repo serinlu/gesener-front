@@ -14,9 +14,11 @@ const AuthProvider = ({ children }) => {
         const autenticarUsuario = async () => {
             try {
                 const user = await getProfile();
-				console.log("Respuesta de Profile", { isAuthenticated: true, user: user.data.user })
-                setAuth({ isAuthenticated: true, user: user.data.user });
-                setLoading(false);
+                console.log("Respuesta de Profile", { isAuthenticated: true, user: user.data.user })
+                if (user) {
+                    setAuth({ isAuthenticated: true, user: user.data.user });
+                    setLoading(false);
+                }
             } catch (err) {
                 console.error("Error al autenticar usuario:", err);
                 setAuth({ isAuthenticated: false, user: null });

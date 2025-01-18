@@ -53,70 +53,30 @@ const Home = () => {
 
     return (
         <div className='w-full mx-auto'>
-            <div className="relative w-full h-auto">
+            <div className="relative w-full h-screen">
+                {/* Video */}
                 <video
                     src={portadaVid}
                     autoPlay
                     loop
                     muted
-                    className="w-full h-auto"
+                    className="absolute top-0 left-0 w-full h-full object-cover"
                 ></video>
-                <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black via-black/80 to-transparent z-0">
-                    <div className='w-[80%] mx-auto gap-x-4 justify-center space-y-4'>
-                        <h1 className='text-white text-center text-4xl font-bold pt-4'>
-                            Optimizamos recursos energéticos para un futuro eficiente y sostenible en tu organización
-                        </h1>
-                        <div className='flex mx-auto justify-center'>
-                            <Button className='px-4 text-xl text-white bg-blue-500 rounded-xl font-bold pointer-events-auto' onClick={handleUs}>
-                                Descubre más
-                            </Button>
-                        </div>
-                    </div>
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent z-10"></div>
+                {/* Content */}
+                <div className="absolute left-8 right-8 bottom-20 z-20 sm:flex space-y-4 items-center justify-between sm:left-12 sm:right-12">
+                    <h1 className="text-white text-xl sm:text-2xl md:text-4xl font-bold sm:w-1/2 md:max-w-3xl leading-tight">
+                        Optimizamos recursos energéticos para un futuro eficiente y sostenible en tu organización
+                    </h1>
+                    <Button
+                        className="px-4 py-2 text-sm sm:text-lg font-bold text-white bg-blue-500 rounded-lg shadow-lg hover:bg-blue-600 flex items-center justify-center"
+                        onClick={handleUs}
+                    >
+                        Descubre más
+                    </Button>
                 </div>
             </div>
-
-
-
-
-
-
-            {/* <motion.div
-                ref={homeRef}
-                className="lg:relative h-auto w-[90%] mx-auto grid lg:grid-cols-2 grid-cols-1 items-center overflow-hidden gap-y-10 lg:gap-y-0 my-16"
-                initial={{ opacity: 0, scale: 1.2 }}
-                animate={homeInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.2 }}
-                transition={{ duration: 1.5 }}
-            >
-                <motion.div
-                    className="relative z-10 text-left px-6 lg:px-10"
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={homeInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-                    transition={{ duration: 0.7, delay: 1 }}
-                >
-                    <p className="text-4xl lg:text-5xl font-bold lg:leading-tight">
-                        Soluciones en energía eléctrica a su medida
-                    </p>
-
-                    <h1 className='text-xl my-4'>
-                        Soluciones para condominios, edificios y departamentos
-                    </h1>
-                </motion.div>
-                <motion.div
-                    className="relative w-full flex justify-center items-center mx-auto lg:max-w-[80%] lg:my-32"
-                    style={{ aspectRatio: "16/9" }}
-                    initial={{ scale: 1, opacity: 0 }}
-                    animate={homeInView ? { scale: 1, opacity: 1 } : { scale: 1, opacity: 0 }}
-                    transition={{ duration: 1.5, delay: 0.5, ease: "easeInOut" }}
-                >
-                    <div className="relative w-full h-0" style={{ paddingBottom: "56.25%" }}>
-                        <img
-                            src={portada}
-                            alt="Portada"
-                            className="absolute top-0 left-0 w-full h-full object-contain scale-100 lg:scale-125" 
-                        />
-                    </div>
-                </motion.div>
-            </motion.div> */}
 
 
             <div className='w-[90%] flex flex-col gap-y-12 mx-auto py-10'>

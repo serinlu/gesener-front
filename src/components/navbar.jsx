@@ -46,6 +46,10 @@ const Navbar = () => {
         }
     }, 300);
 
+    useEffect(() =>  {
+        console.log(auth)
+    }, [])
+
     const handleResultSelect = () => {
         setSearchQuery(null);
         toggleSearch()
