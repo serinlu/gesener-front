@@ -7,7 +7,7 @@ import { createProduct, deleteProduct, getProducts, updateProduct, createProduct
 import { getImages } from '@/services/ImageService.jsx';
 import { validateProduct } from '@/components/dashboard-pages/validations/productValidations.js';
 import { showSuccessAlert, showErrorAlert } from '@/components/alert';
-import Pagination from './Pagination';
+import Pagination from '@/components/dashboard-pages/Pagination'
 
 const ProductsMenu = () => {
     const [products, setProducts] = useState([]);
@@ -381,7 +381,7 @@ const ProductsMenu = () => {
                                     </Button>
                                     <Button
                                         className="bg-red-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-red-600"
-                                        onPress={() => showDeleteModal(product)}
+                                        onPress={() => handleDeleteClick(product)}
                                     >
                                         <FaTrash />
                                     </Button>
@@ -407,7 +407,7 @@ const ProductsMenu = () => {
                                 <div>
                                     <label className="block mb-1">SKU<span className="pl-1 text-red-400 font-bold">*</span></label>
                                     <input
-                                        type="number"
+                                        type="text"
                                         value={form.sku}
                                         onChange={(e) => {
                                             setForm({ ...form, sku: e.target.value });

@@ -5,10 +5,16 @@ import { useState, useEffect } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa'
+import { getImages } from '@/services/ImageService'
+import Pagination from '@/components/dashboard-pages/Pagination'
 
 const SuccessCasesMenu = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [success, setSuccess] = useState([])
+    const [images, setImages] = useState([])
+    const [showImagesListModal, setShowImagesListModal] = useState(false)
+    const [imagesPage, setImagesPage] = useState(1)
+    const [totalImagesPage, setTotalImagesPage] = useState(1)
     const [showModal, setShowModal] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -23,6 +29,20 @@ const SuccessCasesMenu = () => {
     useEffect(() => {
         fetchSuccess()
     }, [])
+
+    useEffect(() => {
+        fetchImages(imagesPage)
+    }, [imagesPage])
+
+    const fetchImages = (page) => {
+        getImages(page)
+            .then(data => {
+                setImages(data.data)
+                setTotalImagesPage(data.totalImagesPage)
+                console.log(images)
+            })
+            .catch(error => console.error(error))
+    }
 
     const fetchSuccess = () => {
         getSuccess()
@@ -82,6 +102,14 @@ const SuccessCasesMenu = () => {
         } catch {
             console.error('Error al crear el caso de éxito:', error)
         }
+    }
+
+    const handleImageSelect = (imageUrl) => {
+        setForm((prevForm) => ({
+            ...prevForm,
+            image: imageUrl,
+        }))
+        setShowImagesListModal(false);
     }
 
     const handleEdit = () => {
@@ -197,14 +225,55 @@ const SuccessCasesMenu = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block mb-2">Imagen (URL)</label>
-                                <input
-                                    type="text"
-                                    value={form.image}
-                                    onChange={(e) => setForm({ ...form, image: e.target.value })}
-                                    className="w-full p-2 border rounded"
-                                />
+                                <div className='flex items-center pb-2 space-x-3'>
+                                    <label className="block">Imagen de la portada</label>
+                                    <Button className='bg-blue-600 rounded-lg text-white p-2' onPress={() => setShowImagesListModal(true)}>Seleccionar</Button>
+                                </div>
+
+                                {/* Vista previa de la imagen seleccionada */}
+                                {form.image ? (
+                                    <div className="flex flex-col items-center mt-2">
+                                        <img src={form.image} alt="Vista previa de imagen" className="w-full h-40 object-cover border rounded" />
+                                        <button
+                                            className="mt-2 bg-red-500 text-white px-4 py-1 rounded"
+                                            onClick={() => setForm({ ...form, image: '' })}
+                                        >
+                                            Quitar Imagen
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <p className="text-gray-500 text-sm">No se ha seleccionado ninguna imagen</p>
+                                )}
                             </div>
+                            {showImagesListModal && (
+                                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style={{ marginTop: 0 }}>
+                                    <div className="bg-white p-6 rounded-lg shadow-lg space-y-4 w-[50%] h-[90%]">
+                                        <h2 className="text-xl font-bold">Imágenes del Producto</h2>
+                                        <div className="grid grid-cols-3 gap-4 overflow-y-auto h-[80%]">
+                                            {isLoading ? (
+                                                <div className="flex items-center justify-center col-span-3">
+                                                    {/* <Spinner color="blue" /> */}
+                                                    <p>Cargando imágenes...</p>
+                                                </div>
+                                            ) : (
+                                                images.map((image, index) => (
+                                                    <img
+                                                        key={index}
+                                                        src={image.url}
+                                                        alt={image?.name}
+                                                        className="w-full h-full object-cover border-2 cursor-pointer"
+                                                        onClick={() => handleImageSelect(image.url)} // Asegúrate de pasar 'image.url' aquí
+                                                    />
+                                                ))
+                                            )}
+                                        </div>
+                                        <Pagination currentPage={imagesPage} totalPages={totalImagesPage} onPageChange={(newPage) => setImagesPage(newPage)} />
+                                        <div className="flex justify-end space-x-2">
+                                            <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setShowImagesListModal(false)}>Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                             <div>
                                 <label className="block mb-2">Video (URL)</label>
                                 <input
