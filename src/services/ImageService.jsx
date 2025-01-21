@@ -1,8 +1,10 @@
 import clientAxios from "@/config/axios";
 
-const uploadImage = async (file) => {
+const uploadImages = async (files) => {
     const formData = new FormData();
-    formData.append('file', file)
+    files.forEach((file) => {
+        formData.append('files', file); // Asegúrate de que el campo coincida con el esperado por el backend
+    });
 
     const config = {
         headers: {
@@ -93,4 +95,4 @@ const deleteImage = async (imageName) => {
     }
 };
 
-export { uploadImage, getImages, getImage, deleteImage };
+export { uploadImages, getImages, getImage, deleteImage };

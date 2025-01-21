@@ -92,16 +92,7 @@ export const ProductCard = ({ product, onAddToCart, onRemoveFromCart }) => {
                 >
                     {product.name || "Producto sin nombre"}
                 </Link>
-                <p className="text-gray-600 mb-2">{product.description || "Sin descripción"}</p>
                 <p className="font-bold mb-4">$ {product.price?.toFixed(2) || "0.00"}</p>
-
-                {/* Indicadores de stock y cantidad */}
-                <p className="text-sm mb-2 text-gray-500">
-                    Stock disponible: {product.countInStock}
-                </p>
-                <p className="text-sm mb-2 text-gray-500">
-                    Máximo permitido: {product.maxItems}
-                </p>
 
                 <div className="w-full">
                     <Button

@@ -76,7 +76,7 @@ const ProductsMenu = () => {
             .then((data) => setBrands(data))
             .catch((error) => console.error(error));
     };
-    
+
     const fetchImages = (page) => {
         setLoading(true);
         getImages(page)
@@ -266,25 +266,31 @@ const ProductsMenu = () => {
 
     const uploadProductsFromExcel = async () => {
         if (!file) {
-            alert("Por favor, selecciona un archivo Excel.");
+            showErrorAlert("Por favor selecciona un archivo antes de continuar.");
             return;
         }
 
-        setCreateLoading(true);  // Activar el spinner de carga
+        setCreateLoading(true);
 
         try {
-            const response = await createProductsFromExcel(file);  // Llamar al servicio 
-            // para cargar los productos
-            if (response) {
-                setShowUploadExcelModal(false);  // Cerrar el modal
-                showSuccessAlert("Productos creados exitosamente");
-                fetchProducts();  // Actualiza la lista de productos después de la carga
-            }
+            const result = await createProductsFromExcel(file);
+            showSuccessAlert(`${result.createdProducts.length} productos creados exitosamente.`);
+            fetchProducts(); // Actualiza la lista de productos después de cargar
         } catch (error) {
-            showErrorAlert("Hubo un error al cargar los productos.");
-            console.error("Error al cargar productos desde Excel:", error);
+            const errorMessage =
+                error.response?.data?.message || "Error al procesar el archivo Excel.";
+            const invalidCategories =
+                error.response?.data?.invalidCategories?.join(", ") || null;
+
+            showErrorAlert(
+                invalidCategories
+                    ? `${errorMessage}. Categorías inválidas: ${invalidCategories}`
+                    : errorMessage
+            );
         } finally {
-            setCreateLoading(false);  // Desactivar el spinner de carga
+            setCreateLoading(false);
+            setShowUploadExcelModal(false);
+            setFile(null); // Limpia el archivo seleccionado
         }
     };
 
@@ -308,7 +314,7 @@ const ProductsMenu = () => {
                         <div className="w-full h-full flex items-center justify-center">
                             <div className="bg-white p-4 rounded-lg w-[30%]">
                                 <h1 className="text-center mb-4 font-bold">Crear productos desde archivo Excel</h1>
-                                <h1 className='my-2'>IMPORTANTE: El archivo excel debe tener un formato de tabla con los atributos del producto: <strong>sku, name, brand, model, categories, description, price, contInStock, maxItems.</strong> En caso no se respete el formato no se crearán los productos</h1>
+                                <h1 className='my-2'>IMPORTANTE: El archivo excel debe tener un formato de tabla con los atributos del producto: <strong>sku, name, brand, model, categories, description, price.</strong> En caso no se respete el formato no se crearán los productos</h1>
                                 <input
                                     type="file"
                                     accept=".xlsx, .xls"

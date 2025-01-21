@@ -1,5 +1,5 @@
 import Pagination from "@/components/dashboard-pages/Pagination";
-import { deleteImage, getImages, uploadImage } from "@/services/ImageService";
+import { deleteImage, getImages, uploadImages } from "@/services/ImageService";
 import { Button } from "@nextui-org/react";
 import { enqueueSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ const ImagesMenu = () => {
   const [showViewImageModal, setShowViewImageModal] = useState(false);
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true); // Estado de carga
   const [page, setPage] = useState(1); // Página actual
   const [totalPages, setTotalPages] = useState(1); // Total de páginas
@@ -46,22 +46,22 @@ const ImagesMenu = () => {
 
   const handleCreateClick = () => {
     setShowUploadImageModal(true);
-    setFile(null);
+    setFiles([]);
   };
 
   const handleCreate = async () => {
-    if (!file) {
-      console.error("No se ha seleccionado ningún archivo");
+    if (!files.length) {
+      console.error("No se han seleccionado archivos");
       return;
     }
 
     try {
       setCreateLoading(true);
-      const response = await uploadImage(file); // Aquí pasamos solo el archivo
+      const response = await uploadImages(files); // Usar el servicio de múltiples imágenes
       if (response) {
-        fetchImages(page); // Volver a cargar las imágenes en la misma página
+        fetchImages(page);
         setShowUploadImageModal(false);
-        enqueueSnackbar("Imagen subida correctamente", {
+        enqueueSnackbar("Imágenes subidas correctamente", {
           variant: "success",
           anchorOrigin: {
             vertical: "top",
@@ -71,8 +71,8 @@ const ImagesMenu = () => {
         });
       }
     } catch (error) {
-      console.error("Error al subir la imagen:", error);
-      enqueueSnackbar("Error al subir la imagen", {
+      console.error("Error al subir las imágenes:", error);
+      enqueueSnackbar("Error al subir las imágenes", {
         variant: "error",
         anchorOrigin: {
           vertical: "top",
@@ -189,17 +189,15 @@ const ImagesMenu = () => {
           </div>
         )}
         {showUploadImageModal && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
-            style={{ marginTop: 0 }}
-          >
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10" style={{ marginTop: 0 }}>
             <div className="w-full h-full flex items-center justify-center">
               <div className="bg-white p-4 rounded-lg w-[30%]">
-                <h1 className="text-center mb-4">Cargar imagen</h1>
+                <h1 className="text-center mb-4">Cargar imágenes</h1>
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => setFile(e.target.files[0])}
+                  multiple // Permitir múltiples imágenes
+                  onChange={(e) => setFiles(Array.from(e.target.files))}
                   className="w-full p-2 rounded-md border border-gray-300"
                 />
                 <div className="flex justify-end mt-4 space-x-2">
