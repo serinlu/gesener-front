@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useId, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getProducts } from '@/services/ProductService';
+import { getProducts, getProductsWithPagination } from '@/services/ProductService';
 import { getCategories } from '@/services/CategoryService';
 import { getBrands } from '@/services/BrandService';
 import { Button } from '@nextui-org/react';
@@ -11,6 +11,7 @@ import Cart from '@/components/Cart';
 import debounce from "lodash.debounce";
 import clientAxios from '@/config/axios';
 import { ProductCard } from '@/components/ProductCard'
+import Pagination from '@/components/dashboard-pages/Pagination'
 
 const accordionVariants = {
     open: {
@@ -57,23 +58,49 @@ const Product = () => {
     const [filtrosMenu, setFiltrosMenu] = useState(false)
     const searchRef = useRef(null)
 
+    const [page, setPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
+
     useEffect(() => {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        fetchProducts(page)
+    }, [page])
+
+    const fetchProducts = async (page) => {
+        try {
+            // Establecer el estado de carga antes de iniciar la solicitud
+            setLoading(true);
+    
+            const data = await getProductsWithPagination(page);
+            
+            // Actualizar los productos y otros estados relacionados
+            setProducts(data.products);
+            setFilteredProducts(data.products);
+            setTotalPages(data.totalPages);
+        } catch (error) {
+            console.error("Error al obtener productos:", error);
+    
+            // Limpia los estados en caso de error
+            setProducts([]);
+            setFilteredProducts([]);
+        } finally {
+            // Finalizar el estado de carga sin importar el resultado
+            setLoading(false);
+        }
+    };
+    
+
     const fetchData = async () => {
         setLoading(true);
-        // const [productsRes, categoriesRes, brandsRes] = await Promise.all([getProducts(), getCategories(), getBrands()]);
-        const productsRes = await getProducts();
-        console.log(productsRes)
         const categoriesRes = await getCategories();
         console.log(categoriesRes)
         const brandsRes = await getBrands();
         console.log(brandsRes)
-        setProducts(productsRes);
         setCategories(categoriesRes);
         setBrands(brandsRes);
-        setFilteredProducts(productsRes);
         setLoading(false);
     };
 
@@ -126,21 +153,20 @@ const Product = () => {
 
     // Unificar el filtro por categorías y marcas en un solo efecto
     useEffect(() => {
-        let filtered = products;
+        let filtered = Array.isArray(products) ? [...products] : [];
 
         if (selectedCategories.length > 0) {
             filtered = filtered.filter(product =>
-                product.categories.some(category => selectedCategories.includes(category._id))
+                product.categories?.some(category => selectedCategories.includes(category._id))
             );
         }
 
         if (selectedBrands.length > 0) {
             filtered = filtered.filter(product =>
-                selectedBrands.includes(product.brand._id)
+                selectedBrands.includes(product.brand?._id)
             );
         }
 
-        // Filtrar por precio
         filtered = filtered.filter(product =>
             product.price >= priceRange[0] && product.price <= priceRange[1]
         );
@@ -329,6 +355,11 @@ const Product = () => {
                                 )}
                         </div>
                     )}
+                    <Pagination
+                        totalPages={totalPages}
+                        currentPage={page}
+                        onPageChange={(newPage) => setPage(newPage)}
+                    />
                 </div>
             </div>
         </div>

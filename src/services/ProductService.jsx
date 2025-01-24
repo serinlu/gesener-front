@@ -47,6 +47,23 @@ const getProducts = async () => {
     }
 };
 
+export const getProductsWithPagination = async (page = 1, pageSize = 12) => {
+    const config = {
+        headers: { 'Content-Type': 'application/json' },
+        params: {
+            page,
+            pageSize,
+        },
+    };
+    try {
+        const response = await clientAxios.get('/products/list/paginated', config);
+        return response.data; // Devuelve los productos paginados
+    } catch (error) {
+        console.error('Error al obtener productos paginados:', error);
+        return { data: [], totalPages: 0 }; // Valores predeterminados en caso de error
+    }
+};
+
 const getProductById = async (id) => {
     try {
         const response = await clientAxios.get(`/products/${id}`);
