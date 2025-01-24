@@ -47,6 +47,47 @@ const getProducts = async () => {
     }
 };
 
+export const getFilteredProducts = async ({ categories = [], brands = [], priceRange = [0, 50000], searchQuery = '', page = 1 }) => {
+    try {
+        // Validar que priceRange sea un array válido con dos elementos
+        const [minPrice, maxPrice] = Array.isArray(priceRange) && priceRange.length === 2
+            ? priceRange
+            : [0, 50000];
+
+        // Construir los parámetros dinámicamente
+        const params = {
+            minPrice,
+            maxPrice,
+            page,
+        };
+
+        // Agregar categorías si están definidas
+        if (categories.length > 0) {
+            params.category = categories.join(','); // Cambiar 'categories' por 'category'
+        }
+
+        // Agregar marcas si están definidas
+        if (brands.length > 0) {
+            params.brand = brands.join(','); // Cambiar 'brands' por 'brand'
+        }
+
+        // Agregar búsqueda si está definida
+        if (searchQuery.trim()) {
+            params.search = searchQuery.trim();
+        }
+
+        // Llamar al endpoint
+        const { data } = await clientAxios.get('/products/list/filtered', { params });
+
+        // Devolver los datos obtenidos
+        return data; // La respuesta debe incluir productos, totalPages y totalProducts
+    } catch (error) {
+        console.error('Error al obtener productos filtrados:', error);
+        throw error; // Relanzar el error para que el frontend lo maneje
+    }
+};
+
+
 export const getProductsWithPagination = async (page = 1, pageSize = 12) => {
     const config = {
         headers: { 'Content-Type': 'application/json' },
