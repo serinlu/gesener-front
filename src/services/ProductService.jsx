@@ -47,7 +47,15 @@ const getProducts = async () => {
     }
 };
 
-export const getFilteredProducts = async ({ categories = [], brands = [], priceRange = [0, 50000], searchQuery = '', page = 1 }) => {
+export const getFilteredProducts = async ({
+    categories = [],
+    brands = [],
+    priceRange = [0, 50000],
+    searchQuery = '',
+    page = 1,
+    sortBy = 'name', // Ordenar por nombre por defecto
+    order = 'asc' // Orden ascendente por defecto
+}) => {
     try {
         // Validar que priceRange sea un array válido con dos elementos
         const [minPrice, maxPrice] = Array.isArray(priceRange) && priceRange.length === 2
@@ -59,6 +67,8 @@ export const getFilteredProducts = async ({ categories = [], brands = [], priceR
             minPrice,
             maxPrice,
             page,
+            sortBy, // Agregar el campo de ordenamiento
+            order, // Agregar el tipo de orden
         };
 
         // Agregar categorías si están definidas

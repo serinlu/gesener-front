@@ -24,6 +24,8 @@ const Product = () => {
     const [totalPages, setTotalPages] = useState(1);
 
     const { addToCart, removeFromCart } = useCart();
+    const [sortBy, setSortBy] = useState('name'); // Campo por el que ordenar
+    const [order, setOrder] = useState('asc'); // Orden ascendente o descendente
 
     useEffect(() => {
         const fetchData = async () => {
@@ -52,6 +54,8 @@ const Product = () => {
                     priceRange: [minPrice, maxPrice],
                     searchQuery: searchQuery.trim(),
                     page,
+                    sortBy, // Incluir el campo de orden
+                    order, // Incluir el tipo de orden
                 });
                 setProducts(data.products);
                 setTotalPages(data.totalPages);
@@ -63,7 +67,15 @@ const Product = () => {
             }
         };
         fetchFilteredProducts();
-    }, [selectedCategories, selectedBrands, priceRange, searchQuery, page]);
+    }, [selectedCategories, selectedBrands, priceRange, searchQuery, page, sortBy, order]);
+
+    const handleSortChange = (e) => {
+        const value = e.target.value;
+        const [field, direction] = value.split('-');
+        setSortBy(field);
+        setOrder(direction);
+        setPage(1); // Reiniciar a la primera página al cambiar el orden
+    };
 
     const handleCategoryChange = (categoryId) => {
         setSelectedCategories((prevSelected) =>
@@ -180,6 +192,11 @@ const Product = () => {
                                 className="flex items-center justify-between p-2 bg-gray-200 rounded-t-lg h-12"
                             >
                                 <h3 className="font-bold text-md pl-2">Categorías</h3>
+                                {selectedCategories.length > 0 && (
+                                    <span className="text-white bg-blue-500 rounded-full px-2 text-xs">
+                                        {selectedCategories.length}
+                                    </span>
+                                )}
                                 <motion.span
                                     variants={arrowVariants}
                                     animate={categoryAccordionOpen ? 'open' : 'closed'}
@@ -221,6 +238,11 @@ const Product = () => {
                                 className="flex items-center justify-between p-2 bg-gray-200 h-12"
                             >
                                 <h3 className="font-bold text-md pl-2">Marcas</h3>
+                                {selectedBrands.length > 0 && (
+                                    <span className="text-white bg-blue-500 rounded-full px-2 text-xs">
+                                        {selectedBrands.length}
+                                    </span>
+                                )}
                                 <motion.span
                                     variants={arrowVariants}
                                     animate={brandAccordionOpen ? 'open' : 'closed'}
@@ -262,6 +284,11 @@ const Product = () => {
                                 className={clsx("flex items-center justify-between p-2 bg-gray-200 h-12", priceAccordionOpen ? "rounded-none" : "rounded-b-lg")}
                             >
                                 <h3 className="font-bold text-md pl-2">Precio</h3>
+                                {(priceRange[0] !== 0 || priceRange[1] !== 50000) && (
+                                    <span className="text-white bg-blue-500 rounded-full px-2 text-xs">
+                                        {priceRange[0]} - {priceRange[1]}
+                                    </span>
+                                )}
                                 <motion.span
                                     variants={arrowVariants}
                                     animate={priceAccordionOpen ? 'open' : 'closed'}
@@ -299,38 +326,60 @@ const Product = () => {
                             </div>
                         </motion.div>
                     </div>
-
-                    {/* Búsqueda */}
                 </div>
 
                 {/* Productos */}
                 <div className="w-full sm:w-3/4 lg:w-4/5 p-4">
-                    {loading ? (
-                        <div>Cargando productos...</div>
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {products.length > 0 ? (
-                                products.map((product) => (
-                                    <ProductCard
-                                        key={product._id}
-                                        product={product}
-                                        onAddToCart={handleAddToCart}
-                                        onRemoveFromCart={removeFromCart}
-                                    />
-                                ))
-                            ) : (
-                                <div className="text-center">No hay productos que coincidan con los filtros seleccionados.</div>
-                            )}
-                        </div>
-                    )}
+                    <div>
+                        <div className="text-4xl pb-4 font-bold">Productos</div>
 
-                    {/* Paginación */}
-                    <Pagination
-                        totalPages={totalPages}
-                        currentPage={page}
-                        onPageChange={(newPage) => setPage(newPage)}
-                    />
+                        {/* Contenedor para ordenar */}
+                        <div className="mb-4 w-full flex justify-end">
+                            <div className="w-auto flex items-center space-x-3">
+                                <h3 className="font-medium">Ordenar por</h3>
+                                <select
+                                    className="border border-gray-300 p-2"
+                                    value={`${sortBy}-${order}`}
+                                    onChange={handleSortChange}
+                                >
+                                    <option value="name-asc">Nombre (A-Z)</option>
+                                    <option value="name-desc">Nombre (Z-A)</option>
+                                    <option value="price-asc">Precio (Menor a Mayor)</option>
+                                    <option value="price-desc">Precio (Mayor a Menor)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Contenedor de los productos */}
+                        {loading ? (
+                            <div>Cargando productos...</div>
+                        ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                {products.length > 0 ? (
+                                    products.map((product) => (
+                                        <ProductCard
+                                            key={product._id}
+                                            product={product}
+                                            onAddToCart={handleAddToCart}
+                                            onRemoveFromCart={removeFromCart}
+                                        />
+                                    ))
+                                ) : (
+                                    <div className="w-full">No hay productos que coincidan con los filtros seleccionados.</div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Paginación */}
+                        <Pagination
+                            totalPages={totalPages}
+                            currentPage={page}
+                            onPageChange={(newPage) => setPage(newPage)}
+                        />
+                    </div>
                 </div>
+
+
             </div>
         </div>
     );
