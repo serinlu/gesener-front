@@ -6,6 +6,7 @@ import Cart from '@/components/Cart';
 import { Helmet } from 'react-helmet-async';
 import { getProductById } from '@/services/ProductService';
 import clientAxios from '@/config/axios';
+import ReactQuill from 'react-quill';
 
 const ProductView = () => {
   const { id } = useParams();
@@ -133,9 +134,10 @@ const ProductView = () => {
           <div className='flex'>
             <div className='w-1/2'>
               <span className='font-bold text-xl'>Descripción</span>
-              <p className='text-gray-700 my-4'>
-                {product.description ? product.description : 'Sin descripción'}
-              </p>
+              <div
+                dangerouslySetInnerHTML={{ __html: product.description }}
+                className='w-full mx-auto text-justify text-lg leading-relaxed my-8'
+              />
             </div>
             <div className='w-1/2'>
               <span className='font-bold'>Valoraciones</span>

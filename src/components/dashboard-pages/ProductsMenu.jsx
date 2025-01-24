@@ -8,6 +8,7 @@ import { getImages } from '@/services/ImageService.jsx';
 import { validateProduct } from '@/components/dashboard-pages/validations/productValidations.js';
 import { showSuccessAlert, showErrorAlert } from '@/components/alert';
 import Pagination from '@/components/dashboard-pages/Pagination'
+import ReactQuill from 'react-quill';
 
 const ProductsMenu = () => {
     const [products, setProducts] = useState([]);
@@ -533,16 +534,15 @@ const ProductsMenu = () => {
                                 </div>
                                 <div>
                                     <label className="block mb-1">Descripción<span className="pl-1 text-red-400 font-bold">*</span></label>
-                                    <input
-                                        type="text"
-                                        value={form.description}
-                                        onChange={(e) => {
-                                            setForm({ ...form, description: e.target.value });
+                                    <ReactQuill
+                                        value={form.description || ''} // Valor actual de la descripción
+                                        onChange={(value) => {
+                                            setForm({ ...form, description: value });
                                             setErrors({ ...errors, description: '' }); // Limpiar el error mientras el usuario escribe
                                         }}
                                         onBlur={() => {
                                             const newErrors = validateProduct(form); // Validar el campo cuando pierde el foco
-                                            setErrors((prevErrors) => ({ ...prevErrors, description: newErrors.description })); // Mostrar el error solo para el campo SKU
+                                            setErrors((prevErrors) => ({ ...prevErrors, description: newErrors.description }));
                                         }}
                                         className={`w-full p-2 border rounded ${errors?.description ? 'border-red-500' : ''}`}
                                     />
