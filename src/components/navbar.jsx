@@ -215,6 +215,7 @@ const Navbar = () => {
                                         onClick={(event) => {
                                             event.stopPropagation(); // Prevenir que el clic cierre inmediatamente el dropdown
                                             setShowSolutionsDropdown(!showSolutionsDropdown);
+                                            setShowUserDropdown(false);
                                         }}
                                         className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-500 focus:outline-none"
                                     >
