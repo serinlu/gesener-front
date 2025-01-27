@@ -26,13 +26,15 @@ const Navbar = () => {
     const [showUserDropdown, setShowUserDropdown] = useState(false);
     const [openSearch, setOpenSearch] = useState(false);
     const searchRef = useRef(null);
+    const solutionsRef = useRef(null);
+    const userRef = useRef(null);
 
     const fetchSearchResults = debounce(async (query) => {
         if (!query) {
             setResults({ products: [], news: [], successCases: [] });
             return
         }
-        
+
         setError(null);
 
         try {
@@ -46,9 +48,24 @@ const Navbar = () => {
         }
     }, 300);
 
-    useEffect(() =>  {
-        console.log(auth)
-    }, [])
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                solutionsRef.current &&
+                !solutionsRef.current.contains(event.target) &&
+                userRef.current &&
+                !userRef.current.contains(event.target)
+            ) {
+                closeDropdowns();
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const handleResultSelect = () => {
         setSearchQuery(null);
@@ -63,6 +80,8 @@ const Navbar = () => {
 
     const toggleCart = () => {
         setIsCartOpen(!isCartOpen);
+        setShowSolutionsDropdown(false);
+        setShowUserDropdown(false);
         if (openSearch) {
             setOpenSearch(false);
             searchRef.current.blur();
@@ -91,6 +110,8 @@ const Navbar = () => {
         setOpenSearch(!openSearch);
         setSearchQuery('');
         fetchSearchResults('')
+        setShowSolutionsDropdown(false);
+        setShowUserDropdown(false);
     };
 
     const clearSearchQuery = () => {
@@ -145,6 +166,11 @@ const Navbar = () => {
         };
     }, [lastScrollY, openSearch, isOpen, isCartOpen, showSolutionsDropdown, showUserDropdown]);
 
+    const closeDropdowns = () => {
+        setShowSolutionsDropdown(false);
+        setShowUserDropdown(false);
+    }
+
     return (
         <div className="z-10 relative">
             <div className={`w-full py-3 bg-white shadow-md text-black z-10 ${openSearch ? 'shadow-none' : ''}`}>
@@ -161,47 +187,52 @@ const Navbar = () => {
                                 <img src={logo} alt="logo" className="h-[2rem] ml-3" />
                             </NavLink>
                         </div>
-                        <div
-                            className="hidden lg:flex items-center space-x-1"
-                        >
-                            <ul className="flex lg:space-x-1 xl:space-x-3 items-center">
-                                <li>
-                                    <NavLink
-                                        to="/"
-                                        className="block px-2 py-2 text-gray-700 hover:text-indigo-500"
-                                    >
-                                        Inicio
-                                    </NavLink>
-                                </li>
-                                <li>
+                        <div className="hidden lg:flex items-center space-x-1 h-full">
+                            <ul className="flex items-center h-full">
+                                <li className="h-full">
                                     <NavLink
                                         to="/us"
-                                        className="block px-2 py-2 text-gray-700 hover:text-indigo-500"
+                                        className={({ isActive }) =>
+                                            isActive
+                                                ? "flex items-center justify-center px-4 py-1 text-white font-semibold bg-blue-500 h-full"
+                                                : "flex items-center justify-center px-4 py-2 text-gray-700 hover:text-indigo-500 h-full"
+                                        }
+                                        onClick={closeDropdowns}
                                     >
                                         Nosotros
                                     </NavLink>
                                 </li>
-                                <li>
+                                <li className="h-full">
                                     <NavLink
                                         to="/products"
-                                        className="block px-2 py-2 text-gray-700 hover:text-indigo-500"
+                                        className={({ isActive }) =>
+                                            isActive
+                                                ? "flex items-center justify-center px-4 py-1 text-white font-semibold bg-blue-500 h-full"
+                                                : "flex items-center justify-center px-4 py-2 text-gray-700 hover:text-indigo-500 h-full"
+                                        }
+                                        onClick={closeDropdowns}
                                     >
                                         Productos
                                     </NavLink>
                                 </li>
-                                <li className="relative">
+                                <li className="relative" ref={solutionsRef}>
                                     <button
-                                        onClick={() => setShowSolutionsDropdown(!showSolutionsDropdown)}
-                                        className="flex items-center px-2 py-2 text-gray-700 hover:text-indigo-500 focus:outline-none"
+                                        onClick={() => {
+                                            setShowSolutionsDropdown(!showSolutionsDropdown)
+                                            setShowUserDropdown(false)
+                                        }}
+                                        className="flex items-center px-4 py-2 text-gray-700 hover:text-indigo-500 focus:outline-none"
                                     >
                                         Soluciones
                                         <IoIosArrowDown
-                                            className={`ml-2 transition-transform duration-300 ${showSolutionsDropdown ? 'rotate-180' : ''
+                                            className={`ml-2 transition-transform duration-300 ${showSolutionsDropdown ? "rotate-180" : ""
                                                 }`}
                                         />
                                     </button>
                                     <div
-                                        className={`absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg transition-all duration-300 ease-in-out transform ${showSolutionsDropdown ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                                        className={`absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg transition-all duration-300 ease-in-out transform ${showSolutionsDropdown
+                                            ? "opacity-100 scale-100"
+                                            : "opacity-0 scale-95 pointer-events-none"
                                             }`}
                                     >
                                         <ul className="py-2">
@@ -210,7 +241,7 @@ const Navbar = () => {
                                                     <NavLink
                                                         to={item.path}
                                                         onClick={() => setShowSolutionsDropdown(false)}
-                                                        className="block px-4 py-2 text-gray-700 hover:bg-indigo-500 hover:text-white"
+                                                        className="block px-4 py-2 text-gray-700 hover:bg-blue-500 hover:text-white"
                                                     >
                                                         {item.label}
                                                     </NavLink>
@@ -219,32 +250,48 @@ const Navbar = () => {
                                         </ul>
                                     </div>
                                 </li>
-                                <li>
+                                <li className="h-full">
                                     <NavLink
                                         to="/news"
-                                        className="block px-2 py-2 text-gray-700 hover:text-indigo-500"
+                                        className={({ isActive }) =>
+                                            isActive
+                                                ? "flex items-center justify-center px-4 py-1 text-white font-semibold bg-blue-500 h-full"
+                                                : "flex items-center justify-center px-4 py-2 text-gray-700 hover:text-indigo-500 h-full"
+                                        }
+                                        onClick={closeDropdowns}
                                     >
                                         Noticias
                                     </NavLink>
                                 </li>
-                                <li>
+                                <li className="h-full">
                                     <NavLink
                                         to="/success-cases"
-                                        className="block px-2 py-2 text-gray-700 hover:text-indigo-500 lg:text-center"
+                                        className={({ isActive }) =>
+                                            isActive
+                                                ? "flex items-center justify-center px-4 py-1 text-white font-semibold bg-blue-500 h-full"
+                                                : "flex items-center justify-center px-4 py-2 text-gray-700 hover:text-indigo-500 h-full"
+                                        }
+                                        onClick={closeDropdowns}
                                     >
                                         Casos de éxito
                                     </NavLink>
                                 </li>
-                                <li>
+                                <li className="h-full">
                                     <NavLink
                                         to="/contact"
-                                        className="block px-2 py-2 text-gray-700 hover:text-indigo-500"
+                                        className={({ isActive }) =>
+                                            isActive
+                                                ? "flex items-center justify-center px-4 py-1 text-white font-semibold bg-blue-500 h-full"
+                                                : "flex items-center justify-center px-4 py-2 text-gray-700 hover:text-indigo-500 h-full"
+                                        }
+                                        onClick={closeDropdowns}
                                     >
                                         Contáctanos
                                     </NavLink>
                                 </li>
                             </ul>
                         </div>
+
 
                         {isOpen && (
                             <div
@@ -265,6 +312,9 @@ const Navbar = () => {
                                 ✕
                             </button>
                             <div className="p-6 flex flex-col gap-y-6">
+                                <NavLink to="/us" onClick={toggleMenu} className="text-lg font-semibold">
+                                    Nosotros
+                                </NavLink>
                                 <NavLink to="/products" onClick={toggleMenu} className="text-lg font-semibold">
                                     Productos
                                 </NavLink>
@@ -315,19 +365,22 @@ const Navbar = () => {
                         <div className="flex items-center justify-between sm:gap-2 xl:gap-4">
                             <div className="relative">
                                 <button
-                                    onClick={() => setShowUserDropdown(!showUserDropdown)}
+                                    onClick={() => {
+                                        setShowUserDropdown(!showUserDropdown)
+                                        setShowSolutionsDropdown(false)
+                                    }}
                                     className="flex items-center text-lg p-2 rounded-md bg-white hover:bg-gray-100 transition-all"
                                 >
                                     <FaUserCircle className="text-2xl sm:mr-2" />
                                     <h1 className="hidden sm:block">{auth.isAuthenticated ? auth.user.name : 'Ingresar'}</h1>
                                 </button>
                                 <div
-                                    className={`absolute -right-12 mt-2 w-48 bg-white rounded-md shadow-lg transition-[max-height,opacity] duration-500 ease-in-out ${showUserDropdown ? 'opacity-100 max-h-96' : 'opacity-0 max-h-0'
+                                    className={`absolute -right-12 mt-2 w-48 bg-white rounded-md shadow-lg transition-[max-height,opacity] duration-500 ease-in-out ${showUserDropdown ? "opacity-100 max-h-96" : "opacity-0 max-h-0"
                                         } overflow-hidden`}
                                 >
                                     <ul className="py-2">
                                         {auth.isAuthenticated ? (
-                                            auth.user.role === 'admin' ? (
+                                            auth.user.role === "admin" ? (
                                                 itemsAuthUser.map((item) => (
                                                     <li key={item.key}>
                                                         {item.action ? (
@@ -343,7 +396,9 @@ const Navbar = () => {
                                                         ) : (
                                                             <NavLink
                                                                 to={item.path}
-                                                                onClick={() => setShowUserDropdown(false)}
+                                                                onClick={() => {
+                                                                    setShowUserDropdown(false);
+                                                                }}
                                                                 className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500"
                                                             >
                                                                 {item.label}
@@ -367,7 +422,9 @@ const Navbar = () => {
                                                         ) : (
                                                             <NavLink
                                                                 to={item.path}
-                                                                onClick={() => setShowUserDropdown(false)}
+                                                                onClick={() => {
+                                                                    setShowUserDropdown(false);
+                                                                }}
                                                                 className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500"
                                                             >
                                                                 {item.label}
@@ -392,7 +449,9 @@ const Navbar = () => {
                                                     ) : (
                                                         <NavLink
                                                             to={item.path}
-                                                            onClick={() => setShowUserDropdown(false)}
+                                                            onClick={() => {
+                                                                setShowUserDropdown(false);
+                                                            }}
                                                             className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500"
                                                         >
                                                             {item.label}
@@ -403,6 +462,7 @@ const Navbar = () => {
                                         )}
                                     </ul>
                                 </div>
+
                             </div>
                             <Button
                                 variant="bordered"
@@ -426,7 +486,7 @@ const Navbar = () => {
                         </div>
                     </nav>
                 </div>
-            </div>
+            </div >
 
             {isOpen && (
                 <div
@@ -436,13 +496,15 @@ const Navbar = () => {
                 ></div>
             )}
 
-            {openSearch && (
-                <div
-                    className="fixed inset-0 bg-black bg-opacity-50 -z-20" // Asegura que el overlay está detrás del navbar
-                    style={{ top: '4rem' }} // Ajusta la parte superior según la altura del navbar
-                    onClick={toggleSearch} // Cierra el buscador al hacer clic fuera
-                ></div>
-            )}
+            {
+                openSearch && (
+                    <div
+                        className="fixed inset-0 bg-black bg-opacity-50 -z-20" // Asegura que el overlay está detrás del navbar
+                        style={{ top: '4rem' }} // Ajusta la parte superior según la altura del navbar
+                        onClick={toggleSearch} // Cierra el buscador al hacer clic fuera
+                    ></div>
+                )
+            }
             <div
                 ref={searchRef}
                 className={`fixed top-[0rem] left-0 w-full bg-white transition-transform duration-300 ease-in-out -z-10 ${openSearch ? 'translate-y-16' : '-translate-y-full'
@@ -561,7 +623,7 @@ const Navbar = () => {
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

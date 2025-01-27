@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faEnvelope, faPhoneAlt } from '@fortawesome/free-solid-svg-icons';
-import { faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube, faTiktok } from '@fortawesome/free-brands-svg-icons';
 
 const Footer = () => {
   return (
@@ -29,11 +29,12 @@ const Footer = () => {
           </div>
         </div>
         <div className="flex space-x-6 my-6 justify-center mx-auto text-xl">
-          <a href="https://www.facebook.com/gesener/" className="hover:text-gray-400"><FontAwesomeIcon icon={faFacebookF} /></a>
-          <a href="https://www.instagram.com/gesener.pe/" className="hover:text-gray-400"><FontAwesomeIcon icon={faInstagram} /></a>
-          <a href="https://twitter.com/Gesener_sac" className="hover:text-gray-400"><FontAwesomeIcon icon={faTwitter} /></a>
-          <a href="https://www.linkedin.com/company/gesener" className="hover:text-gray-400"><FontAwesomeIcon icon={faLinkedinIn} /></a>
-          <a href="https://www.youtube.com/channel/UCaKqPXAnyW260B2vHtBGxgw" className="hover:text-gray-400"><FontAwesomeIcon icon={faYoutube} /></a>
+          <a href="https://www.tiktok.com/@gesener.pe" className="hover:text-gray-400" target='_blank'><FontAwesomeIcon icon={faTiktok}/></a>
+          <a href="https://www.instagram.com/gesener.pe/" className="hover:text-gray-400" target='_blank'><FontAwesomeIcon icon={faInstagram} /></a>
+          <a href="https://twitter.com/Gesener_sac" className="hover:text-gray-400" target='_blank'><FontAwesomeIcon icon={faTwitter} /></a>
+          <a href="https://www.linkedin.com/company/gesener" className="hover:text-gray-400" target='_blank'><FontAwesomeIcon icon={faLinkedinIn} /></a>
+          <a href="https://www.facebook.com/gesener/" className="hover:text-gray-400" target='_blank'><FontAwesomeIcon icon={faFacebookF} /></a>
+          <a href="https://www.youtube.com/channel/UCaKqPXAnyW260B2vHtBGxgw" className="hover:text-gray-400" target='_blank'><FontAwesomeIcon icon={faYoutube} /></a>
         </div>
 
         {/* Centro - Copyright */}

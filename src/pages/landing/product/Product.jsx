@@ -146,6 +146,14 @@ const Product = () => {
         };
     }, []);
 
+    const clearFilters = () => {
+        setSelectedCategories([]);
+        setSelectedBrands([]);
+        setPriceRange([0, 50000]);
+        setPage(1);
+        setSearchQuery('');
+    }
+
     return (
         <div>
             <Helmet>
@@ -156,10 +164,30 @@ const Product = () => {
                 {/* Menú de Filtros en el lado izquierdo */}
                 <div className="w-full sm:w-1/4 lg:w-1/5 p-4 bg-white border-r border-gray-300 sticky top-0 h-screen overflow-y-auto">
                     <div
-                        className={`text-xl font-semibold mb-6 transition-all duration-300 ${hasScrolled ? 'mt-16' : 'mt-0'
+                        className={`flex items-center text-xl font-semibold mb-6 transition-all duration-300 justify-between ${hasScrolled ? 'mt-16' : 'mt-0'
                             }`}
                     >
-                        Filtros
+                        <h1>Filtros</h1>
+                        <Button
+                            className={`text-sm border-2 rounded-lg ${selectedCategories.length === 0 &&
+                                    selectedBrands.length === 0 &&
+                                    priceRange[0] === 0 &&
+                                    priceRange[1] === 50000 &&
+                                    searchQuery === ""
+                                    ? "cursor-not-allowed opacity-50"
+                                    : ""
+                                }`}
+                            onClick={clearFilters}
+                            disabled={
+                                selectedCategories.length === 0 &&
+                                selectedBrands.length === 0 &&
+                                priceRange[0] === 0 &&
+                                priceRange[1] === 50000 &&
+                                searchQuery === ""
+                            }
+                        >
+                            Limpiar
+                        </Button>
                     </div>
 
                     {/* Categorías */}
@@ -219,6 +247,7 @@ const Product = () => {
                                         <input
                                             type="checkbox"
                                             value={category._id}
+                                            checked={selectedCategories.includes(category._id)} // Depende del estado
                                             onChange={() => handleCategoryChange(category._id)}
                                             className="mr-2"
                                         />
@@ -265,6 +294,7 @@ const Product = () => {
                                         <input
                                             type="checkbox"
                                             value={brand._id}
+                                            checked={selectedBrands.includes(brand._id)} // Depende del estado
                                             onChange={() => handleBrandChange(brand._id)}
                                             className="mr-2"
                                         />

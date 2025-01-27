@@ -84,7 +84,7 @@ const Whatsapp = () => {
                 >
                     <div className="w-[22rem] bg-green-500 flex text-base">
                         <FontAwesomeIcon icon={faWhatsapp} className="text-white text-4xl p-4" />
-                        <h1 className="font-bold py-4 px-2">Bienvenido a GESTIÓN ENERGÉTICA, ¿en qué te puedo ayudar?</h1>
+                        <h1 className="font-bold py-4 px-2">Bienvenido a GESENER, ¿en qué te puedo ayudar?</h1>
                     </div>
                     <div className="text-center py-4 px-4">
                         <button

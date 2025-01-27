@@ -1,9 +1,9 @@
 import { Button, Spinner } from '@nextui-org/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaEdit, FaFileExcel, FaPlus, FaTrash } from 'react-icons/fa';
 import { getBrands } from '@/services/BrandService';
 import { getCategories } from '@/services/CategoryService';
-import { createProduct, deleteProduct, getProducts, updateProduct, createProductsFromExcel } from '@/services/ProductService';
+import { createProduct, deleteProduct, getProducts, updateProduct, createProductsFromExcel, getFilteredProducts } from '@/services/ProductService';
 import { getImages } from '@/services/ImageService.jsx';
 import { validateProduct } from '@/components/dashboard-pages/validations/productValidations.js';
 import { showSuccessAlert, showErrorAlert } from '@/components/alert';
@@ -49,9 +49,12 @@ const ProductsMenu = () => {
         description: false,
         price: false,
     });
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
+    const skuInputRef = useRef(null)
 
     useEffect(() => {
-        fetchProducts();
         fetchCategories();
         fetchBrands();
     }, []);
@@ -59,6 +62,26 @@ const ProductsMenu = () => {
     useEffect(() => {
         fetchImages(imagesPage);
     }, [imagesPage]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setLoading(true)
+            try {
+                const data = await getFilteredProducts({
+                    searchQuery: searchQuery.trim(),
+                    page
+                })
+                setProducts(data.products)
+                setTotalPages(data.totalPages)
+            } catch (error) {
+                console.error('Error al obtener los productos:', error)
+                setProducts([])
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchProducts();
+    }, [searchQuery, page])
 
     const fetchProducts = () => {
         getProducts()
@@ -134,6 +157,12 @@ const ProductsMenu = () => {
             });
         }
         setShowModal(true);
+
+        setTimeout(() => {
+            if (skuInputRef.current) {
+                skuInputRef.current.focus();
+            }
+        }, 0);
     }
 
     const handleSave = async () => {
@@ -295,110 +324,163 @@ const ProductsMenu = () => {
         }
     };
 
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+        setPage(1);
+    }
+
     return (
         <>
-            <div className='mb-3 flex justify-end space-x-2'>
-                <Button className='p-3 text-sm w-[5%] flex text-white font-bold rounded-xl bg-green-400' onPress={() => handleExcel()}>
-                    <FaFileExcel />
-                </Button>
-                <Button
-                    className='p-3 text-sm w-[5%] flex text-white font-bold rounded-xl bg-blue-600'
-                    onPress={() => openFormModal()}
-                >
-                    <FaPlus />
-                </Button>
-                {showUploadExcelModal && (
-                    <div
-                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
-                        style={{ margin: 0 }}
+            {/* Encabezado con buscador y botones */}
+            <div className="flex flex-wrap items-center justify-between space-y-4 md:space-y-0 mb-4">
+                {/* Buscador */}
+                <div className="relative w-full md:max-w-[50%] flex items-start justify-start">
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        placeholder="Buscar productos..."
+                        className="border border-gray-300 p-2 w-full pr-10 rounded-lg shadow-sm focus:ring focus:ring-blue-300"
+                    />
+                    {searchQuery && (
+                        <button
+                            onClick={() => setSearchQuery('')}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        >
+                            ✕
+                        </button>
+                    )}
+                </div>
+
+                {/* Botones */}
+                <div className="flex space-x-2">
+                    <Button className="p-3 text-sm w-auto flex items-center text-white font-bold rounded-xl bg-green-400 md:px-4" onPress={() => handleExcel()}>
+                        <FaFileExcel />
+                    </Button>
+                    <Button
+                        className="p-3 text-sm w-auto md:px-4 flex items-center text-white font-bold rounded-xl bg-blue-600"
+                        onPress={() => openFormModal()}
                     >
-                        <div className="w-full h-full flex items-center justify-center">
-                            <div className="bg-white p-4 rounded-lg w-[30%]">
-                                <h1 className="text-center mb-4 font-bold">Crear productos desde archivo Excel</h1>
-                                <h1 className='my-2'>IMPORTANTE: El archivo excel debe tener un formato de tabla con los atributos del producto: <strong>sku, name, brand, model, categories, description, price.</strong> En caso no se respete el formato no se crearán los productos</h1>
-                                <input
-                                    type="file"
-                                    accept=".xlsx, .xls"
-                                    onChange={(e) => setFile(e.target.files[0])}
-                                    className="w-full p-2 rounded-md border border-gray-300"
-                                />
-                                <div className="flex justify-end mt-4 space-x-2">
-                                    <Button
-                                        className="border border-red-500 px-4 py-2 rounded-lg"
-                                        onClick={() => setShowUploadExcelModal(false)}
-                                    >
-                                        Cancelar
-                                    </Button>
-                                    <Button
-                                        color="success"
-                                        variant="bordered"
-                                        className="border bg-blue-100 rounded-lg border-blue-500 hover:bg-blue-200 transition-colors font-normal"
-                                        onClick={uploadProductsFromExcel}
-                                        isDisabled={createLoading}
-                                    >
-                                        {createLoading ? <Spinner color="blue" /> : "Cargar"}
-                                    </Button>
-                                </div>
+                        <FaPlus />
+                    </Button>
+                </div>
+            </div>
+
+            {/* Modal para cargar productos */}
+            {showUploadExcelModal && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
+                    style={{ margin: 0 }}
+                >
+                    <div className="w-full h-full flex items-center justify-center">
+                        <div className="bg-white p-4 rounded-lg w-[30%]">
+                            <h1 className="text-center mb-4 font-bold">Crear productos desde archivo Excel</h1>
+                            <h1 className="my-2">
+                                IMPORTANTE: El archivo excel debe tener un formato de tabla con los atributos del producto: <strong>sku, name, brand, model, categories, description, price.</strong> En caso no se respete el formato no se crearán los productos
+                            </h1>
+                            <input
+                                type="file"
+                                accept=".xlsx, .xls"
+                                onChange={(e) => setFile(e.target.files[0])}
+                                className="w-full p-2 rounded-md border border-gray-300"
+                            />
+                            <div className="flex justify-end mt-4 space-x-2">
+                                <Button
+                                    className="border border-red-500 px-4 py-2 rounded-lg"
+                                    onClick={() => setShowUploadExcelModal(false)}
+                                >
+                                    Cancelar
+                                </Button>
+                                <Button
+                                    color="success"
+                                    variant="bordered"
+                                    className="border bg-blue-100 rounded-lg border-blue-500 hover:bg-blue-200 transition-colors font-normal"
+                                    onClick={uploadProductsFromExcel}
+                                    isDisabled={createLoading}
+                                >
+                                    {createLoading ? <Spinner color="blue" /> : "Cargar"}
+                                </Button>
                             </div>
                         </div>
                     </div>
-                )}
-            </div>
-            <div className='bg-white w-full p-4 rounded-lg h-auto space-y-2'>
-                <div className='p-2 h-auto grid grid-cols-8 text-gray-400 border-b-1 border-gray-200'>
-                    <h1>IMAGEN</h1>
-                    <h1>SKU</h1>
-                    <h1>NOMBRE</h1>
-                    <h1>CATEGORÍA</h1>
-                    <h1>MARCA</h1>
-                    <h1>PRECIO ($)</h1>
-                    <h1>STOCK</h1>
-                    <h1>ACCIONES</h1>
                 </div>
-                <div className="p-2 text-black">
-                    {products.length > 0 ? (
-                        products.map((product) => (
-                            <div key={product._id} className="grid grid-cols-8 items-center gap-4 p-2">
-                                <td className="p-2 text-center">
-                                    {/* Renderizar la imagen usando la URL */}
-                                    <img
-                                        src={product.imageUrl} // URL de la imagen guardada en el producto
-                                        alt={product.name}
-                                        className="w-16 h-16 object-cover rounded" // Ajusta el tamaño de la imagen según tus necesidades
-                                    />
-                                </td>
-                                <h1 className="col-span-1 text-left">{product.sku}</h1>
-                                <h1 className="col-span-1 text-left">{product.name}</h1>
-                                <h1 className="col-span-1 text-left">
-                                    {product.categories.length > 0
-                                        ? product.categories.map((category) => category.name).join(', ')
-                                        : <h1 className='text-red-600'>Sin asignar</h1>}
-                                </h1>
-                                <h1 className="col-span-1 text-left">
-                                    {product.brand?.name || <h1 className='text-red-600'>Sin asignar</h1>}
-                                </h1>
-                                <h1 className="col-span-1 text-left">{product.price}</h1>
-                                <h1 className="col-span-1 text-left">{product.countInStock ?? '0'}</h1>
-                                <div className="col-span-1 flex space-x-2 text-base items-left">
-                                    <Button
-                                        className="bg-yellow-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-yellow-600"
-                                        onPress={() => openFormModal(product)}
-                                    >
-                                        <FaEdit />
-                                    </Button>
-                                    <Button
-                                        className="bg-red-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-red-600"
-                                        onPress={() => handleDeleteClick(product)}
-                                    >
-                                        <FaTrash />
-                                    </Button>
-                                </div>
+            )}
 
-                            </div>
-                        ))
+            {/* Tabla fija con lista desplazable */}
+            <div className="bg-white w-full p-4 rounded-lg h-[80vh] flex flex-col space-y-2">
+                {/* Encabezado fijo */}
+                <div className="p-2 bg-gray-100 border-b border-gray-200">
+                    <div className="grid grid-cols-8 text-gray-400">
+                        <h1>IMAGEN</h1>
+                        <h1>SKU</h1>
+                        <h1>NOMBRE</h1>
+                        <h1>CATEGORÍA</h1>
+                        <h1>MARCA</h1>
+                        <h1>PRECIO ($)</h1>
+                        <h1>STOCK</h1>
+                        <h1>ACCIONES</h1>
+                    </div>
+                </div>
+
+                {/* Contenido desplazable */}
+                <div className="flex-grow overflow-y-auto">
+                    {loading ? (
+                        <div className="text-center text-gray-400">Cargando productos...</div>
                     ) : (
-                        <div className="text-center text-gray-400 p-2">No hay productos creados</div>
+                        <div className="p-2 text-black">
+                            {products.length > 0 ? (
+                                products.map((product) => (
+                                    <div key={product._id} className="grid grid-cols-8 items-center gap-4 p-2 border-b border-gray-200">
+                                        <td className="p-2 text-center">
+                                            <img
+                                                src={product.imageUrl}
+                                                alt={product.name}
+                                                className="w-16 h-16 object-cover rounded"
+                                            />
+                                        </td>
+                                        <h1 className="col-span-1 text-left">{product.sku}</h1>
+                                        <h1 className="col-span-1 text-left">{product.name}</h1>
+                                        <h1 className="col-span-1 text-left">
+                                            {product.categories.length > 0
+                                                ? product.categories.map((category) => category.name).join(', ')
+                                                : <span className='text-red-600'>Sin asignar</span>}
+                                        </h1>
+                                        <h1 className="col-span-1 text-left">
+                                            {product.brand?.name || <span className='text-red-600'>Sin asignar</span>}
+                                        </h1>
+                                        <h1 className="col-span-1 text-left">{product.price}</h1>
+                                        <h1 className="col-span-1 text-left">{product.countInStock ?? '0'}</h1>
+                                        <div className="col-span-1 flex space-x-2 text-base items-left">
+                                            <Button
+                                                className="bg-yellow-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-yellow-600"
+                                                onPress={() => openFormModal(product)}
+                                            >
+                                                <FaEdit />
+                                            </Button>
+                                            <Button
+                                                className="bg-red-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-red-600"
+                                                onPress={() => handleDeleteClick(product)}
+                                            >
+                                                <FaTrash />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center text-gray-400 p-2">No hay productos creados</div>
+                            )}
+                        </div>
                     )}
+                </div>
+
+                {/* Paginador fijo */}
+                <div className="p-2 border-t border-gray-200">
+                    <Pagination
+                        currentPage={page}
+                        totalPages={totalPages}
+                        onPageChange={(newPage) => setPage(newPage)}
+                        classNames="flex justify-between"
+                    />
                 </div>
 
                 {/* Modal para Crear Producto */}
@@ -414,6 +496,7 @@ const ProductsMenu = () => {
                                 <div>
                                     <label className="block mb-1">SKU<span className="pl-1 text-red-400 font-bold">*</span></label>
                                     <input
+                                        ref={skuInputRef} // Asociar la referencia
                                         type="text"
                                         value={form.sku}
                                         onChange={(e) => {

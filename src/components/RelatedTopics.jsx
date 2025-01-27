@@ -39,7 +39,7 @@ const RelatedTopics = () => {
             <hr className="border-t border-gray-400 my-6" />
 
             {/* Video de YouTube */}
-            <div className="w-full h-full">
+            {/* <div className="w-full h-full">
                 <iframe
                     width="100%"
                     height="188"
@@ -48,7 +48,7 @@ const RelatedTopics = () => {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                 ></iframe>
-            </div>
+            </div> */}
         </div>
     );
 }
