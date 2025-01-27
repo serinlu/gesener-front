@@ -175,14 +175,14 @@ const Navbar = () => {
                 >
                     <nav className="w-[90%] mx-auto flex justify-between items-center z-10 relative">
                         <div className="flex items-center">
-                            <button onClick={toggleMenu} className="text-2xl p-2 lg:hidden">
+                            <button onClick={toggleMenu} className="text-2xl p-2 xl:hidden">
                                 <FaBars />
                             </button>
                             <NavLink to="/">
                                 <img src={logo} alt="logo" className="h-[2rem] ml-3" />
                             </NavLink>
                         </div>
-                        <div className="hidden lg:flex items-center space-x-1 h-full">
+                        <div className="hidden xl:flex items-center space-x-1 h-full lg:mx-2 lg:my-2">
                             <ul className="flex items-center h-full">
                                 <li className="h-full">
                                     <NavLink

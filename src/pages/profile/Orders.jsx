@@ -49,8 +49,8 @@ const Orders = () => {
                 <title>Mis pedidos | Gesener</title>
             </Helmet>
             <ProfileSidebar />
-            <div className="container mx-auto px-4 py-8">
-                <h1 className="text-2xl font-bold mb-6">Mis Pedidos</h1>
+            <div className="flex-grow p-6 mx-8">
+                <h1 className="text-3xl font-bold mb-6">Mis Pedidos</h1>
                 {orders.length === 0 ? (
                     <p className="text-lg">No tienes pedidos registrados.</p>
                 ) : (

@@ -25,19 +25,21 @@ const ProfileSidebar = () => {
 
     return (
         <div className="flex w-full md:w-1/5">
-            <div className="text-black flex flex-col w-full md:ml-6">
-                <div className="mt-10 flex flex-row md:flex-col items-center md:items-start justify-center md:justify-start">
+            <div className="text-black flex flex-col w-full">
+                <div className="md:mt-10 flex flex-row md:flex-col items-center md:items-start justify-center md:justify-start">
                     {menuItems.map((item) => (
                         <div
                             key={item.title}
-                            className={`flex items-center p-4 cursor-pointer transition-colors hover:text-blue-700 ${selectedOption === item.title
-                                    ? 'text-blue-700 border-blue-700 border-b-3 md:border-b-0 md:border-r-4'
-                                    : ''
+                            className={`flex items-center p-4 cursor-pointer transition-colors w-full font-semibold ${selectedOption === item.title
+                                ? 'text-white bg-blue-500 hover:text-white md:border-b-0 md:border-r-4'
+                                : 'text-gray-500 bg-gray-100 md:bg-white hover:text-blue-500'
                                 }`}
                             onClick={() => handleMenuClick(item.title, item.path)} // Llamar a handleMenuClick
                         >
-                            <span className="mr-4">{item.icon}</span>
-                            {item.title}
+                            <div className='flex items-center mx-auto'>
+                                <span className="mr-3">{item.icon}</span>
+                                <span className="flex-1">{item.title}</span>
+                            </div>
                         </div>
                     ))}
                 </div>

@@ -37,7 +37,7 @@ const Home = () => {
                 ></video>
 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black z-10"></div>
 
                 {/* Content */}
                 <div className="absolute left-8 right-8 bottom-20 z-20 space-y-4 items-center justify-between sm:left-12 sm:right-12">

@@ -170,12 +170,12 @@ const Product = () => {
                         <h1>Filtros</h1>
                         <Button
                             className={`text-sm border-2 rounded-lg ${selectedCategories.length === 0 &&
-                                    selectedBrands.length === 0 &&
-                                    priceRange[0] === 0 &&
-                                    priceRange[1] === 50000 &&
-                                    searchQuery === ""
-                                    ? "cursor-not-allowed opacity-50"
-                                    : ""
+                                selectedBrands.length === 0 &&
+                                priceRange[0] === 0 &&
+                                priceRange[1] === 50000 &&
+                                searchQuery === ""
+                                ? "cursor-not-allowed opacity-50"
+                                : ""
                                 }`}
                             onClick={clearFilters}
                             disabled={
@@ -335,24 +335,30 @@ const Product = () => {
                             animate={priceAccordionOpen ? 'open' : 'closed'}
                             className={clsx("overflow-hidden mx-auto", priceAccordionOpen ? "rounded-b-lg" : "rounded-none")}
                         >
-                            <div className="flex space-x-2 py-3 bg-gray-100 items-center justify-center">
-                                <input
-                                    type="number"
-                                    min={0}
-                                    max={50000}
-                                    value={priceRange[0]}
-                                    onChange={(e) => handlePriceChange(e.target.value, priceRange[1])}
-                                    className="border border-gray-300 p-2 w-24"
-                                />
-                                <span>-</span>
-                                <input
-                                    type="number"
-                                    min={0}
-                                    max={50000}
-                                    value={priceRange[1]}
-                                    onChange={(e) => handlePriceChange(priceRange[0], e.target.value)}
-                                    className="border border-gray-300 p-2 w-24"
-                                />
+                            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 py-3 bg-gray-100 items-center justify-center xl:px-2">
+                                <div className="flex flex-col items-center sm:items-start">
+                                    <label className="text-sm">Min</label>
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        max={50000}
+                                        value={priceRange[0]}
+                                        onChange={(e) => handlePriceChange(e.target.value, priceRange[1])}
+                                        className="border border-gray-300 p-2 w-full sm:w-20 2xl:w-24"
+                                    />
+                                </div>
+                                <span className="hidden sm:block">-</span>
+                                <div className="flex flex-col items-center sm:items-start">
+                                    <label className="text-sm">Máx</label>
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        max={50000}
+                                        value={priceRange[1]}
+                                        onChange={(e) => handlePriceChange(priceRange[0], e.target.value)}
+                                        className="border border-gray-300 p-2 w-full sm:w-20 2xl:w-24"
+                                    />
+                                </div>
                             </div>
                         </motion.div>
                     </div>
