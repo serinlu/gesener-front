@@ -50,20 +50,15 @@ const Navbar = () => {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (
-                solutionsRef.current &&
-                !solutionsRef.current.contains(event.target) &&
-                userRef.current &&
-                !userRef.current.contains(event.target)
-            ) {
-                closeDropdowns();
+            if (solutionsRef.current && !solutionsRef.current.contains(event.target) || userRef.current && userRef.current.contains(event.target)) {
+                setShowSolutionsDropdown(false);
+                setShowUserDropdown(false);
             }
         };
 
-        document.addEventListener("mousedown", handleClickOutside);
-
+        document.addEventListener("click", handleClickOutside);
         return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("click", handleClickOutside);
         };
     }, []);
 
@@ -217,11 +212,11 @@ const Navbar = () => {
                                 </li>
                                 <li className="relative" ref={solutionsRef}>
                                     <button
-                                        onClick={() => {
-                                            setShowSolutionsDropdown(!showSolutionsDropdown)
-                                            setShowUserDropdown(false)
+                                        onClick={(event) => {
+                                            event.stopPropagation(); // Prevenir que el clic cierre inmediatamente el dropdown
+                                            setShowSolutionsDropdown(!showSolutionsDropdown);
                                         }}
-                                        className="flex items-center px-4 py-2 text-gray-700 hover:text-indigo-500 focus:outline-none"
+                                        className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-500 focus:outline-none"
                                     >
                                         Soluciones
                                         <IoIosArrowDown
@@ -241,7 +236,10 @@ const Navbar = () => {
                                                     <NavLink
                                                         to={item.path}
                                                         onClick={() => setShowSolutionsDropdown(false)}
-                                                        className="block px-4 py-2 text-gray-700 hover:bg-blue-500 hover:text-white"
+                                                        className={({ isActive }) =>
+                                                            `block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-500 ${isActive ? "bg-blue-500 hover:bg-blue-500 text-white hover:text-white" : ""
+                                                            }`
+                                                        }
                                                     >
                                                         {item.label}
                                                     </NavLink>
@@ -311,17 +309,36 @@ const Navbar = () => {
                             <button className="absolute top-4 right-4 text-2xl" onClick={toggleMenu}>
                                 ✕
                             </button>
-                            <div className="p-6 flex flex-col gap-y-6">
-                                <NavLink to="/us" onClick={toggleMenu} className="text-lg font-semibold">
+                            <div className="flex flex-col pt-16">
+                                <NavLink
+                                    to="/us"
+                                    onClick={toggleMenu}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "text-lg font-semibold bg-blue-500 text-white p-4"
+                                            : "text-lg font-semibold bg-white text-black p-4"
+                                    }
+                                >
                                     Nosotros
                                 </NavLink>
-                                <NavLink to="/products" onClick={toggleMenu} className="text-lg font-semibold">
+                                <NavLink
+                                    to="/products"
+                                    onClick={toggleMenu}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "text-lg font-semibold bg-blue-500 text-white p-4"
+                                            : "text-lg font-semibold bg-white text-black p-4"
+                                    }
+                                >
                                     Productos
                                 </NavLink>
                                 <div className="relative w-full">
                                     <button
-                                        onClick={() => setShowSolutionsDropdown(!showSolutionsDropdown)}
-                                        className="flex items-center text-lg font-semibold w-full justify-between"
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            setShowSolutionsDropdown(!showSolutionsDropdown)
+                                        }}
+                                        className={`flex p-4 items-center text-lg font-semibold w-full justify-between ${showSolutionsDropdown ? '' : ''}`}
                                     >
                                         Soluciones
                                         <IoIosArrowDown
@@ -333,13 +350,16 @@ const Navbar = () => {
                                         className={`overflow-hidden transition-[max-height] duration-500 ease-in-out ${showSolutionsDropdown ? 'max-h-96' : 'max-h-0'
                                             }`}
                                     >
-                                        <ul className="py-2 pl-4">
+                                        <ul>
                                             {ItemsSolutions.map((item) => (
                                                 <li key={item.key}>
                                                     <NavLink
                                                         to={item.path}
                                                         onClick={toggleMenu}
-                                                        className="block py-2 text-base text-gray-700 hover:text-indigo-500"
+                                                        className={({ isActive }) =>
+                                                            `block py-3 px-6 text-gray-700 hover:bg-blue-100 hover:text-blue-500 ${isActive ? "bg-blue-500 hover:bg-blue-500 text-white hover:text-white" : ""
+                                                            }`
+                                                        }
                                                     >
                                                         {item.label}
                                                     </NavLink>
@@ -348,16 +368,37 @@ const Navbar = () => {
                                         </ul>
                                     </div>
                                 </div>
-                                <NavLink to="/success-cases" onClick={toggleMenu} className="text-lg font-semibold">
-                                    Casos de éxito
-                                </NavLink>
-                                <NavLink to="/news" onClick={toggleMenu} className="text-lg font-semibold">
+                                <NavLink
+                                    to="/news"
+                                    onClick={toggleMenu}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "text-lg font-semibold bg-blue-500 text-white p-4"
+                                            : "text-lg font-semibold bg-white text-black p-4"
+                                    }
+                                >
                                     Noticias
                                 </NavLink>
-                                <NavLink to="/us" onClick={toggleMenu} className="text-lg font-semibold">
-                                    Nosotros
+                                <NavLink
+                                    to="/success-cases"
+                                    onClick={toggleMenu}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "text-lg font-semibold bg-blue-500 text-white p-4"
+                                            : "text-lg font-semibold bg-white text-black p-4"
+                                    }
+                                >
+                                    Casos de éxito
                                 </NavLink>
-                                <NavLink to="/contact" onClick={toggleMenu} className="text-lg font-semibold">
+                                <NavLink
+                                    to="/contact"
+                                    onClick={toggleMenu}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "text-lg font-semibold bg-blue-500 text-white p-4"
+                                            : "text-lg font-semibold bg-white text-black p-4"
+                                    }
+                                >
                                     Contáctanos
                                 </NavLink>
                             </div>
@@ -365,7 +406,8 @@ const Navbar = () => {
                         <div className="flex items-center justify-between sm:gap-2 xl:gap-4">
                             <div className="relative">
                                 <button
-                                    onClick={() => {
+                                    onClick={(event) => {
+                                        event.stopPropagation();
                                         setShowUserDropdown(!showUserDropdown)
                                         setShowSolutionsDropdown(false)
                                     }}
@@ -378,7 +420,7 @@ const Navbar = () => {
                                     className={`absolute -right-12 mt-2 w-48 bg-white rounded-md shadow-lg transition-[max-height,opacity] duration-500 ease-in-out ${showUserDropdown ? "opacity-100 max-h-96" : "opacity-0 max-h-0"
                                         } overflow-hidden`}
                                 >
-                                    <ul className="py-2">
+                                    <ul className="py-2" ref={userRef}>
                                         {auth.isAuthenticated ? (
                                             auth.user.role === "admin" ? (
                                                 itemsAuthUser.map((item) => (
@@ -389,7 +431,7 @@ const Navbar = () => {
                                                                     item.action();
                                                                     setShowUserDropdown(false);
                                                                 }}
-                                                                className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500 w-full text-left"
+                                                                className="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-500 w-full text-left"
                                                             >
                                                                 {item.label}
                                                             </button>
@@ -399,7 +441,7 @@ const Navbar = () => {
                                                                 onClick={() => {
                                                                     setShowUserDropdown(false);
                                                                 }}
-                                                                className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500"
+                                                                className="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-500"
                                                             >
                                                                 {item.label}
                                                             </NavLink>
@@ -415,7 +457,7 @@ const Navbar = () => {
                                                                     item.action();
                                                                     setShowUserDropdown(false);
                                                                 }}
-                                                                className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500 w-full text-left"
+                                                                className="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-500 w-full text-left"
                                                             >
                                                                 {item.label}
                                                             </button>
@@ -425,7 +467,7 @@ const Navbar = () => {
                                                                 onClick={() => {
                                                                     setShowUserDropdown(false);
                                                                 }}
-                                                                className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500"
+                                                                className="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-500"
                                                             >
                                                                 {item.label}
                                                             </NavLink>
@@ -442,7 +484,7 @@ const Navbar = () => {
                                                                 item.action();
                                                                 setShowUserDropdown(false);
                                                             }}
-                                                            className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500 w-full text-left"
+                                                            className="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-500 w-full text-left"
                                                         >
                                                             {item.label}
                                                         </button>
@@ -452,7 +494,7 @@ const Navbar = () => {
                                                             onClick={() => {
                                                                 setShowUserDropdown(false);
                                                             }}
-                                                            className="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-500"
+                                                            className="block px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-500"
                                                         >
                                                             {item.label}
                                                         </NavLink>
@@ -462,7 +504,6 @@ const Navbar = () => {
                                         )}
                                     </ul>
                                 </div>
-
                             </div>
                             <Button
                                 variant="bordered"
