@@ -6,7 +6,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
   const getPageNumbers = () => {
     const pageNumbers = [];
-    const maxVisiblePages = expandedRange ? 5 : 2;
+    const maxVisiblePages = expandedRange ? 5 : 1; // Reduce la cantidad visible en pantallas pequeñas
 
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
@@ -43,20 +43,21 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
   const buttonClass = (isActive) =>
     clsx(
-      "flex items-center justify-center px-3 h-8 leading-tight",
+      "flex items-center justify-center px-2 h-6 text-xs sm:px-3 sm:h-8 sm:text-sm leading-tight", // Reducido
       isActive
         ? "z-10 text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700"
         : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
     );
 
   return (
-    <div className="flex flex-col items-center space-y-2 mt-4">
+    <div className="flex flex-col items-center space-y-2 mt-2">
       <nav aria-label="Page navigation">
-        <ul className="flex items-center -space-x-px h-8 text-sm">
+        <ul className="flex items-center -space-x-px text-xs sm:text-sm"> {/* Reduce fuente */}
+          {/* Botón "Anterior" (flecha compacta en pantallas pequeñas) */}
           <li>
             <button
               className={clsx(
-                "flex items-center justify-center px-3 h-8 leading-tight rounded-s-lg",
+                "flex items-center justify-center px-2 h-6 sm:px-3 sm:h-8 leading-tight rounded-s-lg",
                 currentPage <= 1
                   ? "text-gray-300 bg-gray-100 cursor-not-allowed"
                   : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
@@ -64,13 +65,14 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
               disabled={currentPage <= 1}
               onClick={() => onPageChange(currentPage - 1)}
             >
-              Anterior
+              <span className="hidden sm:inline">Anterior</span>
+              <span className="sm:hidden">←</span>
             </button>
           </li>
           {pageNumbers.map((pageNumber, index) =>
             pageNumber === "..." ? (
               <li key={`dots-${index}`} aria-hidden="true">
-                <span className="px-3 h-8 text-gray-500">...</span>
+                <span className="px-2 h-6 sm:px-3 sm:h-8 text-gray-500">...</span>
               </li>
             ) : (
               <li key={pageNumber}>
@@ -84,10 +86,11 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
               </li>
             )
           )}
+          {/* Botón "Siguiente" (flecha compacta en pantallas pequeñas) */}
           <li>
             <button
               className={clsx(
-                "flex items-center justify-center px-3 h-8 leading-tight rounded-e-lg",
+                "flex items-center justify-center px-2 h-6 sm:px-3 sm:h-8 leading-tight rounded-e-lg",
                 currentPage >= totalPages
                   ? "text-gray-300 bg-gray-100 cursor-not-allowed"
                   : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
@@ -95,7 +98,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
               disabled={currentPage >= totalPages}
               onClick={() => onPageChange(currentPage + 1)}
             >
-              Siguiente
+              <span className="hidden sm:inline">Siguiente</span>
+              <span className="sm:hidden">→</span>
             </button>
           </li>
         </ul>

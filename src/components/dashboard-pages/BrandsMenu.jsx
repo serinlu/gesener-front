@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createBrand, getBrands, updateBrand, deleteBrand } from '@/services/BrandService';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
 import { Button } from '@nextui-org/react';
+import LoadingSpinner from '../LoadingSpinner';
 
 const BrandsMenu = () => {
     const [brands, setBrands] = useState([]);
@@ -11,6 +12,7 @@ const BrandsMenu = () => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [isEditing, setIsEditing] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchBrands();

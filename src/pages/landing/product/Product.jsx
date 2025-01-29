@@ -22,6 +22,8 @@ const Product = () => {
     const [priceRange, setPriceRange] = useState([0, 50000]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [filtersSidebar, setFiltersSidebar] = useState(false);
+    const [range, setRange] = useState('')
 
     const { addToCart, removeFromCart } = useCart();
     const [sortBy, setSortBy] = useState('name'); // Campo por el que ordenar
@@ -59,6 +61,8 @@ const Product = () => {
                 });
                 setProducts(data.products);
                 setTotalPages(data.totalPages);
+                setRange(data.range)
+                console.log(range)
             } catch (error) {
                 console.error('Error al obtener productos filtrados:', error);
                 setProducts([]);
@@ -154,6 +158,10 @@ const Product = () => {
         setSearchQuery('');
     }
 
+    const toggleFilters = () => {
+        setFiltersSidebar(!filtersSidebar)
+    }
+
     return (
         <div>
             <Helmet>
@@ -162,7 +170,7 @@ const Product = () => {
             </Helmet>
             <div className="flex w-full mt-8">
                 {/* Menú de Filtros en el lado izquierdo */}
-                <div className="w-full sm:w-1/4 lg:w-1/5 p-4 bg-white border-r border-gray-300 sticky top-0 h-screen overflow-y-auto">
+                <div className="hidden xl:block w-full xl:w-1/4 lg:w-1/5 p-4 bg-white border-r border-gray-300 sticky top-0 h-screen overflow-y-auto">
                     <div
                         className={`flex items-center text-xl font-semibold mb-6 transition-all duration-300 justify-between ${hasScrolled ? 'mt-16' : 'mt-0'
                             }`}
@@ -365,14 +373,255 @@ const Product = () => {
                 </div>
 
                 {/* Productos */}
-                <div className="w-full sm:w-3/4 lg:w-4/5 p-4">
+                <div className="w-full sm:w-full xl:w-3/4 p-4">
                     <div>
                         <div className="text-4xl pb-4 font-bold">Productos</div>
 
-                        {/* Contenedor para ordenar */}
-                        <div className="mb-4 w-full flex justify-end">
-                            <div className="w-auto flex items-center space-x-3">
-                                <h3 className="font-medium">Ordenar por</h3>
+                        {/* Contenedor para rango y ordenador */}
+                        <div className="mb-4 w-full flex justify-between items-center">
+                            {/* Botón para filtros (solo visible en pantallas pequeñas) */}
+                            <Button
+                                className="flex xl:hidden items-center text-white bg-blue-500 hover:bg-blue-600 rounded-lg"
+                                onClick={toggleFilters}
+                            >
+                                Filtros
+                            </Button>
+                            {filtersSidebar && (
+                                <div>
+                                    {/* Fondo opaco */}
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 0.5 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.3 }} // Igual duración que el contenedor
+                                        className="fixed top-0 left-0 w-full h-screen bg-gray-700 opacity-50 z-50"
+                                        onClick={toggleFilters}
+                                    />
+
+                                    <motion.div
+                                        initial={{ x: '-100%' }} // Comienza fuera de la pantalla
+                                        animate={{ x: 0 }} // Se mueve a su posición original
+                                        exit={{ x: '-100%' }} // Se mueve de nuevo fuera de la pantalla
+                                        transition={{
+                                            duration: 0.3, // 300ms
+                                            ease: 'easeInOut', // Animación "ease-in-out"
+                                        }}
+                                        className="fixed top-0 left-0 h-screen bg-white w-64 z-50 p-4"
+                                    >
+
+                                        <div
+                                            className={`flex items-center text-xl font-semibold mb-6 justify-between top-0`}
+                                        >
+                                            <h1>Filtros</h1>
+                                            <Button
+                                                className={`text-sm border-2 rounded-lg ${selectedCategories.length === 0 &&
+                                                    selectedBrands.length === 0 &&
+                                                    priceRange[0] === 0 &&
+                                                    priceRange[1] === 50000 &&
+                                                    searchQuery === ""
+                                                    ? "cursor-not-allowed opacity-50"
+                                                    : ""
+                                                    }`}
+                                                onClick={clearFilters}
+                                                disabled={
+                                                    selectedCategories.length === 0 &&
+                                                    selectedBrands.length === 0 &&
+                                                    priceRange[0] === 0 &&
+                                                    priceRange[1] === 50000 &&
+                                                    searchQuery === ""
+                                                }
+                                            >
+                                                Limpiar
+                                            </Button>
+                                        </div>
+
+                                        {/* Categorías */}
+                                        <div className="mb-4">
+                                            <h3 className="font-medium mb-2">Buscar</h3>
+                                            <div className="relative">
+                                                <input
+                                                    type="text"
+                                                    value={searchQuery}
+                                                    onChange={handleSearchChange}
+                                                    placeholder="Buscar productos..."
+                                                    className="border border-gray-300 p-2 w-full pr-10" // Espacio para el botón
+                                                />
+                                                {searchQuery && (
+                                                    <button
+                                                        onClick={() => setSearchQuery('')}
+                                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="w-full">
+                                            <div className="cursor-pointer mx-auto" onClick={() => setCategoryAccordionOpen(!categoryAccordionOpen)}>
+                                                <motion.div
+                                                    initial={false}
+                                                    animate={categoryAccordionOpen ? 'open' : 'closed'}
+                                                    className="flex items-center justify-between p-2 bg-gray-200 rounded-t-lg h-12"
+                                                >
+                                                    <h3 className="font-bold text-md pl-2">Categorías</h3>
+                                                    {selectedCategories.length > 0 && (
+                                                        <span className="text-white bg-blue-500 rounded-full px-2 text-xs">
+                                                            {selectedCategories.length}
+                                                        </span>
+                                                    )}
+                                                    <motion.span
+                                                        variants={arrowVariants}
+                                                        animate={categoryAccordionOpen ? 'open' : 'closed'}
+                                                        transition={{ duration: 0.3 }}
+                                                        className="text-xl"
+                                                    >
+                                                        <FaAngleRight />
+                                                    </motion.span>
+                                                </motion.div>
+                                            </div>
+                                            <motion.div
+                                                variants={accordionVariants}
+                                                initial={false}
+                                                animate={categoryAccordionOpen ? 'open' : 'closed'}
+                                                className="overflow-hidden mx-auto"
+                                            >
+                                                <div className="p-4 border bg-gray-50">
+                                                    {categories.map((category) => (
+                                                        <label key={category._id} className="block mb-2">
+                                                            <input
+                                                                type="checkbox"
+                                                                value={category._id}
+                                                                checked={selectedCategories.includes(category._id)} // Depende del estado
+                                                                onChange={() => handleCategoryChange(category._id)}
+                                                                className="mr-2"
+                                                            />
+                                                            {category.name}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </motion.div>
+                                        </div>
+
+                                        {/* Marcas */}
+                                        <div>
+                                            <div className="cursor-pointer mx-auto" onClick={() => setBrandAccordionOpen(!brandAccordionOpen)}>
+                                                <motion.div
+                                                    initial={false}
+                                                    animate={brandAccordionOpen ? 'open' : 'closed'}
+                                                    className="flex items-center justify-between p-2 bg-gray-200 h-12"
+                                                >
+                                                    <h3 className="font-bold text-md pl-2">Marcas</h3>
+                                                    {selectedBrands.length > 0 && (
+                                                        <span className="text-white bg-blue-500 rounded-full px-2 text-xs">
+                                                            {selectedBrands.length}
+                                                        </span>
+                                                    )}
+                                                    <motion.span
+                                                        variants={arrowVariants}
+                                                        animate={brandAccordionOpen ? 'open' : 'closed'}
+                                                        transition={{ duration: 0.3 }}
+                                                        className="text-xl"
+                                                    >
+                                                        <FaAngleRight />
+                                                    </motion.span>
+                                                </motion.div>
+                                            </div>
+                                            <motion.div
+                                                variants={accordionVariants}
+                                                initial={false}
+                                                animate={brandAccordionOpen ? 'open' : 'closed'}
+                                                className="overflow-hidden mx-auto"
+                                            >
+                                                <div className="p-4 border bg-gray-50">
+                                                    {brands.map((brand) => (
+                                                        <label key={brand._id} className="block mb-2">
+                                                            <input
+                                                                type="checkbox"
+                                                                value={brand._id}
+                                                                checked={selectedBrands.includes(brand._id)} // Depende del estado
+                                                                onChange={() => handleBrandChange(brand._id)}
+                                                                className="mr-2"
+                                                            />
+                                                            {brand.name}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </motion.div>
+                                        </div>
+
+                                        {/* Rango de precio */}
+                                        <div className="mb-4">
+                                            <div className="cursor-pointer mx-auto" onClick={() => setPriceAccordionOpen(!priceAccordionOpen)}>
+                                                <motion.div
+                                                    initial={false}
+                                                    animate={priceAccordionOpen ? 'open' : 'closed'}
+                                                    className={clsx("flex items-center justify-between p-2 bg-gray-200 h-12", priceAccordionOpen ? "rounded-none" : "rounded-b-lg")}
+                                                >
+                                                    <h3 className="font-bold text-md pl-2">Precio</h3>
+                                                    {(priceRange[0] !== 0 || priceRange[1] !== 50000) && (
+                                                        <span className="text-white bg-blue-500 rounded-full px-2 text-xs">
+                                                            {priceRange[0]} - {priceRange[1]}
+                                                        </span>
+                                                    )}
+                                                    <motion.span
+                                                        variants={arrowVariants}
+                                                        animate={priceAccordionOpen ? 'open' : 'closed'}
+                                                        transition={{ duration: 0.3 }}
+                                                        className="text-xl"
+                                                    >
+                                                        <FaAngleRight />
+                                                    </motion.span>
+                                                </motion.div>
+                                            </div>
+                                            <motion.div
+                                                variants={accordionVariants}
+                                                initial={false}
+                                                animate={priceAccordionOpen ? 'open' : 'closed'}
+                                                className={clsx("overflow-hidden mx-auto", priceAccordionOpen ? "rounded-b-lg" : "rounded-none")}
+                                            >
+                                                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 py-3 bg-gray-100 items-center justify-center xl:px-2">
+                                                    <div className="flex flex-col items-center sm:items-start">
+                                                        <label className="text-sm">Min</label>
+                                                        <input
+                                                            type="number"
+                                                            min={0}
+                                                            max={50000}
+                                                            value={priceRange[0]}
+                                                            onChange={(e) => handlePriceChange(e.target.value, priceRange[1])}
+                                                            className="border border-gray-300 p-2 w-full sm:w-20 2xl:w-24"
+                                                        />
+                                                    </div>
+                                                    <span className="hidden sm:block">-</span>
+                                                    <div className="flex flex-col items-center sm:items-start">
+                                                        <label className="text-sm">Máx</label>
+                                                        <input
+                                                            type="number"
+                                                            min={0}
+                                                            max={50000}
+                                                            value={priceRange[1]}
+                                                            onChange={(e) => handlePriceChange(priceRange[0], e.target.value)}
+                                                            className="border border-gray-300 p-2 w-full sm:w-20 2xl:w-24"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        </div>
+
+                                    </motion.div>
+
+                                </div>
+                            )}
+                            <h1 className="hidden xl:flex sm:text-lg font-semibold text-sm my-4">
+                                {loading
+                                    ? 'Cargando productos...'
+                                    : range
+                                        ? `Mostrando ${range} productos`
+                                        : 'No se encontraron productos'}
+                            </h1>
+
+                            <div className="flex items-center space-x-2">
+                                <h3 className="font-medium hidden sm:block">Ordenar por</h3>
                                 <select
                                     className="border border-gray-300 p-2"
                                     value={`${sortBy}-${order}`}
@@ -390,19 +639,28 @@ const Product = () => {
                         {loading ? (
                             <div>Cargando productos...</div>
                         ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                                {products.length > 0 ? (
-                                    products.map((product) => (
-                                        <ProductCard
-                                            key={product._id}
-                                            product={product}
-                                            onAddToCart={handleAddToCart}
-                                            onRemoveFromCart={removeFromCart}
-                                        />
-                                    ))
-                                ) : (
-                                    <div className="w-full">No hay productos que coincidan con los filtros seleccionados.</div>
-                                )}
+                            <div>
+                                <h1 className="xl:hidden flex sm:text-lg font-semibold text-sm my-4">
+                                    {loading
+                                        ? 'Cargando productos...'
+                                        : range
+                                            ? `Mostrando ${range} productos`
+                                            : 'No se encontraron productos'}
+                                </h1>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    {products.length > 0 ? (
+                                        products.map((product) => (
+                                            <ProductCard
+                                                key={product._id}
+                                                product={product}
+                                                onAddToCart={handleAddToCart}
+                                                onRemoveFromCart={removeFromCart}
+                                            />
+                                        ))
+                                    ) : (
+                                        <div className="w-full">No hay productos que coincidan con los filtros seleccionados.</div>
+                                    )}
+                                </div>
                             </div>
                         )}
 

@@ -89,8 +89,16 @@ export const getFilteredProducts = async ({
         // Llamar al endpoint
         const { data } = await clientAxios.get('/products/list/filtered', { params });
 
-        // Devolver los datos obtenidos
-        return data; // La respuesta debe incluir productos, totalPages y totalProducts
+        // Desestructurar los valores devueltos por el backend
+        const { products, totalPages, totalProducts, range } = data;
+
+        // Devolver la información necesaria para el frontend
+        return {
+            products,
+            totalPages,
+            totalProducts,
+            range, // Incluir el rango en la respuesta
+        };
     } catch (error) {
         console.error('Error al obtener productos filtrados:', error);
         throw error; // Relanzar el error para que el frontend lo maneje

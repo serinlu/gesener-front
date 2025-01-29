@@ -33,7 +33,7 @@ const AuthProvider = ({ children }) => {
         logoutUser();
         setAuth({ isAuthenticated: false, user: null });
         setLoading(false);
-        navigate("/login");
+        navigate("/");
     };
 
     if (loading) {

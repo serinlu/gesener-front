@@ -5,6 +5,7 @@ import { enqueueSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaPlus, FaTrash } from "react-icons/fa";
 import Spinner from "@/components/Spinner";
+import LoadingSpinner from "../LoadingSpinner";
 
 const ImagesMenu = () => {
   const [showUploadImageModal, setShowUploadImageModal] = useState(false);
@@ -107,52 +108,58 @@ const ImagesMenu = () => {
           <FaPlus />
         </Button>
       </div>
-      <div className="bg-white w-full p-4 rounded-lg h-auto space-y-2">
-        <div className="p-2 h-auto grid grid-cols-4 text-gray-400 border-b-1 border-gray-200">
-          <h1>PREVISUALIZACIÓN</h1>
-          <h1>NOMBRE</h1>
-          <h1>TAMAÑO</h1>
-          <h1>ACCIONES</h1>
-        </div>
-        <div className="p-2 text-black space-y-2">
+      <div className="bg-white w-full p-4 rounded-lg h-[80vh] flex flex-col space-y-2">
+        <div className="flex-grow overflow-auto">
+          <div className="p-2 h-auto grid grid-cols-4 text-gray-400 border-b-1 border-gray-200">
+            <div className="grid grid-cols-4 text-gray-400 text-sm md:text-base min-w-[1024px]">
+              <h1 className="text-left">PREVISUALIZACIÓN</h1>
+              <h1 className="text-center">NOMBRE</h1>
+              <h1 className="text-center">TAMAÑO</h1>
+              <h1 className="text-center">ACCIONES</h1>
+            </div>
+          </div>
           {loading ? (
             <div className="flex justify-center items-center">
-              <Spinner color="blue" />
+              <LoadingSpinner />
             </div>
-          ) : images.length > 0 ? (
-            images.map((image) => (
-              <div key={image._id} className="grid grid-cols-4 items-center">
-                <img
-                  src={image.url}
-                  alt={image.name}
-                  className="w-20 h-20 object-cover"
-                />
-                <h1>{image.name}</h1>
-                <h1>{formatSize(image.size)}</h1>
-                <div className="col-span-1 flex space-x-2 text-base items-left">
-                  <Button
-                    className="bg-yellow-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-yellow-600"
-                    onPress={() => {
-                      setSelectedImage(image);
-                      setShowViewImageModal(true);
-                    }}
-                  >
-                    <FaEye />
-                  </Button>
-                  <Button
-                    className="bg-red-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-red-600"
-                    onPress={() => {
-                      setSelectedImage(image);
-                      setShowDeleteImageModal(true);
-                    }}
-                  >
-                    <FaTrash />
-                  </Button>
-                </div>
-              </div>
-            ))
           ) : (
-            <h1>No hay imágenes</h1>
+            <div className="p-2 text-black min-w-[1024px]">
+              {images.length > 0 ? (
+                images.map((image) => (
+                  <div key={image._id} className="grid grid-cols-4 items-center">
+                    <img
+                      src={image.url}
+                      alt={image.name}
+                      className="w-20 h-20 object-cover"
+                    />
+                    <h1>{image.name}</h1>
+                    <h1>{formatSize(image.size)}</h1>
+                    <div className="col-span-1 flex space-x-2 text-base items-left">
+                      <Button
+                        className="bg-yellow-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-yellow-600"
+                        onPress={() => {
+                          setSelectedImage(image);
+                          setShowViewImageModal(true);
+                        }}
+                      >
+                        <FaEye />
+                      </Button>
+                      <Button
+                        className="bg-red-500 rounded-md w-1/8 flex items-center justify-start py-2 hover:bg-red-600"
+                        onPress={() => {
+                          setSelectedImage(image);
+                          setShowDeleteImageModal(true);
+                        }}
+                      >
+                        <FaTrash />
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-400 p-2">No hay categorías creadas</div>
+              )}
+            </div>
           )}
         </div>
         {/* Paginación */}
@@ -163,7 +170,9 @@ const ImagesMenu = () => {
             onPageChange={(newPage) => setPage(newPage)}
           />
         </div>
-        {showViewImageModal && (
+      </div>
+      {
+        showViewImageModal && (
           <div
             className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
             style={{ marginTop: 0 }}
@@ -187,8 +196,10 @@ const ImagesMenu = () => {
               </div>
             </div>
           </div>
-        )}
-        {showUploadImageModal && (
+        )
+      }
+      {
+        showUploadImageModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10" style={{ marginTop: 0 }}>
             <div className="w-full h-full flex items-center justify-center">
               <div className="bg-white p-4 rounded-lg w-[30%]">
@@ -220,8 +231,10 @@ const ImagesMenu = () => {
               </div>
             </div>
           </div>
-        )}
-        {showDeleteImageModal && (
+        )
+      }
+      {
+        showDeleteImageModal && (
           <div
             className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
             style={{ marginTop: 0 }}
@@ -248,9 +261,9 @@ const ImagesMenu = () => {
               </div>
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        )
+      }
+    </div >
   );
 };
 

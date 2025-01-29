@@ -15,11 +15,12 @@ const Login = () => {
 
   const { setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // setLoading(true);
+      setLoading(true);
       const response = await loginUser(form);
       if (!response) {
         console.log("error al iniciar sesión");
@@ -27,8 +28,8 @@ const Login = () => {
       }
       // const user = await getProfile();
       // console.log("Respuesta de Profile", user)
-      console.log("Respuesta de Login", {isAuthenticated: true, user: response.user})
-      setAuth({isAuthenticated: true, user: response.user});
+      console.log("Respuesta de Login", { isAuthenticated: true, user: response.user })
+      setAuth({ isAuthenticated: true, user: response.user });
 
       const lastVisited = localStorage.getItem('lastVisited');
       if (lastVisited) {
@@ -40,6 +41,8 @@ const Login = () => {
     }
     catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,13 +77,14 @@ const Login = () => {
               />
             </div>
           </div>
-          <Button
+          <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-base font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className={`w-full bg-indigo-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-base font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+            disabled={loading}
           >
-            {/* {loading ? 'Cargando...' : 'Iniciar sesión'} */}
-            Iniciar sesión
-          </Button>
+            {loading ? 'Cargando...' : 'Iniciar sesión'}
+            {/* Iniciar sesión */}
+          </button>
           <div className="flex justify-between mx-2">
             <Link to="/register" className="text-indigo-600 hover:underline">
               Crear cuenta
