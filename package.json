@@ -28,6 +28,7 @@
     "@nextui-org/react": "^2.4.6",
     "@nextui-org/spinner": "^2.0.34",
     "@react-google-maps/api": "^2.20.3",
+    "antd": "^5.23.3",
     "axios": "^1.7.7",
     "clsx": "^2.1.1",
     "framer-motion": "^11.9.0",

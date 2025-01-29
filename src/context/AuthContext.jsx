@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { getProfile } from "@/services/UserService";
 import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../services/AuthService";
+import { Spin } from "antd";
 
 const AuthContext = createContext();
 
@@ -36,9 +37,13 @@ const AuthProvider = ({ children }) => {
         navigate("/");
     };
 
-    if (loading) {
-        return <div>Cargando...</div>; // Indicador de carga personalizable
-    }
+    // if (loading) {
+    //     return (
+    //         <div>
+    //             <Spin className='text-blue-500' fullscreen />
+    //         </div>
+    //     )
+    // }
 
     return (
         <AuthContext.Provider

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NuestraEmpresa from '@/components/home/nuestra-empresa';
 import NuestrosClientes from '@/components/home/nuestros-clientes';
@@ -8,6 +8,8 @@ import SuccessCasesSlider from '../../../components/home/success-cases';
 import NewsSlider from '../../../components/home/news';
 import portadaVid from '@/uploads/videos/portada.webm';
 import { Button } from '@nextui-org/react';
+import { AuthContext } from '../../../context/AuthContext';
+import { Spin } from 'antd';
 
 const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -22,8 +24,13 @@ const Home = () => {
         navigate('/us');
     };
 
+    const { loading } = useContext(AuthContext)
+
     return (
         <div className="w-full mx-auto">
+            {loading && (
+                <Spin className='text-blue-500' fullscreen />
+            )}
             <div className="relative w-full h-screen z-0">
                 {/* Video */}
                 <video
